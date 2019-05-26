@@ -5,6 +5,7 @@ RUN set -x \
 	&& DEBIAN_FRONTEND=noninteractive apt-get update -qq \
 	&& DEBIAN_FRONTEND=noninteractive apt-get install -qq -y --no-install-recommends --no-install-suggests \
 		git \
+		gox \
 	&& curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
 
 # Get and build terraform-docs
@@ -17,16 +18,26 @@ RUN set -x \
 	&& if [ ${VERSION} != "latest" ]; then \
 		git checkout v${VERSION}; \
 	fi \
-	&& make deps \
-	&& make test \
-	&& make build-linux-amd64 \
-	&& if [ ${VERSION} = "0.4.0" ]; then \
-		mkdir -p bin/linux-amd64; \
-		mv bin/terraform-docs-v${VERSION}-linux-amd64 bin/linux-amd64/terraform-docs; \
+	# Build terraform-docs <= 0.3.0
+	&& if [ "${VERSION}" = "0.3.0" ] || [ "${VERSION}" = "0.2.0" ] || [ "${VERSION}" = "0.1.1" ] || [ "${VERSION}" = "0.1.0" ]; then \
+		go get github.com/hashicorp/hcl \
+		&& go get github.com/tj/docopt \
+		&& make \
+		&& mkdir -p bin/linux-amd64 \
+		&& mv dist/terraform-docs_linux_amd64 bin/linux-amd64/terraform-docs; \
+	# Build terraform-docs > 0.3.0
+	else \
+		make deps \
+		&& make test \
+		&& make build-linux-amd64 \
+		&& if [ ${VERSION} = "0.4.0" ]; then \
+			mkdir -p bin/linux-amd64 \
+			&& mv bin/terraform-docs-v${VERSION}-linux-amd64 bin/linux-amd64/terraform-docs; \
+		fi \
 	fi \
 	&& chmod +x bin/linux-amd64/terraform-docs
 
-# Use a clean image
+# Use a clean tiny image to store artifacts in
 FROM alpine:latest
 COPY --from=builder /go/src/github.com/segmentio/terraform-docs/bin/linux-amd64/terraform-docs /usr/local/bin/terraform-docs
 WORKDIR /docs
