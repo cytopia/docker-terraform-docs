@@ -1,0 +1,74 @@
+---
+
+###
+### Enable sudo (required for docker service)
+###
+sudo: required
+
+
+###
+### Language
+###
+language: python
+
+
+###
+### Add services
+###
+services:
+  - docker
+
+
+###
+### Build Matrix
+###
+env:
+  matrix:
+    - VERSION=0.1.0
+    - VERSION=0.1.1
+    - VERSION=0.2.0
+    - VERSION=0.3.0
+    - VERSION=0.4.0
+    - VERSION=0.4.5
+    - VERSION=0.5.0
+    - VERSION=0.6.0
+    - VERSION=latest
+
+
+###
+### Install requirements
+###
+install:
+  # Get newer docker version
+  - while ! sudo apt-get update; do sleep 1; done
+  - while ! sudo apt-get -y -o Dpkg::Options::="--force-confnew" install docker-ce; do sleep 1; done
+  - docker version
+
+
+###
+### Check generation changes, build and test
+###
+before_script:
+  - while ! make build TAG=${VERSION}; do sleep 1; done
+  - while ! make test TAG=${VERSION}; do sleep 1; done
+
+
+###
+### Push to Dockerhub
+###
+script:
+  # Push to docker hub on success
+  - if [ "${TRAVIS_PULL_REQUEST}" == "false" ]; then
+      make login USER="${DOCKER_USERNAME}" PASS="${DOCKER_PASSWORD}";
+      if [ -n "${TRAVIS_TAG}" ]; then
+        make push TAG="${VERSION}-${TRAVIS_TAG}";
+      elif [ "${TRAVIS_BRANCH}" == "master" ]; then
+        make push TAG=${VERSION};
+      elif [[ ${TRAVIS_BRANCH} =~ ^(release-[.0-9]+)$ ]]; then
+        make push TAG="${VERSION}-${TRAVIS_BRANCH}";
+      else
+        echo "Skipping branch ${TRAVIS_BRANCH}";
+      fi
+    else
+      echo "Skipping push on PR";
+    fi
