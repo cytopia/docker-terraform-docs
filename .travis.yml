@@ -23,14 +23,6 @@ services:
 ### Build Matrix
 ###
 env:
-  global:
-    # travis encrypt DOCKER_USERNAME=user
-    # travis encrypt DOCKER_PASSWORD=pass
-    # Must be regenerated when repository name/owner changes
-    # DOCKER_USERNAME
-    - secure: "vE36kMH5D7UhX7WQ4XoCJ5402cRWPdAax64o2kE02Y9b5vdSJTiPMvEgdrcy/J1c4U0PA4cqmixpprTeT3aDjHHaOjisMuc0SdjiiLK3045uuml0eHMAEx42f+3D1o3ToECgfXlFAQ4vaLuPtqRypBFXIHx0jGJx54m9GSpiEdnYr1OQRgOlbwUzbfkWhUbKXXFwJ+1e8qR0WV8PKy/d2aCUTna+rL4wufZdGa6JNCOWbsT0iLntDQArcWWIK9z3tOz1drZzXBVeKpw+mo5mtXfLSTXLX2X+ap4aMwo0GucVOqbfAfFGVkov1+kyEqQ2k1k+iHhNw9W96Y/PaQcbj6FxpIOPl+Ex/qn03nJMsOlH1yJiRv/IhVmZqvOp//zPFoCIGL54sP3RtbqOixpHPV8EtzZ7JR/y27UJEPnTqbMA4TzuzGLbU0/426Ax7QZe4C3LC2TfzbXdhD6ledk4StfwkkPhKgafK36kCO0jRoc8E1YAzabUpuqfU5vR3LSsqHJuo/qqpmzKk0EnEV0OHBP6smEVTODnYabyOzYggOIUC5JOt1Jh+vwrcR+jpzD2eEn6fhwYv08L3MHgRQ3XZEFcyKyG8pBJvHo09MbUlj09p5IPocT5X4AMlrZBVkn96qxIFgSWN7CQBqSiJUinkkqsYSr4bdK2cf8TZhqIk7Y="
-    # DOCKER_PASSWORD
-    - secure: "kpNIjkN0+A01H+cumSFjzoCY08VPESANYl5K1CYKYfQX/zlVwqeXFNazfSjzfMEs8nU2K98U6P8Juuc2NUMhzj3sYlQ3SHQyqk4SooX/b/KA55k/SojjSO9LannFJkq01l14e1sJRahXAjH/i1Mb4vKpyqUSP7C4MYlPo1a6kNc+yAsLSEfA5Mz+blguAL0AV5mZhzyR+gq3e/OeiTE91X4HAV8z5upVfW4mpXwysQ2vCU870s3npvaEdshgfVoL+I0p9hCb9SvWh9qj1ytrMRRB9P/eBlJjLfSmrstqwmAYbSWpt4vqZnxijdvRbp5c2CsjAtnfYDcK5lwwS5IGa3fGBprSepsW+OS3mUYU3mRm9eA8S6DhXecdcNjo9hzZPAHOyB0qhJHNL+/UJkAJg++aCt9X6vapClw3lv6KSME9EETiKntuO7hsk9mjA+P8U1kzZNI+pqXf+baqicBPaR9/yDMf0DddTXbLjy23LZjy7PMjooDoxMAxAWGhSuCqAkqfx4bZRCRVu0jT8o+ZQJdBLcGVNmdLqXYH6VegbQVv1vOS67a+Lk6u4r8S0gPtaIutOch8Uac1Uk0p4G1Ov93m5vg4Z3FRExiA8lWuwXVd7t2Ge8pkFa1RqGM/Buw5xOZrkzNg6mKWarpWZVYBdqMei6xWbdExfUOT4aofCWw="
   matrix:
     - VERSION=latest
     - VERSION=0.6.0
