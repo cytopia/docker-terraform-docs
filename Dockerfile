@@ -1,5 +1,4 @@
 FROM golang:latest as builder
-ARG VERSION
 
 # Install dependencies
 RUN set -x \
@@ -9,6 +8,7 @@ RUN set -x \
 	&& curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
 
 # Get and build terraform-docs
+ARG VERSION
 RUN set -x \
 	&& export GOPATH=/go \
 	&& mkdir -p /go/src/github.com/segmentio \
@@ -20,6 +20,10 @@ RUN set -x \
 	&& make deps \
 	&& make test \
 	&& make build-linux-amd64 \
+	&& if [ ${VERSION} = "0.4.0" ]; then \
+		mkdir -p bin/linux-amd64; \
+		mv bin terraform-docs-v${VERSION}-linux-amd64 bin/linux-amd64/terraform-docs; \
+	fi \
 	&& chmod +x bin/linux-amd64/terraform-docs
 
 # Use a clean image
