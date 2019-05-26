@@ -24,15 +24,15 @@ services:
 ###
 env:
   matrix:
-    - VERSION=latest
-    - VERSION=0.6.0
-    - VERSION=0.5.0
-    - VERSION=0.4.5
-    - VERSION=0.4.0
-    - VERSION=0.3.0
-    - VERSION=0.2.0
-    - VERSION=0.1.1
     - VERSION=0.1.0
+    - VERSION=0.1.1
+    - VERSION=0.2.0
+    - VERSION=0.3.0
+    - VERSION=0.4.0
+    - VERSION=0.4.5
+    - VERSION=0.5.0
+    - VERSION=0.6.0
+    - VERSION=latest
 
 
 ###
