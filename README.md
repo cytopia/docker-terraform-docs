@@ -9,9 +9,11 @@
 
 [![Docker hub](http://dockeri.co/image/cytopia/terraform-docs)](https://hub.docker.com/r/cytopia/terraform-docs)
 
+
 ## Official project
 
 https://github.com/segmentio/terraform-docs
+
 
 ## Available Docker image versions
 
@@ -26,6 +28,67 @@ https://github.com/segmentio/terraform-docs
 | `v0.2.0`   | [Tag: v0.2.0](https://github.com/segmentio/terraform-docs/tree/v0.2.0) |
 | `v0.1.1`   | [Tag: v0.1.1](https://github.com/segmentio/terraform-docs/tree/v0.1.1) |
 | `v0.1.0`   | [Tag: v0.1.0](https://github.com/segmentio/terraform-docs/tree/v0.1.0) |
+
+
+## Docker mounts
+
+The working directory inside the Docker container is `/docs/` and should be mounted locally to
+where your Terraform module is located.
+
+
+## Usage
+
+#### Output to stdout
+Create markdown output and sent to stdout:
+```bash
+docker run --rm \
+  -v $(pwd):/docs \
+  --sort-inputs-by-required --with-aggregate-type-defaults md .
+```
+
+#### Store in file
+Create README.md with `terraform-docs` output:
+```bash
+docker run --rm \
+  -v $(pwd):/docs \
+  --sort-inputs-by-required --with-aggregate-type-defaults md . > README.md
+```
+
+#### Replace in README.md
+Replace current `terraform-docs` blocks in README.md with current one in order to automatically
+keep it up to date. For this to work, the `terraform-docs` information must be wrapped with the
+following delimiter:
+```markdown
+<!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+## Inputs
+...
+<!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+```
+
+```bash
+# Save output in variable
+DOCS="$(
+  docker run --rm \
+    -v $(pwd):/docs \
+    --sort-inputs-by-required --with-aggregate-type-defaults md .
+)"
+
+# Create new README
+grep -B 100000000 -F '<!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->' README.md > README.md.tmp
+printf "${DOCS}\n\n" >> README.md.tmp
+grep -A 100000000 -F '<!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->' README.md >> README.md.tmp
+
+# Overwrite old README
+mv -f README.md.tmp README.md
+```
+
+
+## Example projects
+
+Find below some example projects how this Docker image is used in CI to verify if the README.md has
+been updated with the latest changes generated from `terraform-docs`:
+
+* https://github.com/cytopia/terraform-aws-rds/blob/master/Makefile
 
 
 ## License
