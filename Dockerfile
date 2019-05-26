@@ -22,7 +22,7 @@ RUN set -x \
 	&& make build-linux-amd64 \
 	&& if [ ${VERSION} = "0.4.0" ]; then \
 		mkdir -p bin/linux-amd64; \
-		mv bin terraform-docs-v${VERSION}-linux-amd64 bin/linux-amd64/terraform-docs; \
+		mv bin/terraform-docs-v${VERSION}-linux-amd64 bin/linux-amd64/terraform-docs; \
 	fi \
 	&& chmod +x bin/linux-amd64/terraform-docs
 
