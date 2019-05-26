@@ -20,14 +20,14 @@ https://github.com/segmentio/terraform-docs
 | Docker tag | Build from |
 |------------|------------|
 | `latest`   | [Branch: master](https://github.com/segmentio/terraform-docs) |
-| `v0.6.0`   | [Tag: v0.6.0](https://github.com/segmentio/terraform-docs/tree/v0.6.0) |
-| `v0.5.0`   | [Tag: v0.5.0](https://github.com/segmentio/terraform-docs/tree/v0.5.0) |
-| `v0.4.5`   | [Tag: v0.4.5](https://github.com/segmentio/terraform-docs/tree/v0.4.5) |
-| `v0.4.0`   | [Tag: v0.4.0](https://github.com/segmentio/terraform-docs/tree/v0.4.0) |
-| `v0.3.0`   | [Tag: v0.3.0](https://github.com/segmentio/terraform-docs/tree/v0.3.0) |
-| `v0.2.0`   | [Tag: v0.2.0](https://github.com/segmentio/terraform-docs/tree/v0.2.0) |
-| `v0.1.1`   | [Tag: v0.1.1](https://github.com/segmentio/terraform-docs/tree/v0.1.1) |
-| `v0.1.0`   | [Tag: v0.1.0](https://github.com/segmentio/terraform-docs/tree/v0.1.0) |
+| `0.6.0`    | [Tag: v0.6.0](https://github.com/segmentio/terraform-docs/tree/v0.6.0) |
+| `0.5.0`    | [Tag: v0.5.0](https://github.com/segmentio/terraform-docs/tree/v0.5.0) |
+| `0.4.5`    | [Tag: v0.4.5](https://github.com/segmentio/terraform-docs/tree/v0.4.5) |
+| `0.4.0`    | [Tag: v0.4.0](https://github.com/segmentio/terraform-docs/tree/v0.4.0) |
+| `0.3.0`    | [Tag: v0.3.0](https://github.com/segmentio/terraform-docs/tree/v0.3.0) |
+| `0.2.0`    | [Tag: v0.2.0](https://github.com/segmentio/terraform-docs/tree/v0.2.0) |
+| `0.1.1`    | [Tag: v0.1.1](https://github.com/segmentio/terraform-docs/tree/v0.1.1) |
+| `0.1.0`    | [Tag: v0.1.0](https://github.com/segmentio/terraform-docs/tree/v0.1.0) |
 
 
 ## Docker mounts
