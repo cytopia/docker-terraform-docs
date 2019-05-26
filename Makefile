@@ -22,10 +22,10 @@ test:
 				| sed 's/.*v//g' \
 		)"; \
 		echo "Testing for latest: $${LATEST}"; \
-		docker run --rm cytopia/terraform-docs | grep "^$${LATEST}$$"; \
+		docker run --rm cytopia/terraform-docs | grep -E "^v?$${LATEST}$$"; \
 	else \
 		echo "Testing for tag: $(TAG)"; \
-		docker run --rm cytopia/terraform-docs | grep "^$(TAG)$$"; \
+		docker run --rm cytopia/terraform-docs | grep -E "^v?$(TAG)$$"; \
 	fi
 
 tag:
