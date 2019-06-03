@@ -111,7 +111,7 @@ if [ "${#}" -ge "1" ]; then
 	else
 		>&2 echo "Error, Unsupported command."
 		>&2 echo "Usage: cytopia/terraform-docs terraform-docs <ARGS> ."
-		>&2 echo "       cytopia/terraform-docs terraform-docs-replace <ARGS>"
+		>&2 echo "       cytopia/terraform-docs terraform-docs-replace <ARGS> <PATH-TO-FILE>"
 		>&2 echo
 		>&2 echo "terraform-docs           Output as expected from terraform-docs"
 		>&2 echo "terraform-docs-replace   Same as above, but replaces directly inside README.md"

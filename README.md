@@ -52,6 +52,17 @@ where your Terraform module is located.
 
 ## Usage
 
+#### Generic
+```bash
+Usage: docker run cytopia/terraform-docs terraform-docs <ARGS> .
+       docker run cytopia/terraform-docs terraform-docs-replace <ARGS> <PATH-TO-FILE>
+
+terraform-docs           Output as expected from terraform-docs
+terraform-docs-replace   Same as above, but replaces directly inside README.md
+                         if DELIM_START and DELIM_CLOSE are found.
+<ARGS>                   All arguments terraform-docs command can use.
+```
+
 #### Output to stdout
 Create markdown output and sent to stdout:
 ```bash
