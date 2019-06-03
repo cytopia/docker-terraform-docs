@@ -195,6 +195,22 @@ _gen-modules:
 	)
 ```
 
+#### Travis CI integration
+With the above Makefile in place, you can easily add a Travis CI rule to ensure the terraform-docs
+output is always up-to-date and will fail otherwise (due to git changes):
+```yml
+---
+sudo: required
+services:
+  - docker
+before_install: true
+install: true
+script:
+  - make gen
+  - git diff --quiet || { echo "Build Changes"; git diff; git status; false; }
+```
+
+
 ## Example projects
 
 Find below some example projects how this Docker image is used in CI to verify if the README.md has
