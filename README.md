@@ -4,6 +4,7 @@
 [![Tag](https://img.shields.io/github/tag/cytopia/docker-terraform-docs.svg)](https://github.com/cytopia/docker-terraform-docs/releases)
 [![](https://images.microbadger.com/badges/version/cytopia/terraform-docs:latest.svg)](https://microbadger.com/images/cytopia/terraform-docs:latest "terraform-docs")
 [![](https://images.microbadger.com/badges/image/cytopia/terraform-docs:latest.svg)](https://microbadger.com/images/cytopia/terraform-docs:latest "terraform-docs")
+[![](https://img.shields.io/badge/github-cytopia%2Fdocker--terraform--docs-red.svg)](https://github.com/cytopia/docker-terraform-docs "github.com/cytopia/docker-terraform-docs")
 [![License](https://img.shields.io/badge/license-MIT-%233DA639.svg)](https://opensource.org/licenses/MIT)
 
 
