@@ -114,6 +114,73 @@ docker run --rm \
   terraform-docs-replace --sort-inputs-by-required --with-aggregate-type-defaults md INFO.md
 ```
 
+#### Example Makefile
+You can add the following Makefile to your project for easy generation of terraform-docs output in
+a Terraform module. It takes into consideration the Main module, sub-modules and examples.
+
+```make
+.PHONY: gen _gen-main _gen-examples _gen-modules
+
+CURRENT_DIR     = $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
+TF_EXAMPLES     = $(sort $(dir $(wildcard $(CURRENT_DIR)examples/*/)))
+TF_MODULES      = $(sort $(dir $(wildcard $(CURRENT_DIR)modules/*/)))
+TF_DOCS_VERSION = 0.6.0
+
+gen:
+	@echo "################################################################################"
+	@echo "# Terraform-docs generate"
+	@echo "################################################################################"
+	@$(MAKE) _gen-main
+	@$(MAKE) _gen-examples
+	@$(MAKE) _gen-modules
+
+_gen-main:
+	@echo "------------------------------------------------------------"
+	@echo "# Main module"
+	@echo "------------------------------------------------------------"
+	@if docker run --rm -v $(CURRENT_DIR):/docs \
+		cytopia/terraform-docs:${TF_DOCS_VERSION} \
+		terraform-docs-replace --sort-inputs-by-required --with-aggregate-type-defaults md README.md; then \
+		echo "OK"; \
+	else \
+		echo "Failed"; \
+		exit 1; \
+	fi
+
+_gen-examples:
+	@$(foreach example,\
+		$(TF_EXAMPLES),\
+		DOCKER_PATH="examples/$(notdir $(patsubst %/,%,$(example)))"; \
+		echo "------------------------------------------------------------"; \
+		echo "# $${DOCKER_PATH}"; \
+		echo "------------------------------------------------------------"; \
+		if docker run --rm -v $(CURRENT_DIR):/docs \
+			cytopia/terraform-docs:${TF_DOCS_VERSION} \
+			terraform-docs-replace --sort-inputs-by-required --with-aggregate-type-defaults md $${DOCKER_PATH}/README.md; then \
+			echo "OK"; \
+		else \
+			echo "Failed"; \
+			exit 1; \
+		fi; \
+	)
+
+_gen-modules:
+	@$(foreach module,\
+		$(TF_MODULES),\
+		DOCKER_PATH="modules/$(notdir $(patsubst %/,%,$(module)))"; \
+		echo "------------------------------------------------------------"; \
+		echo "# $${DOCKER_PATH}"; \
+		echo "------------------------------------------------------------"; \
+		if docker run --rm -v $(CURRENT_DIR):/docs \
+			cytopia/terraform-docs:${TF_DOCS_VERSION} \
+			terraform-docs-replace --sort-inputs-by-required --with-aggregate-type-defaults md $${DOCKER_PATH}/README.md; then \
+			echo "OK"; \
+		else \
+			echo "Failed"; \
+			exit 1; \
+		fi; \
+	)
+```
 
 ## Example projects
 
