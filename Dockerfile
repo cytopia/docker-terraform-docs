@@ -40,6 +40,10 @@ RUN set -x \
 # Use a clean tiny image to store artifacts in
 FROM alpine:latest
 COPY --from=builder /go/src/github.com/segmentio/terraform-docs/bin/linux-amd64/terraform-docs /usr/local/bin/terraform-docs
+COPY ./data/docker-entrypoint.sh /docker-entrypoint.sh
+
+ENV WORKDIR /docs
 WORKDIR /docs
-ENTRYPOINT ["/usr/local/bin/terraform-docs"]
-CMD ["--version"]
+
+CMD ["terraform-docs", "--version"]
+ENTRYPOINT ["/docker-entrypoint.sh"]
