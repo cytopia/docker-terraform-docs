@@ -108,8 +108,8 @@ You are able to use different delimiter. Let's imagine the following delimiter:
 # Note that the command changes from terraform-docs to terraform-docs-replace
 docker run --rm \
   -v $(pwd):/docs \
-  -e DELIM_START=TFDOC_START \
-  -e DELIM_CLOSE=TFDOC_END \
+  -e DELIM_START='TFDOC_START' \
+  -e DELIM_CLOSE='TFDOC_END' \
   cytopia/terraform-docs \
   terraform-docs-replace --sort-inputs-by-required --with-aggregate-type-defaults md INFO.md
 ```
@@ -126,6 +126,10 @@ TF_EXAMPLES     = $(sort $(dir $(wildcard $(CURRENT_DIR)examples/*/)))
 TF_MODULES      = $(sort $(dir $(wildcard $(CURRENT_DIR)modules/*/)))
 TF_DOCS_VERSION = 0.6.0
 
+# Adjust your delimiter here or overwrite via make arguments
+DELIM_START = <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+DELIM_CLOSE = <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+
 gen:
 	@echo "################################################################################"
 	@echo "# Terraform-docs generate"
@@ -138,7 +142,10 @@ _gen-main:
 	@echo "------------------------------------------------------------"
 	@echo "# Main module"
 	@echo "------------------------------------------------------------"
-	@if docker run --rm -v $(CURRENT_DIR):/docs \
+	@if docker run --rm \
+		-v $(CURRENT_DIR):/docs \
+		-e DELIM_START='$(DELIM_START)' \
+		-e DELIM_CLOSE='$(DELIM_CLOSE)' \
 		cytopia/terraform-docs:${TF_DOCS_VERSION} \
 		terraform-docs-replace --sort-inputs-by-required --with-aggregate-type-defaults md README.md; then \
 		echo "OK"; \
@@ -154,7 +161,10 @@ _gen-examples:
 		echo "------------------------------------------------------------"; \
 		echo "# $${DOCKER_PATH}"; \
 		echo "------------------------------------------------------------"; \
-		if docker run --rm -v $(CURRENT_DIR):/docs \
+		if docker run --rm \
+			-v $(CURRENT_DIR):/docs \
+			-e DELIM_START='$(DELIM_START)' \
+			-e DELIM_CLOSE='$(DELIM_CLOSE)' \
 			cytopia/terraform-docs:${TF_DOCS_VERSION} \
 			terraform-docs-replace --sort-inputs-by-required --with-aggregate-type-defaults md $${DOCKER_PATH}/README.md; then \
 			echo "OK"; \
@@ -171,7 +181,10 @@ _gen-modules:
 		echo "------------------------------------------------------------"; \
 		echo "# $${DOCKER_PATH}"; \
 		echo "------------------------------------------------------------"; \
-		if docker run --rm -v $(CURRENT_DIR):/docs \
+		if docker run --rm \
+			-v $(CURRENT_DIR):/docs \
+			-e DELIM_START='$(DELIM_START)' \
+			-e DELIM_CLOSE='$(DELIM_CLOSE)' \
 			cytopia/terraform-docs:${TF_DOCS_VERSION} \
 			terraform-docs-replace --sort-inputs-by-required --with-aggregate-type-defaults md $${DOCKER_PATH}/README.md; then \
 			echo "OK"; \
