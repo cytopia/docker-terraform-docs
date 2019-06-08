@@ -1,9 +1,9 @@
+.PHONY: build rebuild test tag pull login push enter
+
 DIR = .
 FILE = Dockerfile
 IMAGE = cytopia/terraform-docs
 TAG = latest
-
-.PHONY: build rebuild test tag pull login push enter
 
 build:
 	docker build --build-arg VERSION=$(TAG) -t $(IMAGE) -f $(DIR)/$(FILE) $(DIR)
@@ -22,10 +22,10 @@ test:
 				| sed 's/.*v//g' \
 		)"; \
 		echo "Testing for latest: $${LATEST}"; \
-		docker run --rm cytopia/terraform-docs | grep -E "^v?$${LATEST}$$"; \
+		docker run --rm $(IMAGE) | grep -E "^v?$${LATEST}$$"; \
 	else \
 		echo "Testing for tag: $(TAG)"; \
-		docker run --rm cytopia/terraform-docs | grep -E "^v?$(TAG)$$"; \
+		docker run --rm $(IMAGE) | grep -E "^v?$(TAG)$$"; \
 	fi
 
 tag:
