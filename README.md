@@ -9,6 +9,7 @@
 
 > #### All awesome CI images
 >
+> [ansible](https://github.com/cytopia/docker-ansible) |
 > [ansible-lint](https://github.com/cytopia/docker-ansible-lint) |
 > [awesome-ci](https://github.com/cytopia/awesome-ci) |
 > [jsonlint](https://github.com/cytopia/docker-jsonlint) |
@@ -16,12 +17,14 @@
 > [yamllint](https://github.com/cytopia/docker-yamllint)
 
 
+View **[Dockerfile](https://github.com/cytopia/docker-terraform-docs/blob/master/Dockerfile)** on GitHub.
+
 [![Docker hub](http://dockeri.co/image/cytopia/terraform-docs)](https://hub.docker.com/r/cytopia/terraform-docs)
 
-
-Dockerized version of [terraform-docs](https://github.com/segmentio/terraform-docs)<sup>[1]</sup>,
+Tiny Alpine-based multistage-build dockerized version of [terraform-docs](https://github.com/segmentio/terraform-docs)<sup>[1]</sup>,
 which additionally implements `terraform-docs-replace` allowing you to automatically and safely
 replace the `terraform-docs` generated output infile.
+The image is built nightly against multiple stable versions and pushed to Dockerhub.
 
 <sub>[1] Official project: https://github.com/segmentio/terraform-docs</sub>
 

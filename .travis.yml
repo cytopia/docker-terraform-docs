@@ -59,13 +59,13 @@ before_script:
 script:
   # Push to docker hub on success
   - if [ "${TRAVIS_PULL_REQUEST}" == "false" ]; then
-      make login USER="${DOCKER_USERNAME}" PASS="${DOCKER_PASSWORD}";
+      while ! make login USER="${DOCKER_USERNAME}" PASS="${DOCKER_PASSWORD}"; do sleep 1; done;
       if [ -n "${TRAVIS_TAG}" ]; then
-        make push TAG="${VERSION}-${TRAVIS_TAG}";
+        while ! make push TAG="${VERSION}-${TRAVIS_TAG}"; do sleep 1; done;
       elif [ "${TRAVIS_BRANCH}" == "master" ]; then
-        make push TAG=${VERSION};
+        while ! make push TAG=${VERSION}; do sleep 1; done;
       elif [[ ${TRAVIS_BRANCH} =~ ^(release-[.0-9]+)$ ]]; then
-        make push TAG="${VERSION}-${TRAVIS_BRANCH}";
+        while ! make push TAG="${VERSION}-${TRAVIS_BRANCH}"; do sleep 1; done;
       else
         echo "Skipping branch ${TRAVIS_BRANCH}";
       fi

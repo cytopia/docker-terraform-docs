@@ -39,6 +39,9 @@ RUN set -x \
 
 # Use a clean tiny image to store artifacts in
 FROM alpine:latest
+LABEL \
+	maintainer="cytopia <cytopia@everythingcli.org>" \
+	repo="https://github.com/cytopia/docker-terraform-docs"
 COPY --from=builder /go/src/github.com/segmentio/terraform-docs/bin/linux-amd64/terraform-docs /usr/local/bin/terraform-docs
 COPY ./data/docker-entrypoint.sh /docker-entrypoint.sh
 
