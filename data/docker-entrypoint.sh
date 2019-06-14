@@ -3,6 +3,7 @@
 set -e
 set -u
 
+
 ###
 ### Default variables
 ###
@@ -41,6 +42,25 @@ trim_last_arg() {
 }
 
 
+print_usage() {
+	>&2 echo "Error, Unsupported command."
+	>&2 echo "Usage: cytopia/terraform-docs terraform-docs <ARGS> ."
+	>&2 echo "       cytopia/terraform-docs terraform-docs-012 <ARGS> ."
+	>&2 echo
+	>&2 echo "       cytopia/terraform-docs terraform-docs-replace <ARGS> <PATH-TO-FILE>"
+	>&2 echo "       cytopia/terraform-docs terraform-docs-replace-012 <ARGS> <PATH-TO-FILE>"
+	>&2 echo
+	>&2 echo
+	>&2 echo "terraform-docs              Output as expected from terraform-docs"
+	>&2 echo "terraform-docs-012          Same as above, but used for Terraform >= 0.12 modules"
+	>&2 echo
+	>&2 echo "terraform-docs-replace      Replaces directly inside README.md, if DELIM_START and DELIM_CLOSE are found."
+	>&2 echo "terraform-docs-replace-012  Same as above, but used for Terraform >= 0.12 modules"
+	>&2 echo
+	>&2 echo "<ARGS>                      All arguments terraform-docs command can use."
+}
+
+
 ###
 ### Arguments appended?
 ###
@@ -49,10 +69,7 @@ if [ "${#}" -ge "1" ]; then
 	###
 	### Custom replace operation
 	###
-	if [ "${1}" = "terraform-docs-replace" ]; then
-
-		# Remove first argument "replace"
-		shift;
+	if [ "${1}" = "terraform-docs-replace" ] || [ "${1}" = "terraform-docs-replace-012" ]; then
 
 		# Store and Remove last argument (filename)
 		eval MY_FILE="\${$#}"			# store last argument
@@ -81,9 +98,26 @@ if [ "${#}" -ge "1" ]; then
 		GID="$(stat -c %g "${WORKDIR}/${MY_FILE}")"
 		PERM="$(stat -c %a "${WORKDIR}/${MY_FILE}")"
 
-		# Get terraform-docs output
-		>&2 echo "terraform-docs ${*} ${WORKDIR}/$(dirname ${MY_FILE})"
-		DOCS="$(terraform-docs "${@}" "${WORKDIR}/$(dirname ${MY_FILE})")"
+		# Terraform < 0.12
+		if [ "${1}" = "terraform-docs-replace" ]; then
+			# Remove first argument "replace"
+			shift;
+			# Get terraform-docs output
+			>&2 echo "terraform-docs ${*} ${WORKDIR}"
+			DOCS="$(terraform-docs "${@}" "${WORKDIR}")"
+		# Terraform >= 0.12
+		else
+			# Remove first argument "replace"
+			shift;
+			mkdir -p /tmp-012
+			awk -f /terraform-docs.awk *.tf > "/tmp-012/tmp.tf"
+			# Get terraform-docs output
+			>&2 echo "terraform-docs-012 ${*} ${WORKDIR}"
+			if ! DOCS="$(terraform-docs "${@}" "/tmp-012")"; then
+				cat -n /tmp-012/tmp.tf
+				exit 1
+			fi
+		fi
 
 		# Create temporary README.md
 		mkdir -p /tmp
@@ -100,22 +134,31 @@ if [ "${#}" -ge "1" ]; then
 		exit 0
 
 	###
-	### terraform-docs command
+	### terraform-docs command (< 0.12)
 	###
 	elif [ "${1}" = "terraform-docs" ]; then
 		exec "${@}"
 
 	###
+	### terraform-docs command (>= 0.12)
+	###
+	elif [ "${1}" = "terraform-docs-012" ]; then
+		mkdir -p /tmp-012
+		awk -f /usr/bin/terraform-docs.awk *.tf > "/tmp-012/tmp.tf"
+
+		# Remove last argument (path)
+		args="$(trim_last_arg "${@}")"	# get all the args except the last arg
+		eval "set -- ${args}"			# update the shell's arguments with the new value
+		# Remove first argument (terraform-docs-012)
+		shift
+		# Execute
+		exec terraform-docs "${@}" "/tmp-012/"
+
+	###
 	### Unsupported command
 	###
 	else
-		>&2 echo "Error, Unsupported command."
-		>&2 echo "Usage: cytopia/terraform-docs terraform-docs <ARGS> ."
-		>&2 echo "       cytopia/terraform-docs terraform-docs-replace <ARGS> <PATH-TO-FILE>"
-		>&2 echo
-		>&2 echo "terraform-docs           Output as expected from terraform-docs"
-		>&2 echo "terraform-docs-replace   Same as above, but replaces directly inside README.md"
-		>&2 echo "                         if DELIM_START and DELIM_CLOSE are found."
+		print_usage
 		exit 1
 
 	fi
