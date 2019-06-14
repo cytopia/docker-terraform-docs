@@ -25,6 +25,7 @@ View **[Dockerfile](https://github.com/cytopia/docker-terraform-docs/blob/master
 Tiny Alpine-based multistage-build dockerized version of [terraform-docs](https://github.com/segmentio/terraform-docs)<sup>[1]</sup>,
 which additionally implements `terraform-docs-replace` allowing you to automatically and safely
 replace the `terraform-docs` generated output infile.
+Furthermore this implementation is also **Terraform >= 0.12 ready**. See [Generic Usage](#generic) for more details.
 The image is built nightly against multiple stable versions and pushed to Dockerhub.
 
 <sub>[1] Official project: https://github.com/segmentio/terraform-docs</sub>
@@ -58,7 +59,7 @@ using `terraform-docs-replace`.
 
 ## Docker mounts
 
-The working directory inside the Docker container is `/docs/` and should be mounted locally to
+The working directory inside the Docker container is `/data/` and should be mounted locally to
 where your Terraform module is located.
 
 
@@ -66,20 +67,27 @@ where your Terraform module is located.
 
 #### Generic
 ```bash
-Usage: docker run cytopia/terraform-docs terraform-docs <ARGS> .
-       docker run cytopia/terraform-docs terraform-docs-replace <ARGS> <PATH-TO-FILE>
+Usage: cytopia/terraform-docs terraform-docs <ARGS> .
+       cytopia/terraform-docs terraform-docs-012 <ARGS> .
 
-terraform-docs           Output as expected from terraform-docs
-terraform-docs-replace   Same as above, but replaces directly inside README.md
-                         if DELIM_START and DELIM_CLOSE are found.
-<ARGS>                   All arguments terraform-docs command can use.
+       cytopia/terraform-docs terraform-docs-replace <ARGS> <PATH-TO-FILE>
+       cytopia/terraform-docs terraform-docs-replace-012 <ARGS> <PATH-TO-FILE>
+
+
+terraform-docs              Output as expected from terraform-docs
+terraform-docs-012          Same as above, but used for Terraform >= 0.12 modules
+
+terraform-docs-replace      Replaces directly inside README.md, if DELIM_START and DELIM_CLOSE are found.
+terraform-docs-replace-012  Same as above, but used for Terraform >= 0.12 modules
+
+<ARGS>                      All arguments terraform-docs command can use.
 ```
 
 #### Output to stdout
 Create markdown output and sent to stdout:
 ```bash
 docker run --rm \
-  -v $(pwd):/docs \
+  -v $(pwd):/data \
   cytopia/terraform-docs \
   --sort-inputs-by-required terraform-docs --with-aggregate-type-defaults md .
 ```
@@ -88,7 +96,7 @@ docker run --rm \
 Create README.md with `terraform-docs` output:
 ```bash
 docker run --rm \
-  -v $(pwd):/docs \
+  -v $(pwd):/data \
   cytopia/terraform-docs \
   terraform-docs --sort-inputs-by-required --with-aggregate-type-defaults md . > README.md
 ```
@@ -110,7 +118,7 @@ following delimiter by default:
 # Path to README.md must be specified as last command.
 # Note that the command changes from terraform-docs to terraform-docs-replace
 docker run --rm \
-  -v $(pwd):/docs \
+  -v $(pwd):/data \
   cytopia/terraform-docs \
   terraform-docs-replace --sort-inputs-by-required --with-aggregate-type-defaults md README.md
 ```
@@ -130,7 +138,7 @@ You are able to use different delimiter. Let's imagine the following delimiter:
 # Path to INFO.md must be specified as last command.
 # Note that the command changes from terraform-docs to terraform-docs-replace
 docker run --rm \
-  -v $(pwd):/docs \
+  -v $(pwd):/data \
   -e DELIM_START='TFDOC_START' \
   -e DELIM_CLOSE='TFDOC_END' \
   cytopia/terraform-docs \
@@ -166,7 +174,7 @@ _gen-main:
 	@echo "# Main module"
 	@echo "------------------------------------------------------------"
 	@if docker run --rm \
-		-v $(CURRENT_DIR):/docs \
+		-v $(CURRENT_DIR):/data \
 		-e DELIM_START='$(DELIM_START)' \
 		-e DELIM_CLOSE='$(DELIM_CLOSE)' \
 		cytopia/terraform-docs:${TF_DOCS_VERSION} \
@@ -185,7 +193,7 @@ _gen-examples:
 		echo "# $${DOCKER_PATH}"; \
 		echo "------------------------------------------------------------"; \
 		if docker run --rm \
-			-v $(CURRENT_DIR):/docs \
+			-v $(CURRENT_DIR):/data \
 			-e DELIM_START='$(DELIM_START)' \
 			-e DELIM_CLOSE='$(DELIM_CLOSE)' \
 			cytopia/terraform-docs:${TF_DOCS_VERSION} \
@@ -205,7 +213,7 @@ _gen-modules:
 		echo "# $${DOCKER_PATH}"; \
 		echo "------------------------------------------------------------"; \
 		if docker run --rm \
-			-v $(CURRENT_DIR):/docs \
+			-v $(CURRENT_DIR):/data \
 			-e DELIM_START='$(DELIM_START)' \
 			-e DELIM_CLOSE='$(DELIM_CLOSE)' \
 			cytopia/terraform-docs:${TF_DOCS_VERSION} \

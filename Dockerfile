@@ -44,9 +44,10 @@ LABEL \
 	repo="https://github.com/cytopia/docker-terraform-docs"
 COPY --from=builder /go/src/github.com/segmentio/terraform-docs/bin/linux-amd64/terraform-docs /usr/local/bin/terraform-docs
 COPY ./data/docker-entrypoint.sh /docker-entrypoint.sh
+COPY ./data/terraform-docs.awk /terraform-docs.awk
 
-ENV WORKDIR /docs
-WORKDIR /docs
+ENV WORKDIR /data
+WORKDIR /data
 
 CMD ["terraform-docs", "--version"]
 ENTRYPOINT ["/docker-entrypoint.sh"]
