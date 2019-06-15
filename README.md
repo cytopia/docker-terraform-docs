@@ -76,7 +76,7 @@ Where `<tag>` refers to the chosen git tag from this repository.
 ## Environment variables
 
 The following Docker environment variables are available. These will only need to be used when
-using `terraform-docs-replace`.
+using `terraform-docs-replace` or `terraform-docs-replace-012`.
 
 | Variable | Default | Required | Comment |
 |----------|---------|----------|---------|
