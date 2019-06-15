@@ -34,17 +34,43 @@ The image is built nightly against multiple stable versions and pushed to Docker
 
 ## Available Docker image versions
 
-| Docker tag | Build from |
-|------------|------------|
-| `latest`   | [Branch: master](https://github.com/segmentio/terraform-docs) |
-| `0.6.0`    | [Tag: v0.6.0](https://github.com/segmentio/terraform-docs/tree/v0.6.0) |
-| `0.5.0`    | [Tag: v0.5.0](https://github.com/segmentio/terraform-docs/tree/v0.5.0) |
-| `0.4.5`    | [Tag: v0.4.5](https://github.com/segmentio/terraform-docs/tree/v0.4.5) |
-| `0.4.0`    | [Tag: v0.4.0](https://github.com/segmentio/terraform-docs/tree/v0.4.0) |
-| `0.3.0`    | [Tag: v0.3.0](https://github.com/segmentio/terraform-docs/tree/v0.3.0) |
-| `0.2.0`    | [Tag: v0.2.0](https://github.com/segmentio/terraform-docs/tree/v0.2.0) |
-| `0.1.1`    | [Tag: v0.1.1](https://github.com/segmentio/terraform-docs/tree/v0.1.1) |
-| `0.1.0`    | [Tag: v0.1.0](https://github.com/segmentio/terraform-docs/tree/v0.1.0) |
+### Rolling releases
+The following Docker image tags are rolling releases and built and updated nightly. This means any
+scripts from this repository which enhance the original `terraform-docs` are always available at
+their latest state (from this repository's master branch) and *might* cause backwards
+incompatibilities with how you use it (although it's very unlikely that backwards incompatible
+changes will be introduced).
+
+| Docker tag | Build from docker-terraform-docs | Build from terraform-docs |
+|------------|----------------------------------|---------------------------|
+| `latest`   | [Branch: master](https://github.com/cytopia/docker-terraform-docs) | [Branch: master](https://github.com/segmentio/terraform-docs) |
+| `0.6.0`    | [Branch: master](https://github.com/cytopia/docker-terraform-docs) | [Tag: v0.6.0](https://github.com/segmentio/terraform-docs/tree/v0.6.0) |
+| `0.5.0`    | [Branch: master](https://github.com/cytopia/docker-terraform-docs) | [Tag: v0.5.0](https://github.com/segmentio/terraform-docs/tree/v0.5.0) |
+| `0.4.5`    | [Branch: master](https://github.com/cytopia/docker-terraform-docs) | [Tag: v0.4.5](https://github.com/segmentio/terraform-docs/tree/v0.4.5) |
+| `0.4.0`    | [Branch: master](https://github.com/cytopia/docker-terraform-docs) | [Tag: v0.4.0](https://github.com/segmentio/terraform-docs/tree/v0.4.0) |
+| `0.3.0`    | [Branch: master](https://github.com/cytopia/docker-terraform-docs) | [Tag: v0.3.0](https://github.com/segmentio/terraform-docs/tree/v0.3.0) |
+| `0.2.0`    | [Branch: master](https://github.com/cytopia/docker-terraform-docs) | [Tag: v0.2.0](https://github.com/segmentio/terraform-docs/tree/v0.2.0) |
+| `0.1.1`    | [Branch: master](https://github.com/cytopia/docker-terraform-docs) | [Tag: v0.1.1](https://github.com/segmentio/terraform-docs/tree/v0.1.1) |
+| `0.1.0`    | [Branch: master](https://github.com/cytopia/docker-terraform-docs) | [Tag: v0.1.0](https://github.com/segmentio/terraform-docs/tree/v0.1.0) |
+
+### Point in time releases
+If you want to ensure to have reproducible Terraform doc generation you should use a git tag from
+this repository. Tags are incremented for each new version, but never updated itself. This means
+you will have to take care yourself and update your CI tools every time a new tag is being released.
+
+| Docker tag     | Build from docker-terraform-docs | Build from terraform-docs |
+|----------------|----------------------------------|---------------------------|
+| `latest-<tag>` | Tag: `<tag>`                     | [Branch: master](https://github.com/segmentio/terraform-docs) |
+| `0.6.0-<tag>`  | Tag: `<tag>`                     | [Tag: v0.6.0](https://github.com/segmentio/terraform-docs/tree/v0.6.0) |
+| `0.5.0-<tag>`  | Tag: `<tag>`                     | [Tag: v0.5.0](https://github.com/segmentio/terraform-docs/tree/v0.5.0) |
+| `0.4.5-<tag>`  | Tag: `<tag>`                     | [Tag: v0.4.5](https://github.com/segmentio/terraform-docs/tree/v0.4.5) |
+| `0.4.0-<tag>`  | Tag: `<tag>`                     | [Tag: v0.4.0](https://github.com/segmentio/terraform-docs/tree/v0.4.0) |
+| `0.3.0-<tag>`  | Tag: `<tag>`                     | [Tag: v0.3.0](https://github.com/segmentio/terraform-docs/tree/v0.3.0) |
+| `0.2.0-<tag>`  | Tag: `<tag>`                     | [Tag: v0.2.0](https://github.com/segmentio/terraform-docs/tree/v0.2.0) |
+| `0.1.1-<tag>`  | Tag: `<tag>`                     | [Tag: v0.1.1](https://github.com/segmentio/terraform-docs/tree/v0.1.1) |
+| `0.1.0-<tag>`  | Tag: `<tag>`                     | [Tag: v0.1.0](https://github.com/segmentio/terraform-docs/tree/v0.1.0) |
+
+Where `<tag>` refers to the chosen git tag from this repository.
 
 
 ## Environment variables
