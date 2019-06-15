@@ -25,10 +25,11 @@ View **[Dockerfile](https://github.com/cytopia/docker-terraform-docs/blob/master
 Tiny Alpine-based multistage-build dockerized version of [terraform-docs](https://github.com/segmentio/terraform-docs)<sup>[1]</sup>,
 which additionally implements `terraform-docs-replace` allowing you to automatically and safely
 replace the `terraform-docs` generated output infile.
-Furthermore this implementation is also **Terraform >= 0.12 ready**. See [Generic Usage](#generic) for more details.
+Furthermore this implementation is also **Terraform >= 0.12 ready**<sup>[2]</sup>. See [Generic Usage](#generic) for more details.
 The image is built nightly against multiple stable versions and pushed to Dockerhub.
 
-<sub>[1] Official project: https://github.com/segmentio/terraform-docs</sub>
+* <sub>[1] Official project: https://github.com/segmentio/terraform-docs</sub>
+* <sub>[2] Based on an awk script by [cloudposse/build-harness](https://github.com/cloudposse/build-harness/blob/master/bin/terraform-docs.awk)</sub>
 
 
 ## Available Docker image versions
