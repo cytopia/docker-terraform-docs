@@ -117,7 +117,7 @@ Create markdown output and sent to stdout:
 docker run --rm \
   -v $(pwd):/data \
   cytopia/terraform-docs \
-  --sort-inputs-by-required terraform-docs --with-aggregate-type-defaults md .
+  terraform-docs --sort-inputs-by-required terraform-docs --with-aggregate-type-defaults md .
 ```
 
 #### Store in file
