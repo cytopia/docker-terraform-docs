@@ -151,7 +151,11 @@ You can add the following Makefile to your project for easy generation of terraf
 a Terraform module. It takes into consideration the Main module, sub-modules and examples.
 
 ```make
-.PHONY: gen _gen-main _gen-examples _gen-modules
+ifneq (,)
+.error This Makefile requires GNU Make.
+endif
+
+.PHONY: gen _gen-main _gen-examples _gen-modules _update-tf-docs
 
 CURRENT_DIR     = $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
 TF_EXAMPLES     = $(sort $(dir $(wildcard $(CURRENT_DIR)examples/*/)))
@@ -162,13 +166,13 @@ TF_DOCS_VERSION = 0.6.0
 DELIM_START = <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 DELIM_CLOSE = <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 
-gen:
+gen: _update-tf-docs
 	@echo "################################################################################"
 	@echo "# Terraform-docs generate"
 	@echo "################################################################################"
-	@$(MAKE) _gen-main
-	@$(MAKE) _gen-examples
-	@$(MAKE) _gen-modules
+	@$(MAKE) --no-print-directory _gen-main
+	@$(MAKE) --no-print-directory _gen-examples
+	@$(MAKE) --no-print-directory _gen-modules
 
 _gen-main:
 	@echo "------------------------------------------------------------"
@@ -178,7 +182,7 @@ _gen-main:
 		-v $(CURRENT_DIR):/data \
 		-e DELIM_START='$(DELIM_START)' \
 		-e DELIM_CLOSE='$(DELIM_CLOSE)' \
-		cytopia/terraform-docs:${TF_DOCS_VERSION} \
+		cytopia/terraform-docs:$(TF_DOCS_VERSION) \
 		terraform-docs-replace --sort-inputs-by-required --with-aggregate-type-defaults md README.md; then \
 		echo "OK"; \
 	else \
@@ -197,7 +201,7 @@ _gen-examples:
 			-v $(CURRENT_DIR):/data \
 			-e DELIM_START='$(DELIM_START)' \
 			-e DELIM_CLOSE='$(DELIM_CLOSE)' \
-			cytopia/terraform-docs:${TF_DOCS_VERSION} \
+			cytopia/terraform-docs:$(TF_DOCS_VERSION) \
 			terraform-docs-replace --sort-inputs-by-required --with-aggregate-type-defaults md $${DOCKER_PATH}/README.md; then \
 			echo "OK"; \
 		else \
@@ -217,7 +221,7 @@ _gen-modules:
 			-v $(CURRENT_DIR):/data \
 			-e DELIM_START='$(DELIM_START)' \
 			-e DELIM_CLOSE='$(DELIM_CLOSE)' \
-			cytopia/terraform-docs:${TF_DOCS_VERSION} \
+			cytopia/terraform-docs:$(TF_DOCS_VERSION) \
 			terraform-docs-replace --sort-inputs-by-required --with-aggregate-type-defaults md $${DOCKER_PATH}/README.md; then \
 			echo "OK"; \
 		else \
@@ -225,6 +229,9 @@ _gen-modules:
 			exit 1; \
 		fi; \
 	)
+
+_update-tf-docs:
+	docker pull cytopia/terraform-docs:$(TF_DOCS_VERSION)
 ```
 
 #### Travis CI integration
@@ -249,6 +256,7 @@ Find below some example projects how this Docker image is used in CI to verify i
 been updated with the latest changes generated from `terraform-docs`:
 
 * https://github.com/cytopia/terraform-aws-rds/blob/master/Makefile
+* https://github.com/Flaconi/terraform-aws-microservice/blob/master/Makefile
 
 
 ## License

@@ -10,7 +10,7 @@
     braceCnt++
   }
 
-   if ( /\}/ ) {
+  if ( /\}/ ) {
     braceCnt--
   }
 
