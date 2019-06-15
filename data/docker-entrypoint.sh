@@ -144,7 +144,7 @@ if [ "${#}" -ge "1" ]; then
 	###
 	elif [ "${1}" = "terraform-docs-012" ]; then
 		mkdir -p /tmp-012
-		awk -f /usr/bin/terraform-docs.awk *.tf > "/tmp-012/tmp.tf"
+		awk -f /terraform-docs.awk *.tf > "/tmp-012/tmp.tf"
 
 		# Remove last argument (path)
 		args="$(trim_last_arg "${@}")"	# get all the args except the last arg
