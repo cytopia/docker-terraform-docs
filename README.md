@@ -256,6 +256,7 @@ Find below some example projects how this Docker image is used in CI to verify i
 been updated with the latest changes generated from `terraform-docs`:
 
 * https://github.com/cytopia/terraform-aws-rds/blob/master/Makefile
+* https://github.com/Flaconi/terraform-aws-microservice/blob/master/Makefile
 
 
 ## License
