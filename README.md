@@ -112,18 +112,16 @@ terraform-docs-replace-012  Same as above, but used for Terraform >= 0.12 module
 <PATH-TO-FILE>              File in where to auto-replace terraform-docs block.
 ```
 
-### Output to stdout (Terraform < 0.12)
+### Output to stdout
 Create markdown output and sent to stdout:
 ```bash
+# [Terraform < 0.12]
 docker run --rm \
   -v $(pwd):/data \
   cytopia/terraform-docs \
   terraform-docs --sort-inputs-by-required terraform-docs --with-aggregate-type-defaults md .
-```
 
-### Output to stdout (Terraform >= 0.12)
-Create markdown output and sent to stdout:
-```bash
+# [Terraform >= 0.12]
 docker run --rm \
   -v $(pwd):/data \
   cytopia/terraform-docs \
@@ -133,10 +131,17 @@ docker run --rm \
 ### Store in file
 Create README.md with `terraform-docs` output:
 ```bash
+# [Terraform < 0.12]
 docker run --rm \
   -v $(pwd):/data \
   cytopia/terraform-docs \
   terraform-docs --sort-inputs-by-required --with-aggregate-type-defaults md . > README.md
+
+# [Terraform >= 0.12]
+docker run --rm \
+  -v $(pwd):/data \
+  cytopia/terraform-docs \
+  terraform-docs-012 --sort-inputs-by-required --with-aggregate-type-defaults md . > README.md
 ```
 
 ### Replace in README.md
