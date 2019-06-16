@@ -52,7 +52,11 @@ _test_run:
 	@echo "------------------------------------------------------------"
 	@echo "- Testing terraform-docs"
 	@echo "------------------------------------------------------------"
-	@if ! docker run --rm -v $(CURRENT_DIR)/tests:/docs $(IMAGE) terraform-docs md .; then \
+	@if ! docker run --rm -v $(CURRENT_DIR)/tests/default:/data $(IMAGE) terraform-docs-replace md TEST-$(TAG).md; then \
+		echo "Failed"; \
+		exit 1; \
+	fi
+	@if ! docker run --rm -v $(CURRENT_DIR)/tests/0.12:/data $(IMAGE) terraform-docs-replace-012 md TEST-$(TAG).md; then \
 		echo "Failed"; \
 		exit 1; \
 	fi; \
