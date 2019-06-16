@@ -93,7 +93,7 @@ where your Terraform module is located.
 
 ## Usage
 
-#### Generic
+### Generic
 ```bash
 Usage: cytopia/terraform-docs terraform-docs <ARGS> .
        cytopia/terraform-docs terraform-docs-012 <ARGS> .
@@ -109,9 +109,10 @@ terraform-docs-replace      Replaces directly inside README.md, if DELIM_START a
 terraform-docs-replace-012  Same as above, but used for Terraform >= 0.12 modules
 
 <ARGS>                      All arguments terraform-docs command can use.
+<PATH-TO-FILE>              File in where to auto-replace terraform-docs block.
 ```
 
-#### Output to stdout
+### Output to stdout (Terraform < 0.12)
 Create markdown output and sent to stdout:
 ```bash
 docker run --rm \
@@ -120,7 +121,16 @@ docker run --rm \
   terraform-docs --sort-inputs-by-required terraform-docs --with-aggregate-type-defaults md .
 ```
 
-#### Store in file
+### Output to stdout (Terraform >= 0.12)
+Create markdown output and sent to stdout:
+```bash
+docker run --rm \
+  -v $(pwd):/data \
+  cytopia/terraform-docs \
+  terraform-docs-012 --sort-inputs-by-required terraform-docs --with-aggregate-type-defaults md .
+```
+
+### Store in file
 Create README.md with `terraform-docs` output:
 ```bash
 docker run --rm \
@@ -129,7 +139,7 @@ docker run --rm \
   terraform-docs --sort-inputs-by-required --with-aggregate-type-defaults md . > README.md
 ```
 
-#### Replace in README.md
+### Replace in README.md
 Replace current `terraform-docs` blocks in README.md with current one in order to automatically
 keep it up to date. For this to work, the `terraform-docs` information must be wrapped with the
 following delimiter by default:
@@ -143,15 +153,24 @@ following delimiter by default:
 ```
 
 ```bash
+# [Terraform < 0.12]
 # Path to README.md must be specified as last command.
 # Note that the command changes from terraform-docs to terraform-docs-replace
 docker run --rm \
   -v $(pwd):/data \
   cytopia/terraform-docs \
   terraform-docs-replace --sort-inputs-by-required --with-aggregate-type-defaults md README.md
+
+# [Terraform >= 0.12]
+# Path to README.md must be specified as last command.
+# Note that the command changes from terraform-docs to terraform-docs-replace
+docker run --rm \
+  -v $(pwd):/data \
+  cytopia/terraform-docs \
+  terraform-docs-replace-012 --sort-inputs-by-required --with-aggregate-type-defaults md README.md
 ```
 
-#### Replace in INFO.md with different delimiter
+### Replace in INFO.md with different delimiter
 You are able to use different delimiter. Let's imagine the following delimiter:
 
 `INFO.md:`
@@ -163,6 +182,7 @@ You are able to use different delimiter. Let's imagine the following delimiter:
 ```
 
 ```bash
+# [Terraform < 0.12]
 # Path to INFO.md must be specified as last command.
 # Note that the command changes from terraform-docs to terraform-docs-replace
 docker run --rm \
@@ -171,9 +191,19 @@ docker run --rm \
   -e DELIM_CLOSE='TFDOC_END' \
   cytopia/terraform-docs \
   terraform-docs-replace --sort-inputs-by-required --with-aggregate-type-defaults md INFO.md
+
+# [Terraform >= 0.12]
+# Path to INFO.md must be specified as last command.
+# Note that the command changes from terraform-docs to terraform-docs-replace
+docker run --rm \
+  -v $(pwd):/data \
+  -e DELIM_START='TFDOC_START' \
+  -e DELIM_CLOSE='TFDOC_END' \
+  cytopia/terraform-docs \
+  terraform-docs-replace-012 --sort-inputs-by-required --with-aggregate-type-defaults md INFO.md
 ```
 
-#### Example Makefile
+### Example Makefile
 You can add the following Makefile to your project for easy generation of terraform-docs output in
 a Terraform module. It takes into consideration the Main module, sub-modules and examples.
 
@@ -261,7 +291,7 @@ _update-tf-docs:
 	docker pull cytopia/terraform-docs:$(TF_DOCS_VERSION)
 ```
 
-#### Travis CI integration
+### Travis CI integration
 With the above Makefile in place, you can easily add a Travis CI rule to ensure the terraform-docs
 output is always up-to-date and will fail otherwise (due to git changes):
 ```yml

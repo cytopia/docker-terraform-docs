@@ -58,6 +58,7 @@ print_usage() {
 	>&2 echo "terraform-docs-replace-012  Same as above, but used for Terraform >= 0.12 modules"
 	>&2 echo
 	>&2 echo "<ARGS>                      All arguments terraform-docs command can use."
+	>&2 echo "<PATH-TO-FILE>              File in where to auto-replace terraform-docs block."
 }
 
 
