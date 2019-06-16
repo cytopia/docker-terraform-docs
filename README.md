@@ -187,8 +187,8 @@ You are able to use different delimiter. Let's imagine the following delimiter:
 # Note that the command changes from terraform-docs to terraform-docs-replace
 docker run --rm \
   -v $(pwd):/data \
-  -e DELIM_START='TFDOC_START' \
-  -e DELIM_CLOSE='TFDOC_END' \
+  -e DELIM_START='<!-- TFDOC_START -->' \
+  -e DELIM_CLOSE='<!-- TFDOC_END -->' \
   cytopia/terraform-docs \
   terraform-docs-replace --sort-inputs-by-required --with-aggregate-type-defaults md INFO.md
 
@@ -197,8 +197,8 @@ docker run --rm \
 # Note that the command changes from terraform-docs to terraform-docs-replace
 docker run --rm \
   -v $(pwd):/data \
-  -e DELIM_START='TFDOC_START' \
-  -e DELIM_CLOSE='TFDOC_END' \
+  -e DELIM_START='<!-- TFDOC_START -->' \
+  -e DELIM_CLOSE='<!-- TFDOC_END -->' \
   cytopia/terraform-docs \
   terraform-docs-replace-012 --sort-inputs-by-required --with-aggregate-type-defaults md INFO.md
 ```
