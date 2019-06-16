@@ -51,6 +51,7 @@ install:
 before_script:
   - while ! make build TAG=${VERSION}; do sleep 1; done
   - while ! make test TAG=${VERSION}; do sleep 1; done
+  - git diff --quiet || { echo "Build Changes"; git diff; git status; false; }
 
 
 ###
