@@ -24,7 +24,7 @@ Stuff before terraform-docs
 | create_monitoring_role | Create IAM role with a defined name that permits RDS to send enhanced monitoring metrics to CloudWatch Logs. | string | `false` | no |
 | db_subnet_group_name | Name of DB subnet group. DB instance will be created in the VPC associated with the DB subnet group. If unspecified, will be created in the default VPC | string | `` | no |
 | deletion_protection | The database can't be deleted when this value is set to true. | string | `false` | no |
-| enabled_cloudwatch_logs_exports | List of log types to enable for exporting to CloudWatch logs. If omitted, no logs will be exported. Valid values (depending on engine): alert, audit, error, general, listener, slowquery, trace, postgresql (PostgreSQL), upgrade (PostgreSQL). | list | `<list>` | no |
+| enabled_cloudwatch_logs_exports | List of log types to enable for exporting to CloudWatch logs. If omitted, no logs will be exported. Valid values (depending on engine): alert, audit, error, general, listener, slowquery, trace, postgresql (PostgreSQL), upgrade (PostgreSQL). | list | `[]` | no |
 | engine | The database engine to use | string | - | yes |
 | engine_version | The engine version to use | string | - | yes |
 | family | The family of the DB parameter group | string | `` | no |
@@ -44,10 +44,10 @@ Stuff before terraform-docs
 | name | The DB schema name to create. If omitted, no database is created initially | string | `` | no |
 | option_group_description | The description of the option group | string | `` | no |
 | option_group_name | Name of the DB option group to associate. Setting this automatically disables option_group creation | string | `` | no |
-| options | A list of Options to apply. | list | `<list>` | no |
+| options | A list of Options to apply. | list | `[]` | no |
 | parameter_group_description | Description of the DB parameter group to create | string | `` | no |
 | parameter_group_name | Name of the DB parameter group to associate or create | string | `` | no |
-| parameters | A list of DB parameters (map) to apply | list | `<list>` | no |
+| parameters | A list of DB parameters (map) to apply | list | `[]` | no |
 | password | Password for the master DB user. Note that this may show up in logs, and it will be stored in the state file | string | - | yes |
 | port | The port on which the DB accepts connections | string | - | yes |
 | publicly_accessible | Bool to control if instance is publicly accessible | string | `false` | no |
@@ -56,15 +56,15 @@ Stuff before terraform-docs
 | snapshot_identifier | Specifies whether or not to create this database from a snapshot. This correlates to the snapshot ID you'd find in the RDS console, e.g: rds:production-2015-06-26-06-05. | string | `` | no |
 | storage_encrypted | Specifies whether the DB instance is encrypted | string | `false` | no |
 | storage_type | One of 'standard' (magnetic), 'gp2' (general purpose SSD), or 'io1' (provisioned IOPS SSD). The default is 'io1' if iops is specified, 'standard' if not. Note that this behaviour is different from the AWS web console, where the default is 'gp2'. | string | `gp2` | no |
-| subnet_ids | A list of VPC subnet IDs | list | `<list>` | no |
-| tags | A mapping of tags to assign to all resources | map | `<map>` | no |
-| timeouts | (Optional) Updated Terraform resource management timeouts. Applies to `aws_db_instance` in particular to permit resource management times | map | `<map>` | no |
+| subnet_ids | A list of VPC subnet IDs | list | `[]` | no |
+| tags | A mapping of tags to assign to all resources | map | `{}` | no |
+| timeouts | (Optional) Updated Terraform resource management timeouts. Applies to `aws_db_instance` in particular to permit resource management times | map | `{ "create": "40m", "delete": "40m", "update": "80m" }` | no |
 | timezone | (Optional) Time zone of the DB instance. timezone is currently only supported by Microsoft SQL Server. The timezone can only be set on creation. See MSSQL User Guide for more information. | string | `` | no |
 | use_option_group_name_prefix | Whether to use the option group name prefix or not | string | `true` | no |
 | use_parameter_group_name_prefix | Whether to use the parameter group name prefix or not | string | `true` | no |
 | use_subnet_group_name_prefix | Whether to use the subnet group name prefix or not | string | `true` | no |
 | username | Username for the master DB user | string | - | yes |
-| vpc_security_group_ids | List of VPC security groups to associate | list | `<list>` | no |
+| vpc_security_group_ids | List of VPC security groups to associate | list | `[]` | no |
 
 ## Outputs
 

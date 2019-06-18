@@ -60,11 +60,21 @@ _test_run:
 	@echo "------------------------------------------------------------"
 	@echo "- Testing terraform-docs"
 	@echo "------------------------------------------------------------"
-	@if ! docker run --rm -v $(CURRENT_DIR)/tests/default:/data $(IMAGE) terraform-docs-replace md TEST-$(TAG).md; then \
+	$(eval TFDOC_ARG_SORT = $(shell \
+		if [ "$(TAG)" = "latest" ] || [ "$(TAG)" = "0.6.0" ] || [ "$(TAG)" = "0.5.0" ]; then \
+			echo "--sort-inputs-by-required"; \
+		fi; \
+	))
+	$(eval TFDOC_ARG_AGGREGATE = $(shell \
+		if [ "$(TAG)" = "latest" ] || [ "$(TAG)" = "0.6.0" ] || [ "$(TAG)" = "0.5.0" ] || [ "$(TAG)" = "0.4.5" ] || [ "$(TAG)" = "0.4.0" ]; then \
+			echo "--with-aggregate-type-defaults"; \
+		fi; \
+	))
+	@if ! docker run --rm -v $(CURRENT_DIR)/tests/default:/data $(IMAGE) terraform-docs-replace $(TFDOC_ARG_SORT) $(TFDOC_ARG_AGGREGATE) md TEST-$(TAG).md; then \
 		echo "Failed"; \
 		exit 1; \
 	fi
-	@if ! docker run --rm -v $(CURRENT_DIR)/tests/0.12:/data $(IMAGE) terraform-docs-replace-012 md TEST-$(TAG).md; then \
+	@if ! docker run --rm -v $(CURRENT_DIR)/tests/0.12:/data $(IMAGE) terraform-docs-replace-012 $(TFDOC_ARG_SORT) $(TFDOC_ARG_AGGREGATE) md TEST-$(TAG).md; then \
 		echo "Failed"; \
 		exit 1; \
 	fi; \
