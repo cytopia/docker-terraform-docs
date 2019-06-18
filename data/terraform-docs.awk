@@ -15,7 +15,7 @@
   }
 
   # [START] variable or output block started
-  if ($0 ~ /^\s*(variable|output)\s+"(.*?)"/) {
+  if ($0 ~ /^[[:space:]]*(variable|output)[[:space:]][[:space:]]*"(.*?)"/) {
     # Normalize the braceCnt (should be 1 now)
     braceCnt = 1
     # [CLOSE] "default" block
@@ -28,17 +28,21 @@
 
   # [START] multiline default statement started
   if (blockCnt > 0) {
-    if ($0 ~ /^\s*default\s*=/) {
-      print $0
-      blockDefCnt++
-      blockDefStart=1
+    if ($0 ~ /^[[:space:]][[:space:]]*(default)[[:space:]][[:space:]]*=/) {
+      if ($3 ~ "null") {
+        print "  default = \"null\""
+      } else {
+        print $0
+        blockDefCnt++
+        blockDefStart=1
+      }
     }
   }
 
   # [PRINT] single line "description"
   if (blockCnt > 0) {
     if (blockDefCnt == 0) {
-      if ($0 ~ /^\s*description\s*=/) {
+      if ($0 ~ /^[[:space:]][[:space:]]*description[[:space:]][[:space:]]*=/) {
         # [CLOSE] "default" block
         if (blockDefCnt > 0) {
           blockDefCnt = 0
@@ -50,7 +54,7 @@
 
   # [PRINT] single line "type"
   if (blockCnt > 0) {
-    if ($0 ~ /^\s*type\s*=/ ) {
+    if ($0 ~ /^[[:space:]][[:space:]]*type[[:space:]][[:space:]]*=/ ) {
       # [CLOSE] "default" block
       if (blockDefCnt > 0) {
         blockDefCnt = 0
