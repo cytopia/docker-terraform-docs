@@ -6,16 +6,18 @@
 # Script was originally found here: https://github.com/cloudposse/build-harness/blob/master/bin/terraform-docs.awk
 
 {
-  if ( /\{/ ) {
+  if ( $0 ~ /\{/ ) {
     braceCnt++
   }
 
-  if ( /\}/ ) {
+  if ( $0 ~ /\}/ ) {
     braceCnt--
   }
 
   # [START] variable or output block started
-  if ($0 ~ /(variable|output) "(.*?)"/) {
+  if ($0 ~ /^[[:space:]]*(variable|output)[[:space:]][[:space:]]*"(.*?)"/) {
+    # Normalize the braceCnt (should be 1 now)
+    braceCnt = 1
     # [CLOSE] "default" block
     if (blockDefCnt > 0) {
       blockDefCnt = 0
@@ -26,9 +28,11 @@
 
   # [START] multiline default statement started
   if (blockCnt > 0) {
-    if ($1 == "default") {
-      print $0
-      if ($NF ~ /[\[\(\{]/) {
+    if ($0 ~ /^[[:space:]][[:space:]]*(default)[[:space:]][[:space:]]*=/) {
+      if ($3 ~ "null") {
+        print "  default = \"null\""
+      } else {
+        print $0
         blockDefCnt++
         blockDefStart=1
       }
@@ -36,19 +40,21 @@
   }
 
   # [PRINT] single line "description"
-  if (blockDefCnt == 0) {
-    if ($1 == "description") {
-      # [CLOSE] "default" block
-      if (blockDefCnt > 0) {
-        blockDefCnt = 0
+  if (blockCnt > 0) {
+    if (blockDefCnt == 0) {
+      if ($0 ~ /^[[:space:]][[:space:]]*description[[:space:]][[:space:]]*=/) {
+        # [CLOSE] "default" block
+        if (blockDefCnt > 0) {
+          blockDefCnt = 0
+        }
+        print $0
       }
-      print $0
     }
   }
 
   # [PRINT] single line "type"
   if (blockCnt > 0) {
-    if ($1 == "type" ) {
+    if ($0 ~ /^[[:space:]][[:space:]]*type[[:space:]][[:space:]]*=/ ) {
       # [CLOSE] "default" block
       if (blockDefCnt > 0) {
         blockDefCnt = 0

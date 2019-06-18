@@ -2,7 +2,7 @@ ifneq (,)
 .error This Makefile requires GNU Make.
 endif
 
-.PHONY: build rebuild test _test_version _test_run tag pull login push enter
+.PHONY: build rebuild lint test _test_version _test_run tag pull login push enter
 
 CURRENT_DIR = $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
 
@@ -16,6 +16,14 @@ build:
 
 rebuild: pull
 	docker build --no-cache --build-arg VERSION=$(TAG) -t $(IMAGE) -f $(DIR)/$(FILE) $(DIR)
+
+lint:
+	@docker run --rm -v $(CURRENT_DIR):/data cytopia/file-lint file-cr --text --ignore '.git/,.github/,tests/' --path .
+	@docker run --rm -v $(CURRENT_DIR):/data cytopia/file-lint file-crlf --text --ignore '.git/,.github/,tests/' --path .
+	@docker run --rm -v $(CURRENT_DIR):/data cytopia/file-lint file-trailing-single-newline --text --ignore '.git/,.github/,tests/' --path .
+	@docker run --rm -v $(CURRENT_DIR):/data cytopia/file-lint file-trailing-space --text --ignore '.git/,.github/,tests/' --path .
+	@docker run --rm -v $(CURRENT_DIR):/data cytopia/file-lint file-utf8 --text --ignore '.git/,.github/,tests/' --path .
+	@docker run --rm -v $(CURRENT_DIR):/data cytopia/file-lint file-utf8-bom --text --ignore '.git/,.github/,tests/' --path .
 
 test:
 	@$(MAKE) --no-print-directory _test_version
@@ -52,11 +60,21 @@ _test_run:
 	@echo "------------------------------------------------------------"
 	@echo "- Testing terraform-docs"
 	@echo "------------------------------------------------------------"
-	@if ! docker run --rm -v $(CURRENT_DIR)/tests/default:/data $(IMAGE) terraform-docs-replace md TEST-$(TAG).md; then \
+	$(eval TFDOC_ARG_SORT = $(shell \
+		if [ "$(TAG)" = "latest" ] || [ "$(TAG)" = "0.6.0" ] || [ "$(TAG)" = "0.5.0" ]; then \
+			echo "--sort-inputs-by-required"; \
+		fi; \
+	))
+	$(eval TFDOC_ARG_AGGREGATE = $(shell \
+		if [ "$(TAG)" = "latest" ] || [ "$(TAG)" = "0.6.0" ] || [ "$(TAG)" = "0.5.0" ] || [ "$(TAG)" = "0.4.5" ] || [ "$(TAG)" = "0.4.0" ]; then \
+			echo "--with-aggregate-type-defaults"; \
+		fi; \
+	))
+	@if ! docker run --rm -v $(CURRENT_DIR)/tests/default:/data $(IMAGE) terraform-docs-replace $(TFDOC_ARG_SORT) $(TFDOC_ARG_AGGREGATE) md TEST-$(TAG).md; then \
 		echo "Failed"; \
 		exit 1; \
 	fi
-	@if ! docker run --rm -v $(CURRENT_DIR)/tests/0.12:/data $(IMAGE) terraform-docs-replace-012 md TEST-$(TAG).md; then \
+	@if ! docker run --rm -v $(CURRENT_DIR)/tests/0.12:/data $(IMAGE) terraform-docs-replace-012 $(TFDOC_ARG_SORT) $(TFDOC_ARG_AGGREGATE) md TEST-$(TAG).md; then \
 		echo "Failed"; \
 		exit 1; \
 	fi; \
