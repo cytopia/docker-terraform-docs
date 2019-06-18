@@ -115,7 +115,7 @@ if [ "${#}" -ge "1" ]; then
 			# Get terraform-docs output
 			>&2 echo "terraform-docs-012 ${*} ${WORKDIR}"
 			if ! DOCS="$(terraform-docs "${@}" "/tmp-012")"; then
-				cat -n /tmp-012/tmp.tf
+				cat -n "/tmp-012/tmp.tf" >&2
 				exit 1
 			fi
 		fi
@@ -153,7 +153,10 @@ if [ "${#}" -ge "1" ]; then
 		# Remove first argument (terraform-docs-012)
 		shift
 		# Execute
-		exec terraform-docs "${@}" "/tmp-012/"
+		if ! terraform-docs "${@}" "/tmp-012/"; then
+			cat -n "/tmp-012/tmp.tf" >&2
+			exit 1
+		fi
 
 	###
 	### Unsupported command
