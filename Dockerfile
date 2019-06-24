@@ -1,4 +1,4 @@
-FROM golang:latest as builder
+FROM golang:stretch as builder
 
 # Install dependencies
 RUN set -x \
@@ -38,7 +38,7 @@ RUN set -x \
 	&& chmod +x bin/linux-amd64/terraform-docs
 
 # Use a clean tiny image to store artifacts in
-FROM alpine:latest
+FROM alpine:3.9
 LABEL \
 	maintainer="cytopia <cytopia@everythingcli.org>" \
 	repo="https://github.com/cytopia/docker-terraform-docs"
