@@ -98,8 +98,8 @@ Stuff before terraform-docs
 | storage_encrypted | Specifies whether the DB instance is encrypted | bool | `false` | no |
 | storage_type | One of 'standard' (magnetic), 'gp2' (general purpose SSD), or 'io1' (provisioned IOPS SSD). The default is 'io1' if iops is specified, 'standard' if not. Note that this behaviour is different from the AWS web console, where the default is 'gp2'. | string | `gp2` | no |
 | subnet_ids | A list of VPC subnet IDs | list(string) | `<list>` | no |
-| tags | A mapping of tags to assign to security group | map(string) | `<map>` | no |
 | tags | A mapping of tags to assign to all resources | map(string) | `<map>` | no |
+| test_var | This is a test variable | string | `` | no |
 | timeouts | (Optional) Updated Terraform resource management timeouts. Applies to `aws_db_instance` in particular to permit resource management times | map(string) | `<map>` | no |
 | timezone | (Optional) Time zone of the DB instance. timezone is currently only supported by Microsoft SQL Server. The timezone can only be set on creation. See MSSQL User Guide for more information. | string | `` | no |
 | use_name_prefix | Whether to use name_prefix or fixed name. Should be true to able to update security group name after initial creation | bool | `true` | no |
