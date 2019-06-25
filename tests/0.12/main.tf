@@ -54,6 +54,18 @@ output "environment" {
 
 ###################################################################################################
 #
+# Quoted type (https://github.com/antonbabenko/pre-commit-terraform/issues/52)
+#
+###################################################################################################
+variable "test_var" {
+  type        = "string"
+  description = "This is a test variable"
+  default     = ""
+}
+
+
+###################################################################################################
+#
 # https://github.com/terraform-aws-modules/terraform-aws-rds: variables.tf
 #
 ###################################################################################################
@@ -517,12 +529,6 @@ variable "description" {
   description = "Description of security group"
   type        = string
   default     = "Security Group managed by Terraform"
-}
-
-variable "tags" {
-  description = "A mapping of tags to assign to security group"
-  type        = map(string)
-  default     = {}
 }
 
 ##########
