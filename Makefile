@@ -2,7 +2,7 @@ ifneq (,)
 .error This Makefile requires GNU Make.
 endif
 
-.PHONY: build rebuild lint test _test-version _test-run tag pull login push enter
+.PHONY: build rebuild lint test _test-version _test-run-one _test-run-two tag pull login push enter
 
 CURRENT_DIR = $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
 
@@ -27,7 +27,8 @@ lint:
 
 test:
 	@$(MAKE) --no-print-directory _test-version
-	@$(MAKE) --no-print-directory _test-run
+	@$(MAKE) --no-print-directory _test-run-one
+	@$(MAKE) --no-print-directory _test-run-two
 
 _test-version:
 	@echo "------------------------------------------------------------"
@@ -42,7 +43,7 @@ _test-version:
 				| head -1 \
 				| sed 's/.*v//g' \
 		)"; \
-		echo "Testing for latest: $${LATEST}"; \
+		echo "Testing for latest: dev"; \
 		if ! docker run --rm $(IMAGE) | grep -E "^(terraform-docs[[:space:]])?(version[[:space:]])?dev"; then \
 			echo "Failed"; \
 			exit 1; \
@@ -56,9 +57,30 @@ _test-version:
 	fi; \
 	echo "Success"; \
 
-_test-run:
+_test-run-one:
 	@echo "------------------------------------------------------------"
-	@echo "- Testing terraform-docs"
+	@echo "- Testing terraform-docs (1/2)"
+	@echo "------------------------------------------------------------"
+	@echo '<!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->' > tests/basic/TEST-$(TAG).md
+	@echo >> tests/basic/TEST-$(TAG).md
+	@echo '<!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->' >> tests/basic/TEST-$(TAG).md
+	@if ! docker run --rm -v $(CURRENT_DIR)/tests/basic:/data $(IMAGE) terraform-docs-replace md TEST-$(TAG).md; then \
+		echo "Failed"; \
+		exit 1; \
+	fi; \
+	if ! grep '## Inputs' tests/basic/TEST-$(TAG).md; then \
+		echo "Failed"; \
+		exit 1; \
+	fi; \
+	if ! grep 'test description' tests/basic/TEST-$(TAG).md; then \
+		echo "Failed"; \
+		exit 1; \
+	fi; \
+	echo "Success";
+
+_test-run-two:
+	@echo "------------------------------------------------------------"
+	@echo "- Testing terraform-docs (2/2)"
 	@echo "------------------------------------------------------------"
 	$(eval TFDOC_ARG_SORT = $(shell \
 		if [ "$(TAG)" = "latest" ] || [ "$(TAG)" = "0.6.0" ] || [ "$(TAG)" = "0.5.0" ]; then \
@@ -70,10 +92,12 @@ _test-run:
 			echo "--with-aggregate-type-defaults"; \
 		fi; \
 	))
+	@# ---- Test Terraform < 0.12 ----
 	@if ! docker run --rm -v $(CURRENT_DIR)/tests/default:/data $(IMAGE) terraform-docs-replace $(TFDOC_ARG_SORT) $(TFDOC_ARG_AGGREGATE) md TEST-$(TAG).md; then \
 		echo "Failed"; \
 		exit 1; \
 	fi
+	@# ---- Test Terraform >= 0.12 ----
 	@if ! docker run --rm -v $(CURRENT_DIR)/tests/0.12:/data $(IMAGE) terraform-docs-replace-012 $(TFDOC_ARG_SORT) $(TFDOC_ARG_AGGREGATE) md TEST-$(TAG).md; then \
 		echo "Failed"; \
 		exit 1; \
