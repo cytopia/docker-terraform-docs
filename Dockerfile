@@ -1,48 +1,62 @@
-FROM golang:stretch as builder
+FROM golang:alpine3.9 as builder
 
 # Install dependencies
 RUN set -x \
-	&& DEBIAN_FRONTEND=noninteractive apt-get update -qq \
-	&& DEBIAN_FRONTEND=noninteractive apt-get install -qq -y --no-install-recommends --no-install-suggests \
+	&& apk add --no-cache \
+		curl \
+		gcc \
 		git \
-		gox \
+		make \
+		musl-dev \
 	&& curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
 
 # Get and build terraform-docs
-ARG VERSION
+ARG VERSION=latest
 RUN set -x \
 	&& export GOPATH=/go \
 	&& mkdir -p /go/src/github.com/segmentio \
 	&& git clone https://github.com/segmentio/terraform-docs /go/src/github.com/segmentio/terraform-docs \
 	&& cd /go/src/github.com/segmentio/terraform-docs \
-	&& if [ ${VERSION} != "latest" ]; then \
+	&& if [ "${VERSION}" != "latest" ]; then \
 		git checkout v${VERSION}; \
 	fi \
 	# Build terraform-docs <= 0.3.0
 	&& if [ "${VERSION}" = "0.3.0" ] || [ "${VERSION}" = "0.2.0" ] || [ "${VERSION}" = "0.1.1" ] || [ "${VERSION}" = "0.1.0" ]; then \
 		go get github.com/hashicorp/hcl \
+		&& go get github.com/mitchellh/gox \
 		&& go get github.com/tj/docopt \
+		&& sed -i'' 's/darwin//g' Makefile \
+		&& sed -i'' 's/windows//g' Makefile \
 		&& make \
-		&& mkdir -p bin/linux-amd64 \
-		&& mv dist/terraform-docs_linux_amd64 bin/linux-amd64/terraform-docs; \
+		&& mv dist/terraform-docs_linux_amd64 /usr/local/bin/terraform-docs; \
 	# Build terraform-docs > 0.3.0
 	else \
 		make deps \
 		&& make test \
 		&& make build-linux-amd64 \
-		&& if [ ${VERSION} = "0.4.0" ]; then \
-			mkdir -p bin/linux-amd64 \
-			&& mv bin/terraform-docs-v${VERSION}-linux-amd64 bin/linux-amd64/terraform-docs; \
+		&& if [ "${VERSION}" = "0.4.0" ]; then \
+			mv bin/terraform-docs-v${VERSION}-linux-amd64 /usr/local/bin/terraform-docs; \
+		else \
+			mv bin/linux-amd64/terraform-docs /usr/local/bin/terraform-docs; \
 		fi \
 	fi \
-	&& chmod +x bin/linux-amd64/terraform-docs
+	&& chmod +x /usr/local/bin/terraform-docs
+
+# Version pre-check
+RUN set -x \
+	&& if [ "${VERSION}" != "latest" ]; then \
+		terraform-docs --version | grep "${VERSION}"; \
+	else \
+		terraform-docs --version | grep -E "(terraform-docs[[:space:]])?(version[[:space:]])?dev"; \
+	fi
+
 
 # Use a clean tiny image to store artifacts in
-FROM alpine:3.9
+FROM alpine:3.8
 LABEL \
 	maintainer="cytopia <cytopia@everythingcli.org>" \
 	repo="https://github.com/cytopia/docker-terraform-docs"
-COPY --from=builder /go/src/github.com/segmentio/terraform-docs/bin/linux-amd64/terraform-docs /usr/local/bin/terraform-docs
+COPY --from=builder /usr/local/bin/terraform-docs /usr/local/bin/terraform-docs
 COPY ./data/docker-entrypoint.sh /docker-entrypoint.sh
 COPY ./data/terraform-docs.awk /terraform-docs.awk
 
