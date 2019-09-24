@@ -3,6 +3,7 @@ FROM golang:alpine3.9 as builder
 # Install dependencies
 RUN set -x \
 	&& apk add --no-cache \
+		bash \
 		curl \
 		gcc \
 		git \
@@ -29,6 +30,12 @@ RUN set -x \
 		&& sed -i'' 's/windows//g' Makefile \
 		&& make \
 		&& mv dist/terraform-docs_linux_amd64 /usr/local/bin/terraform-docs; \
+	# Build terraform-docs latest
+	elif [ "${VERSION}" = "latest" ]; then \
+		go get github.com/mitchellh/gox \
+		&& make test \
+		&& make build-all GOOS=linux GOARCH=amd64 \
+		&& mv bin/linux-amd64/terraform-docs /usr/local/bin/terraform-docs; \
 	# Build terraform-docs > 0.3.0
 	else \
 		make deps \
@@ -47,7 +54,7 @@ RUN set -x \
 	&& if [ "${VERSION}" != "latest" ]; then \
 		terraform-docs --version | grep "${VERSION}"; \
 	else \
-		terraform-docs --version | grep -E "(terraform-docs[[:space:]])?(version[[:space:]])?dev"; \
+		terraform-docs --version | grep -E "(terraform-docs[[:space:]])?(version[[:space:]])?(dev|latest)"; \
 	fi
 
 
