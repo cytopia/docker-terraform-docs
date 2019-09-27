@@ -58,6 +58,7 @@ Stuff before terraform-docs
 | family | The family of the DB parameter group | string | `` | no |
 | final\_snapshot\_identifier | The name of your final DB snapshot when this DB instance is deleted. | string | `null` | no |
 | iam\_database\_authentication\_enabled | Specifies whether or mappings of AWS Identity and Access Management (IAM) accounts to database accounts is enabled | bool | `false` | no |
+| ingress\_cidr\_blocks | Bzzzzz | list | `[ { "cidr_blocks": "10.0.0.0/32", "description": "SG", "from_port": 22, "protocol": "tcp", "to_port": 22 } ]` | no |
 | ingress\_cidr\_blocks | List of IPv4 CIDR ranges to use on all ingress rules | list(string) | `[]` | no |
 | ingress\_ipv6\_cidr\_blocks | List of IPv6 CIDR ranges to use on all ingress rules | list(string) | `[]` | no |
 | ingress\_prefix\_list\_ids | List of prefix list IDs (for allowing access to VPC endpoints) to use on all ingress rules | list(string) | `[]` | no |

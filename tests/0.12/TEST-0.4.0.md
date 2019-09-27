@@ -52,6 +52,7 @@ Stuff before terraform-docs
 | final_snapshot_identifier | The name of your final DB snapshot when this DB instance is deleted. | string | `null` | no |
 | iam_database_authentication_enabled | Specifies whether or mappings of AWS Identity and Access Management (IAM) accounts to database accounts is enabled | bool | `false` | no |
 | identifier | The name of the RDS instance, if omitted, Terraform will assign a random, unique identifier | string | - | yes |
+| ingress_cidr_blocks | Bzzzzz | list | `[ { "cidr_blocks": "10.0.0.0/32", "description": "SG", "from_port": 22, "protocol": "tcp", "to_port": 22 } ]` | no |
 | ingress_cidr_blocks | List of IPv4 CIDR ranges to use on all ingress rules | list(string) | `[]` | no |
 | ingress_ipv6_cidr_blocks | List of IPv6 CIDR ranges to use on all ingress rules | list(string) | `[]` | no |
 | ingress_prefix_list_ids | List of prefix list IDs (for allowing access to VPC endpoints) to use on all ingress rules | list(string) | `[]` | no |
@@ -70,8 +71,8 @@ Stuff before terraform-docs
 | monitoring_role_arn | The ARN for the IAM role that permits RDS to send enhanced monitoring metrics to CloudWatch Logs. Must be specified if monitoring_interval is non-zero. | string | `` | no |
 | monitoring_role_name | Name of the IAM role which will be created when create_monitoring_role is enabled. | string | `rds-monitoring-role` | no |
 | multi_az | Specifies if the RDS instance is multi-AZ | bool | `false` | no |
-| name | Name of security group | string | - | yes |
 | name | The DB name to create. If omitted, no database is created initially | string | `` | no |
+| name | Name of security group | string | - | yes |
 | network | The network | object | `{ "subnets": [ { "cidr_block": "10.0.0.0/16", "id": "vpc-123456" } ], "vpc": [ { "cidr_block": "10.0.0.0/16", "id": "vpc-123456" } ] }` | no |
 | number_of_computed_egress_rules | Number of computed egress rules to create by name | number | `0` | no |
 | number_of_computed_egress_with_cidr_blocks | Number of computed egress rules to create where 'cidr_blocks' is used | number | `0` | no |
