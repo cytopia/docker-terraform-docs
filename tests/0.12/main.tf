@@ -54,6 +54,35 @@ output "environment" {
 
 ###################################################################################################
 #
+# "description" key in type (https://github.com/antonbabenko/pre-commit-terraform/issues/65)
+#
+###################################################################################################
+variable "ingress_cidr_blocks" {
+  description = "Bzzzzz"
+  type = list(
+    object({
+      description = string
+      cidr_blocks = string
+      from_port   = number
+      to_port     = number
+      protocol    = string
+    })
+  )
+
+  default = [
+    {
+      description = "SG"
+      cidr_blocks = "10.0.0.0/32"
+      from_port   = 22
+      to_port     = 22
+      protocol    = "tcp"
+    },
+  ]
+}
+
+
+###################################################################################################
+#
 # Quoted type (https://github.com/antonbabenko/pre-commit-terraform/issues/52)
 #
 ###################################################################################################
