@@ -71,8 +71,8 @@ Stuff before terraform-docs
 | monitoring_role_arn | The ARN for the IAM role that permits RDS to send enhanced monitoring metrics to CloudWatch Logs. Must be specified if monitoring_interval is non-zero. | `` | no |
 | monitoring_role_name | Name of the IAM role which will be created when create_monitoring_role is enabled. | `rds-monitoring-role` | no |
 | multi_az | Specifies if the RDS instance is multi-AZ | `false` | no |
-| name | The DB name to create. If omitted, no database is created initially | `` | no |
 | name | Name of security group | - | yes |
+| name | The DB name to create. If omitted, no database is created initially | `` | no |
 | network | The network | `<map>` | no |
 | number_of_computed_egress_rules | Number of computed egress rules to create by name | `0` | no |
 | number_of_computed_egress_with_cidr_blocks | Number of computed egress rules to create where 'cidr_blocks' is used | `0` | no |
@@ -87,6 +87,7 @@ Stuff before terraform-docs
 | option_group_description | The description of the option group | `` | no |
 | option_group_name | Name of the DB option group to associate. Setting this automatically disables option_group creation | `` | no |
 | options | A list of Options to apply. | `<list>` | no |
+| override_special |  | `%` | no |
 | parameter_group_description | Description of the DB parameter group to create | `` | no |
 | parameter_group_name | Name of the DB parameter group to associate or create | `` | no |
 | parameters | A list of DB parameters (map) to apply | `<list>` | no |

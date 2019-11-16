@@ -90,6 +90,7 @@ Stuff before terraform-docs
 | option\_group\_description | The description of the option group | string | `` | no |
 | option\_group\_name | Name of the DB option group to associate. Setting this automatically disables option_group creation | string | `` | no |
 | options | A list of Options to apply. | any | `[]` | no |
+| override\_special | - | string | `%` | no |
 | parameter\_group\_description | Description of the DB parameter group to create | string | `` | no |
 | parameter\_group\_name | Name of the DB parameter group to associate or create | string | `` | no |
 | parameters | A list of DB parameters (map) to apply | list(map(string)) | `[]` | no |
