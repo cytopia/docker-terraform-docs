@@ -123,7 +123,7 @@ if [ "${#}" -ge "1" ]; then
 		# Create temporary README.md
 		mkdir -p /tmp
 		grep -B 100000000 -F "${DELIM_START}" "${WORKDIR}/${MY_FILE}" > /tmp/README.md
-		printf "${DOCS}\n\n" >> /tmp/README.md
+		printf "%s\n\n" "${DOCS}" >> /tmp/README.md
 		grep -A 100000000 -F "${DELIM_CLOSE}" "${WORKDIR}/${MY_FILE}" >> /tmp/README.md
 
 		# Adjust permissions of temporary file
