@@ -35,7 +35,7 @@ RUN set -x \
 		go get github.com/mitchellh/gox \
 		&& make test \
 		&& make build-all GOOS=linux GOARCH=amd64 \
-		&& mv bin/linux-amd64/terraform-docs /usr/local/bin/terraform-docs; \
+		&& mv bin/terraform-docs-latest-linux-amd64 /usr/local/bin/terraform-docs; \
 	# Build terraform-docs > 0.3.0
 	else \
 		make deps \
