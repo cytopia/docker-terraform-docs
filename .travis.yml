@@ -32,6 +32,7 @@ env:
     - VERSION=0.4.5
     - VERSION=0.5.0
     - VERSION=0.6.0
+    - VERSION=0.7.0
     - VERSION=latest
 
 

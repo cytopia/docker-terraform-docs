@@ -64,6 +64,7 @@ changes will be introduced).
 | Docker tag | Build from docker-terraform-docs | Build from terraform-docs |
 |------------|----------------------------------|---------------------------|
 | `latest`   | [Branch: master](https://github.com/cytopia/docker-terraform-docs) | [Branch: master](https://github.com/segmentio/terraform-docs) |
+| `0.7.0`    | [Branch: master](https://github.com/cytopia/docker-terraform-docs) | [Tag: v0.7.0](https://github.com/segmentio/terraform-docs/tree/v0.7.0) |
 | `0.6.0`    | [Branch: master](https://github.com/cytopia/docker-terraform-docs) | [Tag: v0.6.0](https://github.com/segmentio/terraform-docs/tree/v0.6.0) |
 | `0.5.0`    | [Branch: master](https://github.com/cytopia/docker-terraform-docs) | [Tag: v0.5.0](https://github.com/segmentio/terraform-docs/tree/v0.5.0) |
 | `0.4.5`    | [Branch: master](https://github.com/cytopia/docker-terraform-docs) | [Tag: v0.4.5](https://github.com/segmentio/terraform-docs/tree/v0.4.5) |
@@ -81,6 +82,7 @@ you will have to take care yourself and update your CI tools every time a new ta
 | Docker tag     | Build from docker-terraform-docs | Build from terraform-docs |
 |----------------|----------------------------------|---------------------------|
 | `latest-<tag>` | Tag: `<tag>`                     | [Branch: master](https://github.com/segmentio/terraform-docs) |
+| `0.7.0-<tag>`  | Tag: `<tag>`                     | [Tag: v0.7.0](https://github.com/segmentio/terraform-docs/tree/v0.7.0) |
 | `0.6.0-<tag>`  | Tag: `<tag>`                     | [Tag: v0.6.0](https://github.com/segmentio/terraform-docs/tree/v0.6.0) |
 | `0.5.0-<tag>`  | Tag: `<tag>`                     | [Tag: v0.5.0](https://github.com/segmentio/terraform-docs/tree/v0.5.0) |
 | `0.4.5-<tag>`  | Tag: `<tag>`                     | [Tag: v0.4.5](https://github.com/segmentio/terraform-docs/tree/v0.4.5) |
