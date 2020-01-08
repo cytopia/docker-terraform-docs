@@ -53,6 +53,39 @@ output "environment" {
 
 ###################################################################################################
 #
+# multi-line patch (https://github.com/cytopia/build-harness/pull/1)
+#
+###################################################################################################
+
+variable "subnetwork" {
+  type = string
+
+  default = <<EOF
+This
+is
+a
+test
+EOF
+
+  description = <<EOF
+This
+is
+a
+test
+EOF
+
+  value = <<EOF
+This
+is
+a
+test
+EOF
+
+}
+
+
+###################################################################################################
+#
 # "%" in default value (https://github.com/cytopia/docker-terraform-docs/issues/24)
 #
 ###################################################################################################

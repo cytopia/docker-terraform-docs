@@ -50,7 +50,7 @@ _test-version:
 		fi; \
 	else \
 		echo "Testing for tag: $(TAG)"; \
-		if ! docker run --rm $(IMAGE) | grep -E "^v?$(TAG)$$"; then \
+		if ! docker run --rm $(IMAGE) | grep -E "^(terraform-docs version)?\s?v?$(TAG)(\s.*)?$$"; then \
 			echo "Failed"; \
 			exit 1; \
 		fi; \
@@ -83,12 +83,12 @@ _test-run-two:
 	@echo "- Testing terraform-docs (2/2)"
 	@echo "------------------------------------------------------------"
 	$(eval TFDOC_ARG_SORT = $(shell \
-		if [ "$(TAG)" = "latest" ] || [ "$(TAG)" = "0.6.0" ] || [ "$(TAG)" = "0.5.0" ]; then \
+		if [ "$(TAG)" = "latest" ] || [ "$(TAG)" = "0.7.0" ] || [ "$(TAG)" = "0.6.0" ] || [ "$(TAG)" = "0.5.0" ]; then \
 			echo "--sort-inputs-by-required"; \
 		fi; \
 	))
 	$(eval TFDOC_ARG_AGGREGATE = $(shell \
-		if [ "$(TAG)" = "latest" ] || [ "$(TAG)" = "0.6.0" ] || [ "$(TAG)" = "0.5.0" ] || [ "$(TAG)" = "0.4.5" ] || [ "$(TAG)" = "0.4.0" ]; then \
+		if [ "$(TAG)" = "latest" ] || [ "$(TAG)" = "0.7.0" ] || [ "$(TAG)" = "0.6.0" ] || [ "$(TAG)" = "0.5.0" ] || [ "$(TAG)" = "0.4.5" ] || [ "$(TAG)" = "0.4.0" ]; then \
 			echo "--with-aggregate-type-defaults"; \
 		fi; \
 	))

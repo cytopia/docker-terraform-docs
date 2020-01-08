@@ -30,6 +30,11 @@ RUN set -x \
 		&& sed -i'' 's/windows//g' Makefile \
 		&& make \
 		&& mv dist/terraform-docs_linux_amd64 /usr/local/bin/terraform-docs; \
+	# Build terraform-docs 0.7.0
+	elif [ "${VERSION}" = "0.7.0" ]; then \
+		make test \
+		&& make gox build-all GOOS=linux GOARCH=amd64 \
+		&& mv bin/terraform-docs-0.7.0-linux-amd64 /usr/local/bin/terraform-docs; \
 	# Build terraform-docs latest
 	elif [ "${VERSION}" = "latest" ]; then \
 		go get github.com/mitchellh/gox \

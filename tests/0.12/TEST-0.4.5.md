@@ -99,6 +99,11 @@ Stuff before terraform-docs
 | storage_encrypted | Specifies whether the DB instance is encrypted | bool | `false` | no |
 | storage_type | One of 'standard' (magnetic), 'gp2' (general purpose SSD), or 'io1' (provisioned IOPS SSD). The default is 'io1' if iops is specified, 'standard' if not. Note that this behaviour is different from the AWS web console, where the default is 'gp2'. | string | `gp2` | no |
 | subnet_ids | A list of VPC subnet IDs | list(string) | `[]` | no |
+| subnetwork | This is a test | string | `This
+is
+a
+test
+` | no |
 | tags | A mapping of tags to assign to all resources | map(string) | `{}` | no |
 | test_var | This is a test variable | string | `` | no |
 | timeouts | (Optional) Updated Terraform resource management timeouts. Applies to `aws_db_instance` in particular to permit resource management times | map(string) | `{ "create": "40m", "delete": "40m", "update": "80m" }` | no |

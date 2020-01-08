@@ -1,16 +1,8 @@
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
-## Providers
-
-No provider.
-
 ## Inputs
 
 | Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:-----:|
-| test | test description | `any` | n/a | yes |
-
-## Outputs
-
-No output.
+|------|-------------|:----:|:-----:|:-----:|
+| test | test description | string | n/a | yes |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
