@@ -53,9 +53,11 @@ print_usage() {
 	>&2 echo
 	>&2 echo "terraform-docs              Output as expected from terraform-docs"
 	>&2 echo "terraform-docs-012          Same as above, but used for Terraform >= 0.12 modules"
+	>&2 echo "                            (Not required anymore and will become deprecated)"
 	>&2 echo
 	>&2 echo "terraform-docs-replace      Replaces directly inside README.md, if DELIM_START and DELIM_CLOSE are found."
 	>&2 echo "terraform-docs-replace-012  Same as above, but used for Terraform >= 0.12 modules"
+	>&2 echo "                            (Not required anymore and will become deprecated)"
 	>&2 echo
 	>&2 echo "<ARGS>                      All arguments terraform-docs command can use."
 	>&2 echo "<PATH-TO-FILE>              File in where to auto-replace terraform-docs block."
@@ -99,64 +101,31 @@ if [ "${#}" -ge "1" ]; then
 		GID="$(stat -c %g "${WORKDIR}/${MY_FILE}")"
 		PERM="$(stat -c %a "${WORKDIR}/${MY_FILE}")"
 
-		# Terraform < 0.12
-		if [ "${1}" = "terraform-docs-replace" ]; then
-			# Remove first argument "replace"
-			shift;
-			# Get terraform-docs output
-			>&2 echo "terraform-docs ${*} ${WORKDIR}"
-			DOCS="$(terraform-docs "${@}" "${WORKDIR}")"
-		# Terraform >= 0.12
-		else
-			# Remove first argument "replace"
-			shift;
-			mkdir -p /tmp-012
-			awk -f /terraform-docs.awk *.tf > "/tmp-012/tmp.tf"
-			# Get terraform-docs output
-			>&2 echo "terraform-docs-012 ${*} ${WORKDIR}"
-			if ! DOCS="$(terraform-docs "${@}" "/tmp-012")"; then
-				cat -n "/tmp-012/tmp.tf" >&2
-				exit 1
-			fi
-		fi
+		# Remove first argument "replace"
+		shift;
+		# Get terraform-docs output
+		>&2 echo "terraform-docs ${*} ${WORKDIR}"
+		DOCS="$(terraform-docs "${@}" "${WORKDIR}")"
 
 		# Create temporary README.md
 		mkdir -p /tmp
 		grep -B 100000000 -F "${DELIM_START}" "${WORKDIR}/${MY_FILE}" > /tmp/README.md
-		printf "%s\n\n" "${DOCS}" >> /tmp/README.md
+		printf "%s\\n\\n" "${DOCS}" >> /tmp/README.md
 		grep -A 100000000 -F "${DELIM_CLOSE}" "${WORKDIR}/${MY_FILE}" >> /tmp/README.md
 
 		# Adjust permissions of temporary file
-		chown ${UID}:${GID} /tmp/README.md
-		chmod ${PERM} /tmp/README.md
+		chown "${UID}:${GID}" /tmp/README.md
+		chmod "${PERM}" /tmp/README.md
 
 		# Overwrite existing file
 		mv -f /tmp/README.md "${WORKDIR}/${MY_FILE}"
 		exit 0
 
 	###
-	### terraform-docs command (< 0.12)
+	### terraform-docs command
 	###
-	elif [ "${1}" = "terraform-docs" ]; then
+	elif [ "${1}" = "terraform-docs" ] || [ "${1}" = "terraform-docs-012" ]; then
 		exec "${@}"
-
-	###
-	### terraform-docs command (>= 0.12)
-	###
-	elif [ "${1}" = "terraform-docs-012" ]; then
-		mkdir -p /tmp-012
-		awk -f /terraform-docs.awk *.tf > "/tmp-012/tmp.tf"
-
-		# Remove last argument (path)
-		args="$(trim_last_arg "${@}")"	# get all the args except the last arg
-		eval "set -- ${args}"			# update the shell's arguments with the new value
-		# Remove first argument (terraform-docs-012)
-		shift
-		# Execute
-		if ! terraform-docs "${@}" "/tmp-012/"; then
-			cat -n "/tmp-012/tmp.tf" >&2
-			exit 1
-		fi
 
 	###
 	### Unsupported command
