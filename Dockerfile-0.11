@@ -34,13 +34,7 @@ RUN set -x \
 	elif [ "${VERSION}" = "0.7.0" ]; then \
 		make test \
 		&& make gox build-all GOOS=linux GOARCH=amd64 \
-		&& mv bin/terraform-docs-0.7.0-linux-amd64 /usr/local/bin/terraform-docs; \
-	# Build terraform-docs latest
-	elif [ "${VERSION}" = "latest" ]; then \
-		go get github.com/mitchellh/gox \
-		&& make test \
-		&& make build-all GOOS=linux GOARCH=amd64 \
-		&& mv bin/terraform-docs-latest-linux-amd64 /usr/local/bin/terraform-docs; \
+		&& mv bin/terraform-docs-${VERSION}-linux-amd64 /usr/local/bin/terraform-docs; \
 	# Build terraform-docs > 0.3.0
 	else \
 		make deps \
@@ -69,7 +63,7 @@ LABEL \
 	maintainer="cytopia <cytopia@everythingcli.org>" \
 	repo="https://github.com/cytopia/docker-terraform-docs"
 COPY --from=builder /usr/local/bin/terraform-docs /usr/local/bin/terraform-docs
-COPY ./data/docker-entrypoint.sh /docker-entrypoint.sh
+COPY ./data/docker-entrypoint-0.11.sh /docker-entrypoint.sh
 COPY ./data/terraform-docs.awk /terraform-docs.awk
 
 ENV WORKDIR /data

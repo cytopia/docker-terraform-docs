@@ -64,6 +64,8 @@ changes will be introduced).
 | Docker tag | Build from docker-terraform-docs | Build from terraform-docs |
 |------------|----------------------------------|---------------------------|
 | `latest`   | [Branch: master](https://github.com/cytopia/docker-terraform-docs) | [Branch: master](https://github.com/segmentio/terraform-docs) |
+| `0.8.0-rc.2` | [Branch: master](https://github.com/cytopia/docker-terraform-docs) | [Tag: v0.8.0-rc.2](https://github.com/segmentio/terraform-docs/tree/v0.8.0-rc.2) |
+| `0.8.0-rc.1` | [Branch: master](https://github.com/cytopia/docker-terraform-docs) | [Tag: v0.8.0-rc.1](https://github.com/segmentio/terraform-docs/tree/v0.8.0-rc.1) |
 | `0.7.0`    | [Branch: master](https://github.com/cytopia/docker-terraform-docs) | [Tag: v0.7.0](https://github.com/segmentio/terraform-docs/tree/v0.7.0) |
 | `0.6.0`    | [Branch: master](https://github.com/cytopia/docker-terraform-docs) | [Tag: v0.6.0](https://github.com/segmentio/terraform-docs/tree/v0.6.0) |
 | `0.5.0`    | [Branch: master](https://github.com/cytopia/docker-terraform-docs) | [Tag: v0.5.0](https://github.com/segmentio/terraform-docs/tree/v0.5.0) |
@@ -82,6 +84,8 @@ you will have to take care yourself and update your CI tools every time a new ta
 | Docker tag     | Build from docker-terraform-docs | Build from terraform-docs |
 |----------------|----------------------------------|---------------------------|
 | `latest-<tag>` | Tag: `<tag>`                     | [Branch: master](https://github.com/segmentio/terraform-docs) |
+| `0.8.0-rc.2-<tag>` | Tag: `<tag>`                 | [Tag: v0.8.0-rc.2](https://github.com/segmentio/terraform-docs/tree/v0.8.0-rc.2) |
+| `0.8.0-rc.1-<tag>` | Tag: `<tag>`                 | [Tag: v0.8.0-rc.1](https://github.com/segmentio/terraform-docs/tree/v0.8.0-rc.1) |
 | `0.7.0-<tag>`  | Tag: `<tag>`                     | [Tag: v0.7.0](https://github.com/segmentio/terraform-docs/tree/v0.7.0) |
 | `0.6.0-<tag>`  | Tag: `<tag>`                     | [Tag: v0.6.0](https://github.com/segmentio/terraform-docs/tree/v0.6.0) |
 | `0.5.0-<tag>`  | Tag: `<tag>`                     | [Tag: v0.5.0](https://github.com/segmentio/terraform-docs/tree/v0.5.0) |
@@ -140,13 +144,13 @@ Create markdown output and sent to stdout:
 docker run --rm \
   -v $(pwd):/data \
   cytopia/terraform-docs \
-  terraform-docs --sort-inputs-by-required terraform-docs --with-aggregate-type-defaults md .
+  terraform-docs --sort-inputs-by-required --with-aggregate-type-defaults md .
 
 # [Terraform >= 0.12]
 docker run --rm \
   -v $(pwd):/data \
   cytopia/terraform-docs \
-  terraform-docs-012 --sort-inputs-by-required terraform-docs --with-aggregate-type-defaults md .
+  terraform-docs-012 --sort-inputs-by-required --with-aggregate-type-defaults md .
 ```
 
 ### Store in file

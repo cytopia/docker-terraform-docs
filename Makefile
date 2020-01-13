@@ -4,27 +4,64 @@ endif
 
 .PHONY: build rebuild lint test _test-version _test-run-one _test-run-two tag pull login push enter
 
-CURRENT_DIR = $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
-
+# --------------------------------------------------------------------------------------------------
+# VARIABLES
+# --------------------------------------------------------------------------------------------------
 DIR = .
-FILE = Dockerfile
+FILE_012 = Dockerfile-0.12
+FILE_011 = Dockerfile-0.11
 IMAGE = cytopia/terraform-docs
 TAG = latest
+NO_CACHE =
 
+
+# --------------------------------------------------------------------------------------------------
+# DEFAULT TARGET
+# --------------------------------------------------------------------------------------------------
+help:
+	@echo "lint                   Lint this repository."
+	@echo "build   [TAG=x.y.z]    Build terraform-docs docker image."
+	@echo "rebuild [TAG=x.y.z]    Build terraform-docs docker image without cache."
+	@echo "test    [TAG=x.y.z]    Test built terraform-docs docker image."
+
+
+# --------------------------------------------------------------------------------------------------
+# BUILD TARGETS
+# --------------------------------------------------------------------------------------------------
 build:
-	docker build --build-arg VERSION=$(TAG) -t $(IMAGE) -f $(DIR)/$(FILE) $(DIR)
+	if [ "$(TAG)" = "0.1.0" ] \
+	|| [ "$(TAG)" = "0.1.1" ] \
+	|| [ "$(TAG)" = "0.2.0" ] \
+	|| [ "$(TAG)" = "0.3.0" ] \
+	|| [ "$(TAG)" = "0.4.0" ] \
+	|| [ "$(TAG)" = "0.4.5" ] \
+	|| [ "$(TAG)" = "0.5.0" ] \
+	|| [ "$(TAG)" = "0.6.0" ] \
+	|| [ "$(TAG)" = "0.7.0" ]; then \
+		docker build $(NO_CACHE) --build-arg VERSION=$(TAG) -t $(IMAGE) -f $(DIR)/$(FILE_011) $(DIR); \
+	else \
+		docker build $(NO_CACHE) --build-arg VERSION=$(TAG) -t $(IMAGE) -f $(DIR)/$(FILE_012) $(DIR); \
+	fi
 
-rebuild: pull
-	docker build --no-cache --build-arg VERSION=$(TAG) -t $(IMAGE) -f $(DIR)/$(FILE) $(DIR)
+rebuild: NO_CACHE=--no-cache
+rebuild: build
 
+
+# --------------------------------------------------------------------------------------------------
+# LINT TARGETS
+# --------------------------------------------------------------------------------------------------
 lint:
-	@docker run --rm -v $(CURRENT_DIR):/data cytopia/file-lint file-cr --text --ignore '.git/,.github/,tests/' --path .
-	@docker run --rm -v $(CURRENT_DIR):/data cytopia/file-lint file-crlf --text --ignore '.git/,.github/,tests/' --path .
-	@docker run --rm -v $(CURRENT_DIR):/data cytopia/file-lint file-trailing-single-newline --text --ignore '.git/,.github/,tests/' --path .
-	@docker run --rm -v $(CURRENT_DIR):/data cytopia/file-lint file-trailing-space --text --ignore '.git/,.github/,tests/' --path .
-	@docker run --rm -v $(CURRENT_DIR):/data cytopia/file-lint file-utf8 --text --ignore '.git/,.github/,tests/' --path .
-	@docker run --rm -v $(CURRENT_DIR):/data cytopia/file-lint file-utf8-bom --text --ignore '.git/,.github/,tests/' --path .
+	@docker run --rm -v $(PWD):/data cytopia/file-lint file-cr --text --ignore '.git/,.github/,tests/' --path .
+	@docker run --rm -v $(PWD):/data cytopia/file-lint file-crlf --text --ignore '.git/,.github/,tests/' --path .
+	@docker run --rm -v $(PWD):/data cytopia/file-lint file-trailing-single-newline --text --ignore '.git/,.github/,tests/' --path .
+	@docker run --rm -v $(PWD):/data cytopia/file-lint file-trailing-space --text --ignore '.git/,.github/,tests/' --path .
+	@docker run --rm -v $(PWD):/data cytopia/file-lint file-utf8 --text --ignore '.git/,.github/,tests/' --path .
+	@docker run --rm -v $(PWD):/data cytopia/file-lint file-utf8-bom --text --ignore '.git/,.github/,tests/' --path .
 
+
+# --------------------------------------------------------------------------------------------------
+# TEST TARGETS
+# --------------------------------------------------------------------------------------------------
 test:
 	@$(MAKE) --no-print-directory _test-version
 	@$(MAKE) --no-print-directory _test-run-one
@@ -64,7 +101,7 @@ _test-run-one:
 	@echo '<!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->' > tests/basic/TEST-$(TAG).md
 	@echo >> tests/basic/TEST-$(TAG).md
 	@echo '<!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->' >> tests/basic/TEST-$(TAG).md
-	@if ! docker run --rm -v $(CURRENT_DIR)/tests/basic:/data $(IMAGE) terraform-docs-replace md TEST-$(TAG).md; then \
+	@if ! docker run --rm -v $(PWD)/tests/basic:/data $(IMAGE) terraform-docs-replace md TEST-$(TAG).md; then \
 		echo "Failed"; \
 		exit 1; \
 	fi; \
@@ -83,27 +120,31 @@ _test-run-two:
 	@echo "- Testing terraform-docs (2/2)"
 	@echo "------------------------------------------------------------"
 	$(eval TFDOC_ARG_SORT = $(shell \
-		if [ "$(TAG)" = "latest" ] || [ "$(TAG)" = "0.7.0" ] || [ "$(TAG)" = "0.6.0" ] || [ "$(TAG)" = "0.5.0" ]; then \
+		if [ "$(TAG)" != "0.1.0" ] && [ "$(TAG)" != "0.1.1" ] && [ "$(TAG)" != "0.2.0" ] && [ "$(TAG)" != "0.3.0" ] && [ "$(TAG)" != "0.4.0" ] && [ "$(TAG)" != "0.4.5" ]; then \
 			echo "--sort-inputs-by-required"; \
 		fi; \
 	))
 	$(eval TFDOC_ARG_AGGREGATE = $(shell \
-		if [ "$(TAG)" = "latest" ] || [ "$(TAG)" = "0.7.0" ] || [ "$(TAG)" = "0.6.0" ] || [ "$(TAG)" = "0.5.0" ] || [ "$(TAG)" = "0.4.5" ] || [ "$(TAG)" = "0.4.0" ]; then \
+		if [ "$(TAG)" != "0.1.0" ] && [ "$(TAG)" != "0.1.1" ] && [ "$(TAG)" != "0.2.0" ] && [ "$(TAG)" != "0.3.0" ]; then \
 			echo "--with-aggregate-type-defaults"; \
 		fi; \
 	))
 	@# ---- Test Terraform < 0.12 ----
-	@if ! docker run --rm -v $(CURRENT_DIR)/tests/default:/data $(IMAGE) terraform-docs-replace $(TFDOC_ARG_SORT) $(TFDOC_ARG_AGGREGATE) md TEST-$(TAG).md; then \
+	@if ! docker run --rm -v $(PWD)/tests/default:/data $(IMAGE) terraform-docs-replace $(TFDOC_ARG_SORT) $(TFDOC_ARG_AGGREGATE) md TEST-$(TAG).md; then \
 		echo "Failed"; \
 		exit 1; \
 	fi
 	@# ---- Test Terraform >= 0.12 ----
-	@if ! docker run --rm -v $(CURRENT_DIR)/tests/0.12:/data $(IMAGE) terraform-docs-replace-012 $(TFDOC_ARG_SORT) $(TFDOC_ARG_AGGREGATE) md TEST-$(TAG).md; then \
+	@if ! docker run --rm -v $(PWD)/tests/0.12:/data $(IMAGE) terraform-docs-replace-012 $(TFDOC_ARG_SORT) $(TFDOC_ARG_AGGREGATE) md TEST-$(TAG).md; then \
 		echo "Failed"; \
 		exit 1; \
 	fi; \
 	echo "Success";
 
+
+# --------------------------------------------------------------------------------------------------
+# HELPER TARGETS
+# --------------------------------------------------------------------------------------------------
 tag:
 	docker tag $(IMAGE) $(IMAGE):$(TAG)
 

@@ -106,7 +106,7 @@ No provider.
 | subnetwork | This is a test | `string` | `"This\nis\na\ntest\n"` | no |
 | tags | A mapping of tags to assign to all resources | `map(string)` | `{}` | no |
 | test\_var | This is a test variable | `string` | `""` | no |
-| timeouts | (Optional) Updated Terraform resource management timeouts. Applies to `aws_db_instance` in particular to permit resource management times | `map(string)` | <code><pre>{<br>  "create": "40m",<br>  "delete": "40m",<br>  "update": "80m"<br>}<br></pre></code> | no |
+| timeouts | (Optional) Updated Terraform resource management timeouts. Applies to `aws\_db\_instance` in particular to permit resource management times | `map(string)` | <code><pre>{<br>  "create": "40m",<br>  "delete": "40m",<br>  "update": "80m"<br>}<br></pre></code> | no |
 | timezone | (Optional) Time zone of the DB instance. timezone is currently only supported by Microsoft SQL Server. The timezone can only be set on creation. See MSSQL User Guide for more information. | `string` | `""` | no |
 | use\_name\_prefix | Whether to use name\_prefix or fixed name. Should be true to able to update security group name after initial creation | `bool` | `true` | no |
 | use\_parameter\_group\_name\_prefix | Whether to use the parameter group name prefix or not | `bool` | `true` | no |
