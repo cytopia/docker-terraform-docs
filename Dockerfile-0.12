@@ -24,13 +24,11 @@ RUN set -x \
 	# Build terraform-docs latest
 	&& if [ "${VERSION}" = "latest" ]; then \
 		go get github.com/mitchellh/gox \
-		&& make test \
 		&& make build-all GOOS=linux GOARCH=amd64 \
 		&& mv bin/terraform-docs-${VERSION}-linux-amd64 /usr/local/bin/terraform-docs; \
 	# Build terraform-docs 0.8.0-rc.1 and above
 	else \
 		go get github.com/mitchellh/gox \
-		&& make test \
 		&& make build-all GOOS=linux GOARCH=amd64 \
 		&& mv bin/terraform-docs-${VERSION}-linux-amd64 /usr/local/bin/terraform-docs; \
 	fi \
