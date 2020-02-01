@@ -1,8 +1,3 @@
-# Test
-
-Stuff before terraform-docs
-
-<!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Inputs
 
 | Name | Description | Type | Default | Required |
@@ -143,6 +138,3 @@ test
 | this_security_group_owner_id | The owner ID |
 | this_security_group_vpc_id | The VPC ID |
 
-<!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->	
-
-Stuff after terraform-docs

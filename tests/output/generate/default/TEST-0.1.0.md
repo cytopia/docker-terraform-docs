@@ -1,8 +1,3 @@
-# Test
-
-Stuff before terraform-docs
-
-<!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 
 ## Inputs
 
@@ -89,6 +84,3 @@ Stuff before terraform-docs
 | this_db_subnet_group_arn |  |
 | this_db_subnet_group_id |  |
 
-<!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->	
-
-Stuff after terraform-docs

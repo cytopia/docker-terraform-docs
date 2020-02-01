@@ -1,4 +1,3 @@
-<!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 
 ## Inputs
 
@@ -6,4 +5,3 @@
 |------|-------------|:----:|:-----:|:-----:|
 | test | test description | string | - | yes |
 
-<!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->

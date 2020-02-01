@@ -1,8 +1,3 @@
-# Test
-
-Stuff before terraform-docs
-
-<!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Providers
 
 No provider.
@@ -141,6 +136,3 @@ No provider.
 | this\_security\_group\_owner\_id | The owner ID |
 | this\_security\_group\_vpc\_id | The VPC ID |
 
-<!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->	
-
-Stuff after terraform-docs

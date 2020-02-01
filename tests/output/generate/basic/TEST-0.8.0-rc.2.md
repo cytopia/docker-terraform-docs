@@ -1,4 +1,3 @@
-<!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Providers
 
 No provider.
@@ -13,4 +12,3 @@ No provider.
 
 No output.
 
-<!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
