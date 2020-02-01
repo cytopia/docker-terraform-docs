@@ -125,7 +125,10 @@ if [ "${#}" -ge "1" ]; then
 	### terraform-docs command
 	###
 	elif [ "${1}" = "terraform-docs" ] || [ "${1}" = "terraform-docs-012" ]; then
-		exec "${@}"
+
+		# Remove first argument "replace"
+		shift
+		terraform-docs "${@}"
 
 	###
 	### Unsupported command
