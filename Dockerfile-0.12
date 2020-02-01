@@ -51,7 +51,6 @@ LABEL \
 COPY --from=builder /usr/local/bin/terraform-docs /usr/local/bin/terraform-docs
 COPY ./data/docker-entrypoint-0.12.sh /docker-entrypoint.sh
 
-ENV WORKDIR /data
 WORKDIR /data
 
 CMD ["terraform-docs", "--version"]

@@ -66,7 +66,6 @@ COPY --from=builder /usr/local/bin/terraform-docs /usr/local/bin/terraform-docs
 COPY ./data/docker-entrypoint-0.11.sh /docker-entrypoint.sh
 COPY ./data/terraform-docs.awk /terraform-docs.awk
 
-ENV WORKDIR /data
 WORKDIR /data
 
 CMD ["terraform-docs", "--version"]
