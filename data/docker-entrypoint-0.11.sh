@@ -111,7 +111,7 @@ if [ "${#}" -ge "1" ]; then
 			# Remove first argument "replace"
 			shift;
 			mkdir -p /tmp-012
-			awk -f /terraform-docs.awk -- *.tf > "/tmp-012/tmp.tf"
+			awk -f /terraform-docs.awk -- "$(dirname "${MY_FILE}")/"*.tf > "/tmp-012/tmp.tf"
 			# Get terraform-docs output
 			>&2 echo "terraform-docs-012 ${*} $(dirname "${MY_FILE}")"
 			if ! DOCS="$(terraform-docs "${@}" "/tmp-012")"; then
@@ -141,19 +141,25 @@ if [ "${#}" -ge "1" ]; then
 
 		# Terraform < 0.12
 		if [ "${1}" = "terraform-docs" ]; then
+			>&2 echo "${*}"
 			exec "${@}"
 
 		# Terraform >= 0.12
 		else
-			mkdir -p /tmp-012
-			awk -f /terraform-docs.awk -- *.tf > "/tmp-012/tmp.tf"
 
-			# Remove last argument (path)
+			# Store and Remove last argument (filename)
+			eval MY_DIR="\${$#}"			# store last argument
 			args="$(trim_last_arg "${@}")"	# get all the args except the last arg
 			eval "set -- ${args}"			# update the shell's arguments with the new value
-			# Remove first argument (terraform-docs-012)
+
+			mkdir -p /tmp-012
+			awk -f /terraform-docs.awk -- "${MY_DIR}/"*.tf > "/tmp-012/tmp.tf"
+
+			# Remove first argument
 			shift
+
 			# Execute
+			>&2 echo "terraform-docs ${*} ${MY_DIR}"
 			if ! terraform-docs "${@}" "/tmp-012/"; then
 				cat -n "/tmp-012/tmp.tf" >&2
 				exit 1
