@@ -81,51 +81,55 @@ if [ "${#}" -ge "1" ]; then
 
 
 		# Check if file exists
-		if [ ! -f "${WORKDIR}/${MY_FILE}" ]; then
-			>&2 echo "Error, ${MY_FILE} not found in: ${WORKDIR}/${MY_FILE}"
+		if [ ! -f "${MY_FILE}" ]; then
+			>&2 echo "Error, File not found in: ${MY_FILE}"
 			exit 1
 		fi
 		# Check if starting delimiter exists in file
-		if ! grep -Fq "${DELIM_START}" "${WORKDIR}/${MY_FILE}"; then
+		if ! grep -Fq "${DELIM_START}" "${MY_FILE}"; then
 			>&2 echo "Error, Starting delimiter not found ${MY_FILE}: '${DELIM_START}'"
 			exit 1
 		fi
 		# Check if closint delimiter exists in file
-		if ! grep -Fq "${DELIM_CLOSE}" "${WORKDIR}/${MY_FILE}"; then
+		if ! grep -Fq "${DELIM_CLOSE}" "${MY_FILE}"; then
 			>&2 echo "Error, Closing delimiter not found ${MY_FILE}: '${DELIM_CLOSE}'"
 			exit 1
 		fi
 
 		# Get owner and permissions of current file
-		UID="$(stat -c %u "${WORKDIR}/${MY_FILE}")"
-		GID="$(stat -c %g "${WORKDIR}/${MY_FILE}")"
-		PERM="$(stat -c %a "${WORKDIR}/${MY_FILE}")"
+		UID="$(stat -c %u "${MY_FILE}")"
+		GID="$(stat -c %g "${MY_FILE}")"
+		PERM="$(stat -c %a "${MY_FILE}")"
 
 		# Remove first argument "replace"
 		shift;
 		# Get terraform-docs output
-		>&2 echo "terraform-docs ${*} ${WORKDIR}"
-		DOCS="$(terraform-docs "${@}" "${WORKDIR}")"
+		>&2 echo "terraform-docs ${*} $(dirname "${MY_FILE}")"
+		DOCS="$(terraform-docs "${@}" "$(dirname "${MY_FILE}")")"
 
 		# Create temporary README.md
 		mkdir -p /tmp
-		grep -B 100000000 -F "${DELIM_START}" "${WORKDIR}/${MY_FILE}" > /tmp/README.md
+		grep -B 100000000 -F "${DELIM_START}" "${MY_FILE}" > /tmp/README.md
 		printf "%s\\n\\n" "${DOCS}" >> /tmp/README.md
-		grep -A 100000000 -F "${DELIM_CLOSE}" "${WORKDIR}/${MY_FILE}" >> /tmp/README.md
+		grep -A 100000000 -F "${DELIM_CLOSE}" "${MY_FILE}" >> /tmp/README.md
 
 		# Adjust permissions of temporary file
 		chown "${UID}:${GID}" /tmp/README.md
 		chmod "${PERM}" /tmp/README.md
 
 		# Overwrite existing file
-		mv -f /tmp/README.md "${WORKDIR}/${MY_FILE}"
+		mv -f /tmp/README.md "${MY_FILE}"
 		exit 0
 
 	###
 	### terraform-docs command
 	###
 	elif [ "${1}" = "terraform-docs" ] || [ "${1}" = "terraform-docs-012" ]; then
-		exec "${@}"
+
+		# Remove first argument "replace"
+		shift
+		>&2 echo "terraform-docs ${*}"
+		terraform-docs "${@}"
 
 	###
 	### Unsupported command

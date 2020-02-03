@@ -91,7 +91,7 @@ No provider.
 | number\_of\_computed\_ingress\_with\_source\_security\_group\_id | Number of computed ingress rules to create where 'source\_security\_group\_id' is used | `number` | `0` | no |
 | option\_group\_description | The description of the option group | `string` | `""` | no |
 | option\_group\_name | Name of the DB option group to associate. Setting this automatically disables option\_group creation | `string` | `""` | no |
-| options | A list of Options to apply. | `list` | `[]` | no |
+| options | A list of Options to apply. | `any` | `[]` | no |
 | override\_special | n/a | `string` | `"%"` | no |
 | parameter\_group\_description | Description of the DB parameter group to create | `string` | `""` | no |
 | parameter\_group\_name | Name of the DB parameter group to associate or create | `string` | `""` | no |

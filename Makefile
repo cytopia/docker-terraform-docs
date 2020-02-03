@@ -2,7 +2,7 @@ ifneq (,)
 .error This Makefile requires GNU Make.
 endif
 
-.PHONY: build rebuild lint test _test-version _test-run-one _test-run-two tag pull login push enter
+.PHONY: build rebuild lint test _test-version _test-run-generate-one _test-run-generate-two _test-run-replace-one _test-run-replace-two tag pull login push enter
 
 # --------------------------------------------------------------------------------------------------
 # VARIABLES
@@ -64,8 +64,10 @@ lint:
 # --------------------------------------------------------------------------------------------------
 test:
 	@$(MAKE) --no-print-directory _test-version
-	@$(MAKE) --no-print-directory _test-run-one
-	@$(MAKE) --no-print-directory _test-run-two
+	@$(MAKE) --no-print-directory _test-run-generate-one
+	@$(MAKE) --no-print-directory _test-run-generate-two
+	@$(MAKE) --no-print-directory _test-run-replace-one
+	@$(MAKE) --no-print-directory _test-run-replace-two
 
 _test-version:
 	@echo "------------------------------------------------------------"
@@ -94,28 +96,25 @@ _test-version:
 	fi; \
 	echo "Success"; \
 
-_test-run-one:
+_test-run-generate-one:
 	@echo "------------------------------------------------------------"
 	@echo "- Testing terraform-docs (1/2)"
 	@echo "------------------------------------------------------------"
-	@echo '<!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->' > tests/basic/TEST-$(TAG).md
-	@echo >> tests/basic/TEST-$(TAG).md
-	@echo '<!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->' >> tests/basic/TEST-$(TAG).md
-	@if ! docker run --rm -v $(PWD)/tests/basic:/data $(IMAGE) terraform-docs-replace md TEST-$(TAG).md; then \
+	@if ! docker run --rm -v $(PWD)/tests:/data $(IMAGE) terraform-docs md /data/output/generate/basic/ > tests/output/generate/basic/TEST-$(TAG).md; then \
 		echo "Failed"; \
 		exit 1; \
 	fi; \
-	if ! grep '## Inputs' tests/basic/TEST-$(TAG).md; then \
+	if ! grep '## Inputs' tests/output/generate/basic/TEST-$(TAG).md; then \
 		echo "Failed"; \
 		exit 1; \
 	fi; \
-	if ! grep 'test description' tests/basic/TEST-$(TAG).md; then \
+	if ! grep -E '^variable.*$$' tests/output/generate/basic/main.tf | awk -F'"' '{print $$2}' | xargs -n1 sh -c 'if ! cat tests/output/generate/basic/TEST-$(TAG).md | sed "s/\\\//g" | grep -E "[[:space:]]$$1[[:space:]]" >/dev/null; then echo "[ERROR] $$1"; false; else echo "[SUCC]  $$1"; true; fi' -- ; then \
 		echo "Failed"; \
 		exit 1; \
 	fi; \
 	echo "Success";
 
-_test-run-two:
+_test-run-generate-two:
 	@echo "------------------------------------------------------------"
 	@echo "- Testing terraform-docs (2/2)"
 	@echo "------------------------------------------------------------"
@@ -130,12 +129,79 @@ _test-run-two:
 		fi; \
 	))
 	@# ---- Test Terraform < 0.12 ----
-	@if ! docker run --rm -v $(PWD)/tests/default:/data $(IMAGE) terraform-docs-replace $(TFDOC_ARG_SORT) $(TFDOC_ARG_AGGREGATE) md TEST-$(TAG).md; then \
+	@if ! docker run --rm -v $(PWD)/tests:/data $(IMAGE) terraform-docs $(TFDOC_ARG_SORT) $(TFDOC_ARG_AGGREGATE) md /data/output/generate/default/ > tests/output/generate/default/TEST-$(TAG).md; then \
+		echo "Failed"; \
+		exit 1; \
+	fi; \
+	if ! grep -E '^variable.*$$' tests/output/generate/default/main.tf | awk -F'"' '{print $$2}' | xargs -n1 sh -c 'if ! cat tests/output/generate/default/TEST-$(TAG).md | sed "s/\\\//g" | grep -E "[[:space:]]$$1[[:space:]]" >/dev/null; then echo "[ERROR] $$1"; false; else echo "[SUCC]  $$1"; true; fi' -- ; then \
 		echo "Failed"; \
 		exit 1; \
 	fi
 	@# ---- Test Terraform >= 0.12 ----
-	@if ! docker run --rm -v $(PWD)/tests/0.12:/data $(IMAGE) terraform-docs-replace-012 $(TFDOC_ARG_SORT) $(TFDOC_ARG_AGGREGATE) md TEST-$(TAG).md; then \
+	@if ! docker run --rm -v $(PWD)/tests:/data $(IMAGE) terraform-docs-012 $(TFDOC_ARG_SORT) $(TFDOC_ARG_AGGREGATE) md /data/output/generate/0.12/ > tests/output/generate/0.12/TEST-$(TAG).md; then \
+		echo "Failed"; \
+		exit 1; \
+	fi; \
+	if ! grep -E '^variable.*$$' tests/output/generate/0.12/main.tf | awk -F'"' '{print $$2}' | xargs -n1 sh -c 'if ! cat tests/output/generate/0.12/TEST-$(TAG).md | sed "s/\\\//g" | grep -E "[[:space:]]$$1[[:space:]]" >/dev/null; then echo "[ERROR] $$1"; false; else echo "[SUCC]  $$1"; true; fi' -- ; then \
+		echo "Failed"; \
+		exit 1; \
+	fi
+	@echo "Success";
+
+_test-run-replace-one:
+	@echo "------------------------------------------------------------"
+	@echo "- Testing terraform-docs-replace (1/2)"
+	@echo "------------------------------------------------------------"
+	@echo '<!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->' > tests/output/replace/basic/TEST-$(TAG).md
+	@echo >> tests/output/replace/basic/TEST-$(TAG).md
+	@echo '<!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->' >> tests/output/replace/basic/TEST-$(TAG).md
+	@if ! docker run --rm -v $(PWD)/tests:/data $(IMAGE) terraform-docs-replace md /data/output/replace/basic/TEST-$(TAG).md; then \
+		echo "Failed"; \
+		exit 1; \
+	fi; \
+	if ! grep '## Inputs' tests/output/replace/basic/TEST-$(TAG).md; then \
+		echo "Failed"; \
+		exit 1; \
+	fi; \
+	if ! grep 'test description' tests/output/replace/basic/TEST-$(TAG).md; then \
+		echo "Failed"; \
+		exit 1; \
+	fi; \
+	if ! grep -E '^variable.*$$' tests/output/replace/basic/main.tf | awk -F'"' '{print $$2}' | xargs -n1 sh -c 'if ! cat tests/output/replace/basic/TEST-$(TAG).md | sed "s/\\\//g" | grep -E "[[:space:]]$$1[[:space:]]" >/dev/null; then echo "[ERROR] $$1"; false; else echo "[SUCC]  $$1"; true; fi' -- ; then \
+		echo "Failed"; \
+		exit 1; \
+	fi; \
+	echo "Success";
+
+_test-run-replace-two:
+	@echo "------------------------------------------------------------"
+	@echo "- Testing terraform-docs-replace (2/2)"
+	@echo "------------------------------------------------------------"
+	$(eval TFDOC_ARG_SORT = $(shell \
+		if [ "$(TAG)" != "0.1.0" ] && [ "$(TAG)" != "0.1.1" ] && [ "$(TAG)" != "0.2.0" ] && [ "$(TAG)" != "0.3.0" ] && [ "$(TAG)" != "0.4.0" ] && [ "$(TAG)" != "0.4.5" ]; then \
+			echo "--sort-inputs-by-required"; \
+		fi; \
+	))
+	$(eval TFDOC_ARG_AGGREGATE = $(shell \
+		if [ "$(TAG)" != "0.1.0" ] && [ "$(TAG)" != "0.1.1" ] && [ "$(TAG)" != "0.2.0" ] && [ "$(TAG)" != "0.3.0" ]; then \
+			echo "--with-aggregate-type-defaults"; \
+		fi; \
+	))
+	@# ---- Test Terraform < 0.12 ----
+	@if ! docker run --rm -v $(PWD)/tests:/data $(IMAGE) terraform-docs-replace $(TFDOC_ARG_SORT) $(TFDOC_ARG_AGGREGATE) md /data/output/replace/default/TEST-$(TAG).md; then \
+		echo "Failed"; \
+		exit 1; \
+	fi; \
+	if ! grep -E '^variable.*$$' tests/output/replace/default/main.tf | awk -F'"' '{print $$2}' | xargs -n1 sh -c 'if ! cat tests/output/replace/default/TEST-$(TAG).md | sed "s/\\\//g" | grep -E "[[:space:]]$$1[[:space:]]" >/dev/null; then echo "[ERROR] $$1"; false; else echo "[SUCC]  $$1"; true; fi' -- ; then \
+		echo "Failed"; \
+		exit 1; \
+	fi
+	@# ---- Test Terraform >= 0.12 ----
+	@if ! docker run --rm -v $(PWD)/tests:/data $(IMAGE) terraform-docs-replace-012 $(TFDOC_ARG_SORT) $(TFDOC_ARG_AGGREGATE) md /data/output/replace/0.12/TEST-$(TAG).md; then \
+		echo "Failed"; \
+		exit 1; \
+	fi; \
+	if ! grep -E '^variable.*$$' tests/output/replace/0.12/main.tf | awk -F'"' '{print $$2}' | xargs -n1 sh -c 'if ! cat tests/output/replace/0.12/TEST-$(TAG).md | sed "s/\\\//g" | grep -E "[[:space:]]$$1[[:space:]]" >/dev/null; then echo "[ERROR] $$1"; false; else echo "[SUCC]  $$1"; true; fi' -- ; then \
 		echo "Failed"; \
 		exit 1; \
 	fi; \
