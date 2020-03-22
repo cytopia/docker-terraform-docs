@@ -42,12 +42,12 @@ No provider.
 | create\_db\_parameter\_group | Whether to create a database parameter group | `bool` | `true` | no |
 | create\_db\_subnet\_group | Whether to create a database subnet group | `bool` | `true` | no |
 | create\_monitoring\_role | Create IAM role with a defined name that permits RDS to send enhanced monitoring metrics to CloudWatch Logs. | `bool` | `false` | no |
-| database\_outbound\_acl\_rules | Database subnets outbound network ACL rules | `list(map(string))` | <pre>[<br>  {<br>    "cidr_block": "0.0.0.0/0",<br>    "from_port": 0,<br>    "protocol": "-1",<br>    "rule_action": "allow",<br>    "rule_number": 100,<br>    "to_port": 0<br>  }<br>]<br></pre> | no |
+| database\_outbound\_acl\_rules | Database subnets outbound network ACL rules | `list(map(string))` | <pre>[<br>  {<br>    "cidr_block": "0.0.0.0/0",<br>    "from_port": 0,<br>    "protocol": "-1",<br>    "rule_action": "allow",<br>    "rule_number": 100,<br>    "to_port": 0<br>  }<br>]</pre> | no |
 | db\_subnet\_group\_name | Name of DB subnet group. DB instance will be created in the VPC associated with the DB subnet group. If unspecified, will be created in the default VPC | `string` | `""` | no |
 | deletion\_protection | The database can't be deleted when this value is set to true. | `bool` | `false` | no |
 | description | Description of security group | `string` | `"Security Group managed by Terraform"` | no |
-| egress\_cidr\_blocks | List of IPv4 CIDR ranges to use on all egress rules | `list(string)` | <pre>[<br>  "0.0.0.0/0"<br>]<br></pre> | no |
-| egress\_ipv6\_cidr\_blocks | List of IPv6 CIDR ranges to use on all egress rules | `list(string)` | <pre>[<br>  "::/0"<br>]<br></pre> | no |
+| egress\_cidr\_blocks | List of IPv4 CIDR ranges to use on all egress rules | `list(string)` | <pre>[<br>  "0.0.0.0/0"<br>]</pre> | no |
+| egress\_ipv6\_cidr\_blocks | List of IPv6 CIDR ranges to use on all egress rules | `list(string)` | <pre>[<br>  "::/0"<br>]</pre> | no |
 | egress\_prefix\_list\_ids | List of prefix list IDs (for allowing access to VPC endpoints) to use on all egress rules | `list(string)` | `[]` | no |
 | egress\_rules | List of egress rules to create by name | `list(string)` | `[]` | no |
 | egress\_with\_cidr\_blocks | List of egress rules to create where 'cidr\_blocks' is used | `list(map(string))` | `[]` | no |
@@ -73,7 +73,7 @@ No provider.
 | monitoring\_role\_arn | The ARN for the IAM role that permits RDS to send enhanced monitoring metrics to CloudWatch Logs. Must be specified if monitoring\_interval is non-zero. | `string` | `""` | no |
 | monitoring\_role\_name | Name of the IAM role which will be created when create\_monitoring\_role is enabled. | `string` | `"rds-monitoring-role"` | no |
 | multi\_az | Specifies if the RDS instance is multi-AZ | `bool` | `false` | no |
-| network | The network | <pre>object({<br>    vpc = object({<br>      id         = string<br>      cidr_block = string<br>    })<br>    subnets = set(object({<br>      id         = string<br>      cidr_block = string<br>    }))<br>  })<br></pre> | <pre>{<br>  "subnets": [<br>    {<br>      "cidr_block": "10.0.0.0/16",<br>      "id": "vpc-123456"<br>    }<br>  ],<br>  "vpc": {<br>    "cidr_block": "10.0.0.0/16",<br>    "id": "vpc-123456"<br>  }<br>}<br></pre> | no |
+| network | The network | <pre>object({<br>    vpc = object({<br>      id         = string<br>      cidr_block = string<br>    })<br>    subnets = set(object({<br>      id         = string<br>      cidr_block = string<br>    }))<br>  })</pre> | <pre>{<br>  "subnets": [<br>    {<br>      "cidr_block": "10.0.0.0/16",<br>      "id": "vpc-123456"<br>    }<br>  ],<br>  "vpc": {<br>    "cidr_block": "10.0.0.0/16",<br>    "id": "vpc-123456"<br>  }<br>}</pre> | no |
 | number\_of\_computed\_egress\_rules | Number of computed egress rules to create by name | `number` | `0` | no |
 | number\_of\_computed\_egress\_with\_cidr\_blocks | Number of computed egress rules to create where 'cidr\_blocks' is used | `number` | `0` | no |
 | number\_of\_computed\_egress\_with\_ipv6\_cidr\_blocks | Number of computed egress rules to create where 'ipv6\_cidr\_blocks' is used | `number` | `0` | no |
@@ -101,7 +101,7 @@ No provider.
 | subnetwork | This<br>is<br>a<br>test | `string` | `"This\nis\na\ntest\n"` | no |
 | tags | A mapping of tags to assign to all resources | `map(string)` | `{}` | no |
 | test\_var | This is a test variable | `string` | `""` | no |
-| timeouts | (Optional) Updated Terraform resource management timeouts. Applies to `aws_db_instance` in particular to permit resource management times | `map(string)` | <pre>{<br>  "create": "40m",<br>  "delete": "40m",<br>  "update": "80m"<br>}<br></pre> | no |
+| timeouts | (Optional) Updated Terraform resource management timeouts. Applies to `aws_db_instance` in particular to permit resource management times | `map(string)` | <pre>{<br>  "create": "40m",<br>  "delete": "40m",<br>  "update": "80m"<br>}</pre> | no |
 | timezone | (Optional) Time zone of the DB instance. timezone is currently only supported by Microsoft SQL Server. The timezone can only be set on creation. See MSSQL User Guide for more information. | `string` | `""` | no |
 | use\_name\_prefix | Whether to use name\_prefix or fixed name. Should be true to able to update security group name after initial creation | `bool` | `true` | no |
 | use\_parameter\_group\_name\_prefix | Whether to use the parameter group name prefix or not | `bool` | `true` | no |
