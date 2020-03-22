@@ -1,4 +1,4 @@
-FROM golang:alpine3.9 as builder
+FROM golang:alpine3.11 as builder
 
 # Install dependencies
 RUN set -x \
@@ -23,7 +23,7 @@ RUN set -x \
 	fi \
 	# Build terraform-docs latest
 	&& if [ "${VERSION}" = "latest" ]; then \
-		go get github.com/mitchellh/gox \
+		make gox \
 		&& make build-all GOOS=linux GOARCH=amd64 \
 		&& mv bin/terraform-docs-${VERSION}-linux-amd64 /usr/local/bin/terraform-docs; \
 	# Build terraform-docs 0.8.0-rc.1 and above
@@ -44,7 +44,7 @@ RUN set -x \
 
 
 # Use a clean tiny image to store artifacts in
-FROM alpine:3.8
+FROM alpine:3.11
 LABEL \
 	maintainer="cytopia <cytopia@everythingcli.org>" \
 	repo="https://github.com/cytopia/docker-terraform-docs"

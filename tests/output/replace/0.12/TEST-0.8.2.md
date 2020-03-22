@@ -1,3 +1,8 @@
+# Test
+
+Stuff before terraform-docs
+
+<!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Providers
 
 No provider.
@@ -5,7 +10,7 @@ No provider.
 ## Inputs
 
 | Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:--------:|
+|------|-------------|------|---------|:-----:|
 | allocated\_storage | The allocated storage in gigabytes | `string` | n/a | yes |
 | backup\_window | The daily time range (in UTC) during which automated backups are created if they are enabled. Example: '09:46-10:16'. Must not overlap with maintenance\_window | `string` | n/a | yes |
 | engine | The database engine to use | `string` | n/a | yes |
@@ -136,3 +141,6 @@ No provider.
 | this\_security\_group\_owner\_id | The owner ID |
 | this\_security\_group\_vpc\_id | The VPC ID |
 
+<!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->	
+
+Stuff after terraform-docs

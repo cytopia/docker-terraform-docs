@@ -1,3 +1,8 @@
+# Test
+
+Stuff before terraform-docs
+
+<!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Providers
 
 No provider.
@@ -5,7 +10,7 @@ No provider.
 ## Inputs
 
 | Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:--------:|
+|------|-------------|------|---------|:-----:|
 | allocated\_storage | The allocated storage in gigabytes | `any` | n/a | yes |
 | backup\_window | The daily time range (in UTC) during which automated backups are created if they are enabled. Example: '09:46-10:16'. Must not overlap with maintenance\_window | `any` | n/a | yes |
 | engine | The database engine to use | `any` | n/a | yes |
@@ -87,3 +92,6 @@ No provider.
 | this\_db\_subnet\_group\_arn | The ARN of the db subnet group |
 | this\_db\_subnet\_group\_id | The db subnet group id |
 
+<!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->	
+
+Stuff after terraform-docs
