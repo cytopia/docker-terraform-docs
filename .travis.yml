@@ -38,6 +38,7 @@ env:
     - VERSION=0.8.0-rc.3
     - VERSION=0.8.0
     - VERSION=0.8.1
+    - VERSION=0.8.2
     - VERSION=latest
 
 
