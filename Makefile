@@ -119,12 +119,12 @@ _test-run-generate-two:
 	@echo "- Testing terraform-docs (2/2)"
 	@echo "------------------------------------------------------------"
 	$(eval TFDOC_ARG_SORT = $(shell \
-		if [ "$(TAG)" != "0.1.0" ] && [ "$(TAG)" != "0.1.1" ] && [ "$(TAG)" != "0.2.0" ] && [ "$(TAG)" != "0.3.0" ] && [ "$(TAG)" != "0.4.0" ] && [ "$(TAG)" != "0.4.5" ]; then \
+		if [ "$(TAG)" != "0.1.0" ] && [ "$(TAG)" != "0.1.1" ] && [ "$(TAG)" != "0.2.0" ] && [ "$(TAG)" != "0.3.0" ] && [ "$(TAG)" != "0.4.0" ] && [ "$(TAG)" != "0.4.5" ] && [ "$(TAG)" != "latest" ]; then \
 			echo "--sort-inputs-by-required"; \
 		fi; \
 	))
 	$(eval TFDOC_ARG_AGGREGATE = $(shell \
-		if [ "$(TAG)" != "0.1.0" ] && [ "$(TAG)" != "0.1.1" ] && [ "$(TAG)" != "0.2.0" ] && [ "$(TAG)" != "0.3.0" ]; then \
+		if [ "$(TAG)" != "0.1.0" ] && [ "$(TAG)" != "0.1.1" ] && [ "$(TAG)" != "0.2.0" ] && [ "$(TAG)" != "0.3.0" ] && [ "$(TAG)" != "latest" ]; then \
 			echo "--with-aggregate-type-defaults"; \
 		fi; \
 	))
@@ -178,12 +178,12 @@ _test-run-replace-two:
 	@echo "- Testing terraform-docs-replace (2/2)"
 	@echo "------------------------------------------------------------"
 	$(eval TFDOC_ARG_SORT = $(shell \
-		if [ "$(TAG)" != "0.1.0" ] && [ "$(TAG)" != "0.1.1" ] && [ "$(TAG)" != "0.2.0" ] && [ "$(TAG)" != "0.3.0" ] && [ "$(TAG)" != "0.4.0" ] && [ "$(TAG)" != "0.4.5" ]; then \
+		if [ "$(TAG)" != "0.1.0" ] && [ "$(TAG)" != "0.1.1" ] && [ "$(TAG)" != "0.2.0" ] && [ "$(TAG)" != "0.3.0" ] && [ "$(TAG)" != "0.4.0" ] && [ "$(TAG)" != "0.4.5" ] && [ "$(TAG)" != "latest" ]; then \
 			echo "--sort-inputs-by-required"; \
 		fi; \
 	))
 	$(eval TFDOC_ARG_AGGREGATE = $(shell \
-		if [ "$(TAG)" != "0.1.0" ] && [ "$(TAG)" != "0.1.1" ] && [ "$(TAG)" != "0.2.0" ] && [ "$(TAG)" != "0.3.0" ]; then \
+		if [ "$(TAG)" != "0.1.0" ] && [ "$(TAG)" != "0.1.1" ] && [ "$(TAG)" != "0.2.0" ] && [ "$(TAG)" != "0.3.0" ] && [ "$(TAG)" != "latest" ]; then \
 			echo "--with-aggregate-type-defaults"; \
 		fi; \
 	))
