@@ -16,22 +16,12 @@ No provider.
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | allocated\_storage | The allocated storage in gigabytes | `string` | n/a | yes |
-| backup\_window | The daily time range (in UTC) during which automated backups are created if they are enabled. Example: '09:46-10:16'. Must not overlap with maintenance\_window | `string` | n/a | yes |
-| engine | The database engine to use | `string` | n/a | yes |
-| engine\_version | The engine version to use | `string` | n/a | yes |
-| identifier | The name of the RDS instance, if omitted, Terraform will assign a random, unique identifier | `string` | n/a | yes |
-| instance\_class | The instance type of the RDS instance | `string` | n/a | yes |
-| maintenance\_window | The window to perform maintenance in. Syntax: 'ddd:hh24:mi-ddd:hh24:mi'. Eg: 'Mon:00:00-Mon:03:00' | `string` | n/a | yes |
-| name | Name of security group | `string` | n/a | yes |
-| password | Password for the master DB user. Note that this may show up in logs, and it will be stored in the state file | `string` | n/a | yes |
-| port | The port on which the DB accepts connections | `string` | n/a | yes |
-| username | Username for the master DB user | `string` | n/a | yes |
-| vpc\_id | ID of the VPC where to create security group | `string` | n/a | yes |
 | allow\_major\_version\_upgrade | Indicates that major version upgrades are allowed. Changing this parameter does not result in an outage and the change is asynchronously applied as soon as possible | `bool` | `false` | no |
 | apply\_immediately | Specifies whether any database modifications are applied immediately, or during the next maintenance window | `bool` | `false` | no |
 | auto\_minor\_version\_upgrade | Indicates that minor engine upgrades will be applied automatically to the DB instance during the maintenance window | `bool` | `true` | no |
 | availability\_zone | The Availability Zone of the RDS instance | `string` | `""` | no |
 | backup\_retention\_period | The days to retain backups for | `number` | `1` | no |
+| backup\_window | The daily time range (in UTC) during which automated backups are created if they are enabled. Example: '09:46-10:16'. Must not overlap with maintenance\_window | `string` | n/a | yes |
 | character\_set\_name | (Optional) The character set name to use for DB encoding in Oracle instances. This can't be changed. See Oracle Character Sets Supported in Amazon RDS for more information | `string` | `""` | no |
 | computed\_egress\_rules | List of computed egress rules to create by name | `list(string)` | `[]` | no |
 | computed\_egress\_with\_cidr\_blocks | List of computed egress rules to create where 'cidr\_blocks' is used | `list(map(string))` | `[]` | no |
@@ -63,9 +53,12 @@ No provider.
 | egress\_with\_self | List of egress rules to create where 'self' is defined | `list(map(string))` | `[]` | no |
 | egress\_with\_source\_security\_group\_id | List of egress rules to create where 'source\_security\_group\_id' is used | `list(map(string))` | `[]` | no |
 | enabled\_cloudwatch\_logs\_exports | List of log types to enable for exporting to CloudWatch logs. If omitted, no logs will be exported. Valid values (depending on engine): alert, audit, error, general, listener, slowquery, trace, postgresql (PostgreSQL), upgrade (PostgreSQL). | `list(string)` | `[]` | no |
+| engine | The database engine to use | `string` | n/a | yes |
+| engine\_version | The engine version to use | `string` | n/a | yes |
 | family | The family of the DB parameter group | `string` | `""` | no |
 | final\_snapshot\_identifier | The name of your final DB snapshot when this DB instance is deleted. | `string` | `null` | no |
 | iam\_database\_authentication\_enabled | Specifies whether or mappings of AWS Identity and Access Management (IAM) accounts to database accounts is enabled | `bool` | `false` | no |
+| identifier | The name of the RDS instance, if omitted, Terraform will assign a random, unique identifier | `string` | n/a | yes |
 | ingress\_cidr\_blocks | List of IPv4 CIDR ranges to use on all ingress rules | `list(string)` | `[]` | no |
 | ingress\_ipv6\_cidr\_blocks | List of IPv6 CIDR ranges to use on all ingress rules | `list(string)` | `[]` | no |
 | ingress\_prefix\_list\_ids | List of prefix list IDs (for allowing access to VPC endpoints) to use on all ingress rules | `list(string)` | `[]` | no |
@@ -74,14 +67,17 @@ No provider.
 | ingress\_with\_ipv6\_cidr\_blocks | List of ingress rules to create where 'ipv6\_cidr\_blocks' is used | `list(map(string))` | `[]` | no |
 | ingress\_with\_self | List of ingress rules to create where 'self' is defined | `list(map(string))` | `[]` | no |
 | ingress\_with\_source\_security\_group\_id | List of ingress rules to create where 'source\_security\_group\_id' is used | `list(map(string))` | `[]` | no |
+| instance\_class | The instance type of the RDS instance | `string` | n/a | yes |
 | iops | The amount of provisioned IOPS. Setting this implies a storage\_type of 'io1' | `number` | `0` | no |
 | kms\_key\_id | The ARN for the KMS encryption key. If creating an encrypted replica, set this to the destination KMS ARN. If storage\_encrypted is set to true and kms\_key\_id is not specified the default KMS key created in your account will be used | `string` | `""` | no |
 | license\_model | License model information for this DB instance. Optional, but required for some DB engines, i.e. Oracle SE1 | `string` | `""` | no |
+| maintenance\_window | The window to perform maintenance in. Syntax: 'ddd:hh24:mi-ddd:hh24:mi'. Eg: 'Mon:00:00-Mon:03:00' | `string` | n/a | yes |
 | major\_engine\_version | Specifies the major version of the engine that this option group should be associated with | `string` | `""` | no |
 | monitoring\_interval | The interval, in seconds, between points when Enhanced Monitoring metrics are collected for the DB instance. To disable collecting Enhanced Monitoring metrics, specify 0. The default is 0. Valid Values: 0, 1, 5, 10, 15, 30, 60. | `number` | `0` | no |
 | monitoring\_role\_arn | The ARN for the IAM role that permits RDS to send enhanced monitoring metrics to CloudWatch Logs. Must be specified if monitoring\_interval is non-zero. | `string` | `""` | no |
 | monitoring\_role\_name | Name of the IAM role which will be created when create\_monitoring\_role is enabled. | `string` | `"rds-monitoring-role"` | no |
 | multi\_az | Specifies if the RDS instance is multi-AZ | `bool` | `false` | no |
+| name | Name of security group | `string` | n/a | yes |
 | network | The network | <pre>object({<br>    vpc = object({<br>      id         = string<br>      cidr_block = string<br>    })<br>    subnets = set(object({<br>      id         = string<br>      cidr_block = string<br>    }))<br>  })</pre> | <pre>{<br>  "subnets": [<br>    {<br>      "cidr_block": "10.0.0.0/16",<br>      "id": "vpc-123456"<br>    }<br>  ],<br>  "vpc": {<br>    "cidr_block": "10.0.0.0/16",<br>    "id": "vpc-123456"<br>  }<br>}</pre> | no |
 | number\_of\_computed\_egress\_rules | Number of computed egress rules to create by name | `number` | `0` | no |
 | number\_of\_computed\_egress\_with\_cidr\_blocks | Number of computed egress rules to create where 'cidr\_blocks' is used | `number` | `0` | no |
@@ -100,6 +96,8 @@ No provider.
 | parameter\_group\_description | Description of the DB parameter group to create | `string` | `""` | no |
 | parameter\_group\_name | Name of the DB parameter group to associate or create | `string` | `""` | no |
 | parameters | A list of DB parameters (map) to apply | `list(map(string))` | `[]` | no |
+| password | Password for the master DB user. Note that this may show up in logs, and it will be stored in the state file | `string` | n/a | yes |
+| port | The port on which the DB accepts connections | `string` | n/a | yes |
 | publicly\_accessible | Bool to control if instance is publicly accessible | `bool` | `false` | no |
 | replicate\_source\_db | Specifies that this resource is a Replicate database, and to use this value as the source database. This correlates to the identifier of another Amazon RDS Database to replicate. | `string` | `""` | no |
 | skip\_final\_snapshot | Determines whether a final DB snapshot is created before the DB instance is deleted. If true is specified, no DBSnapshot is created. If false is specified, a DB snapshot is created before the DB instance is deleted, using the value from final\_snapshot\_identifier | `bool` | `true` | no |
@@ -114,6 +112,8 @@ No provider.
 | timezone | (Optional) Time zone of the DB instance. timezone is currently only supported by Microsoft SQL Server. The timezone can only be set on creation. See MSSQL User Guide for more information. | `string` | `""` | no |
 | use\_name\_prefix | Whether to use name\_prefix or fixed name. Should be true to able to update security group name after initial creation | `bool` | `true` | no |
 | use\_parameter\_group\_name\_prefix | Whether to use the parameter group name prefix or not | `bool` | `true` | no |
+| username | Username for the master DB user | `string` | n/a | yes |
+| vpc\_id | ID of the VPC where to create security group | `string` | n/a | yes |
 | vpc\_security\_group\_ids | List of VPC security groups to associate | `list(string)` | `[]` | no |
 
 ## Outputs
