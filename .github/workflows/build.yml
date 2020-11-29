@@ -1,0 +1,220 @@
+---
+
+# -------------------------------------------------------------------------------------------------
+# Job Name
+# -------------------------------------------------------------------------------------------------
+name: Build
+
+
+# -------------------------------------------------------------------------------------------------
+# When to run
+# -------------------------------------------------------------------------------------------------
+on:
+  # Runs on Pull Requests
+  pull_request:
+
+  # Runs on master Branch and Tags
+  push:
+    branches:
+      - master
+    tags:
+      - '[0-9]+.[0-9]+*'
+
+
+# -------------------------------------------------------------------------------------------------
+# What to run
+# -------------------------------------------------------------------------------------------------
+jobs:
+  diagnostics:
+    name: Diagnostics
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: False
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Show environment
+        run: |
+          env
+
+      # https://help.github.com/en/github/automating-your-workflow-with-github-actions/contexts-and-expression-syntax-for-github-actions#github-context
+      - name: Show GitHub variables
+        run: |
+          echo "github.actor:                           ${{ github.actor }}"
+          echo "github.ref:                             ${{ github.ref }}"
+          echo "github.base_ref:                        ${{ github.base_ref }}"
+          echo "github.head_ref:                        ${{ github.head_ref }}"
+          echo "github.event:                           ${{ github.event }}"
+          echo "github.event_name:                      ${{ github.event_name }}"
+          echo "github.event.pull_request.base.repo.id: ${{ github.event.pull_request.base.repo.id }}"
+          echo "github.event.pull_request.head.repo.id: ${{ github.event.pull_request.head.repo.id }}"
+
+      - name: Dump GitHub context
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
+        run: echo "${GITHUB_CONTEXT}"
+
+      - name: Dump Runner context
+        env:
+          RUNNER_CONTEXT: ${{ toJson(runner) }}
+        run: echo "${RUNNER_CONTEXT}"
+
+
+  build:
+    name: "[ ${{ matrix.version }} ]"
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: False
+      matrix:
+        version:
+          - '0.1.0'
+          - '0.1.1'
+          - '0.2.0'
+          - '0.3.0'
+          - '0.4.0'
+          - '0.4.5'
+          - '0.5.0'
+          - '0.6.0'
+          - '0.7.0'
+          - '0.8.0-rc.1'
+          - '0.8.0-rc.2'
+          - '0.8.0-rc.3'
+          - '0.8.0'
+          - '0.8.1'
+          - '0.8.2'
+          - '0.9.0'
+          - '0.9.1'
+          - 'latest'
+    steps:
+
+      # ------------------------------------------------------------
+      # Checkout repository
+      # ------------------------------------------------------------
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Set variables
+        id: vars
+        run: |
+          # Detached from branch
+          if [ "$( git rev-parse --abbrev-ref HEAD )" = "HEAD" ]; then
+            GIT_TYPE=TAG
+            GIT_SLUG="$( git tag --points-at HEAD | head -1 )"
+          else
+            GIT_TYPE=BRANCH
+            GIT_SLUG="$( git rev-parse --abbrev-ref HEAD )"
+          fi
+
+          # Output
+          echo "GIT_TYPE=${GIT_TYPE}"
+          echo "GIT_SLUG=${GIT_SLUG}"
+
+          # Export variable
+          # https://docs.github.com/en/free-pro-team@latest/actions/reference/workflow-commands-for-github-actions#environment-files
+          echo "GIT_TYPE=${GIT_TYPE}" >> $GITHUB_ENV
+          echo "GIT_SLUG=${GIT_SLUG}" >> $GITHUB_ENV
+
+
+      # ------------------------------------------------------------
+      # Build
+      # ------------------------------------------------------------
+      - name: Build
+        run: |
+          retry() {
+            for n in $(seq ${RETRIES}); do
+              echo "[${n}/${RETRIES}] ${*}";
+              if eval "${*}"; then
+                echo "[SUCC] ${n}/${RETRIES}";
+                return 0;
+              fi;
+              sleep 2;
+              echo "[FAIL] ${n}/${RETRIES}";
+            done;
+            return 1;
+          }
+          retry make build VERSION=${VERSION}
+        env:
+          VERSION: ${{ matrix.version }}
+          RETRIES: 20
+
+      - name: Test
+        run: |
+          retry() {
+            for n in $(seq ${RETRIES}); do
+              echo "[${n}/${RETRIES}] ${*}";
+              if eval "${*}"; then
+                echo "[SUCC] ${n}/${RETRIES}";
+                return 0;
+              fi;
+              sleep 2;
+              echo "[FAIL] ${n}/${RETRIES}";
+            done;
+            return 1;
+          }
+          retry make test VERSION=${VERSION}
+          git diff --quiet || { echo "Build Changes"; git diff; git status; false; }
+        env:
+          VERSION: ${{ matrix.version }}
+          RETRIES: 20
+
+
+      # ------------------------------------------------------------
+      # Push build artifacts
+      # ------------------------------------------------------------
+      # Only run this, if the PR was created by the repo owner
+      - name: Publish images (only repo owner)
+        run: |
+          retry() {
+            for n in $(seq ${RETRIES}); do
+              echo "[${n}/${RETRIES}] ${*}";
+              if eval "${*}"; then
+                echo "[SUCC] ${n}/${RETRIES}";
+                return 0;
+              fi;
+              sleep 2;
+              echo "[FAIL] ${n}/${RETRIES}";
+            done;
+            return 1;
+          }
+
+          # Info output
+          echo "Git Type: ${GIT_TYPE}"
+          echo "Git Slug: ${GIT_SLUG}"
+
+          # Login
+          echo "retry make login USER= PASS="
+
+          # Push
+          if [ "${GIT_TYPE}" = "TAG" ]; then
+            echo "retry make push-base VERSION=${VERSION}-${GIT_SLUG}"
+            echo "retry make push-mods VERSION=${VERSION}-${GIT_SLUG}"
+            echo "retry make push-prod VERSION=${VERSION}-${GIT_SLUG}"
+            echo "retry make push-work VERSION=${VERSION}-${GIT_SLUG}"
+          else
+            if [ "${GIT_SLUG}" = "master" ]; then
+              echo "retry make push-base VERSION=${VERSION}"
+              echo "retry make push-mods VERSION=${VERSION}"
+              echo "retry make push-prod VERSION=${VERSION}"
+              echo "retry make push-work VERSION=${VERSION}"
+            else
+              echo "retry make push-base VERSION=${VERSION}-${GIT_SLUG}"
+              echo "retry make push-mods VERSION=${VERSION}-${GIT_SLUG}"
+              echo "retry make push-prod VERSION=${VERSION}-${GIT_SLUG}"
+              echo "retry make push-work VERSION=${VERSION}-${GIT_SLUG}"
+            fi
+          fi
+        env:
+          VERSION: ${{ matrix.version }}
+          RETRIES: 20
+        # https://help.github.com/en/github/automating-your-workflow-with-github-actions/contexts-and-expression-syntax-for-github-actions#functions
+        if: github.event.pull_request.base.repo.id == github.event.pull_request.head.repo.id
+            && (
+              (github.event_name == 'schedule'     && (github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/')))
+              ||
+              (github.event_name == 'push'         && (github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/')))
+              ||
+              (github.event_name == 'pull_request' && (startsWith(github.head_ref, 'release-')))
+            )

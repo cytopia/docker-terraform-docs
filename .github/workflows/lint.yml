@@ -1,0 +1,27 @@
+---
+
+###
+### Lints all files
+###
+
+name: Lint
+on:
+  pull_request:
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: False
+      matrix:
+        target:
+          - lint
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Lint
+        run: |
+          make "${TARGET}"
+        env:
+          TARGET: ${{ matrix.target }}
