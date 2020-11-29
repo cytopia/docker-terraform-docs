@@ -85,6 +85,8 @@ jobs:
           - '0.8.2'
           - '0.9.0'
           - '0.9.1'
+          - '0.10.0'
+          - '0.10.1'
           - 'latest'
     steps:
 
@@ -135,7 +137,7 @@ jobs:
             done;
             return 1;
           }
-          retry make build VERSION=${VERSION}
+          retry make build TAG=${VERSION}
         env:
           VERSION: ${{ matrix.version }}
           RETRIES: 20
@@ -154,7 +156,7 @@ jobs:
             done;
             return 1;
           }
-          retry make test VERSION=${VERSION}
+          retry make test TAG=${VERSION}
           git diff --quiet || { echo "Build Changes"; git diff; git status; false; }
         env:
           VERSION: ${{ matrix.version }}
@@ -189,21 +191,21 @@ jobs:
 
           # Push
           if [ "${GIT_TYPE}" = "TAG" ]; then
-            echo "retry make push-base VERSION=${VERSION}-${GIT_SLUG}"
-            echo "retry make push-mods VERSION=${VERSION}-${GIT_SLUG}"
-            echo "retry make push-prod VERSION=${VERSION}-${GIT_SLUG}"
-            echo "retry make push-work VERSION=${VERSION}-${GIT_SLUG}"
+            echo "retry make push-base TAG=${VERSION}-${GIT_SLUG}"
+            echo "retry make push-mods TAG=${VERSION}-${GIT_SLUG}"
+            echo "retry make push-prod TAG=${VERSION}-${GIT_SLUG}"
+            echo "retry make push-work TAG=${VERSION}-${GIT_SLUG}"
           else
             if [ "${GIT_SLUG}" = "master" ]; then
-              echo "retry make push-base VERSION=${VERSION}"
-              echo "retry make push-mods VERSION=${VERSION}"
-              echo "retry make push-prod VERSION=${VERSION}"
-              echo "retry make push-work VERSION=${VERSION}"
+              echo "retry make push-base TAG=${VERSION}"
+              echo "retry make push-mods TAG=${VERSION}"
+              echo "retry make push-prod TAG=${VERSION}"
+              echo "retry make push-work TAG=${VERSION}"
             else
-              echo "retry make push-base VERSION=${VERSION}-${GIT_SLUG}"
-              echo "retry make push-mods VERSION=${VERSION}-${GIT_SLUG}"
-              echo "retry make push-prod VERSION=${VERSION}-${GIT_SLUG}"
-              echo "retry make push-work VERSION=${VERSION}-${GIT_SLUG}"
+              echo "retry make push-base TAG=${VERSION}-${GIT_SLUG}"
+              echo "retry make push-mods TAG=${VERSION}-${GIT_SLUG}"
+              echo "retry make push-prod TAG=${VERSION}-${GIT_SLUG}"
+              echo "retry make push-work TAG=${VERSION}-${GIT_SLUG}"
             fi
           fi
         env:

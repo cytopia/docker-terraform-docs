@@ -76,9 +76,9 @@ _test-version:
 	@if [ "$(TAG)" = "latest" ]; then \
 		echo "Fetching latest version from GitHub"; \
 		LATEST="$$( \
-			curl -L -sS  https://github.com/segmentio/terraform-docs/releases/latest/ \
+			curl -L -sS  https://github.com/terraform-docs/terraform-docs/releases/latest/ \
 				| tac | tac \
-				| grep -Eo "segmentio/terraform-docs/releases/tag/v[.0-9]+" \
+				| grep -Eo "terraform-docs/terraform-docs/releases/tag/v[.0-9]+" \
 				| head -1 \
 				| sed 's/.*v//g' \
 		)"; \
@@ -119,12 +119,12 @@ _test-run-generate-two:
 	@echo "- Testing terraform-docs (2/2)"
 	@echo "------------------------------------------------------------"
 	$(eval TFDOC_ARG_SORT = $(shell \
-		if [ "$(TAG)" != "0.1.0" ] && [ "$(TAG)" != "0.1.1" ] && [ "$(TAG)" != "0.2.0" ] && [ "$(TAG)" != "0.3.0" ] && [ "$(TAG)" != "0.4.0" ] && [ "$(TAG)" != "0.4.5" ] && [ "$(TAG)" != "latest" ]; then \
+		if [ "$(TAG)" = "0.5.0" ] || [ "$(TAG)" = "0.6.0" ] || [ "$(TAG)" = "0.7.0" ] || [ "$(TAG)" = "0.8.0" ] || [ "$(TAG)" = "0.8.1" ] || [ "$(TAG)" = "0.8.2" ] || [ "$(TAG)" = "0.9.0" ] || [ "$(TAG)" = "0.9.1" ]; then \
 			echo "--sort-inputs-by-required"; \
 		fi; \
 	))
 	$(eval TFDOC_ARG_AGGREGATE = $(shell \
-		if [ "$(TAG)" != "0.1.0" ] && [ "$(TAG)" != "0.1.1" ] && [ "$(TAG)" != "0.2.0" ] && [ "$(TAG)" != "0.3.0" ] && [ "$(TAG)" != "latest" ]; then \
+		if [ "$(TAG)" = "0.4.0" ] ||[ "$(TAG)" = "0.4.5" ] ||  [ "$(TAG)" = "0.5.0" ] || [ "$(TAG)" = "0.6.0" ] || [ "$(TAG)" = "0.7.0" ] || [ "$(TAG)" = "0.8.0" ] || [ "$(TAG)" = "0.8.1" ] || [ "$(TAG)" = "0.8.2" ] || [ "$(TAG)" = "0.9.0" ] || [ "$(TAG)" = "0.9.1" ]; then \
 			echo "--with-aggregate-type-defaults"; \
 		fi; \
 	))
@@ -178,12 +178,12 @@ _test-run-replace-two:
 	@echo "- Testing terraform-docs-replace (2/2)"
 	@echo "------------------------------------------------------------"
 	$(eval TFDOC_ARG_SORT = $(shell \
-		if [ "$(TAG)" != "0.1.0" ] && [ "$(TAG)" != "0.1.1" ] && [ "$(TAG)" != "0.2.0" ] && [ "$(TAG)" != "0.3.0" ] && [ "$(TAG)" != "0.4.0" ] && [ "$(TAG)" != "0.4.5" ] && [ "$(TAG)" != "latest" ]; then \
+		if [ "$(TAG)" = "0.5.0" ] || [ "$(TAG)" = "0.6.0" ] || [ "$(TAG)" = "0.7.0" ] || [ "$(TAG)" = "0.8.0" ] || [ "$(TAG)" = "0.8.1" ] || [ "$(TAG)" = "0.8.2" ] || [ "$(TAG)" = "0.9.0" ] || [ "$(TAG)" = "0.9.1" ]; then \
 			echo "--sort-inputs-by-required"; \
 		fi; \
 	))
 	$(eval TFDOC_ARG_AGGREGATE = $(shell \
-		if [ "$(TAG)" != "0.1.0" ] && [ "$(TAG)" != "0.1.1" ] && [ "$(TAG)" != "0.2.0" ] && [ "$(TAG)" != "0.3.0" ] && [ "$(TAG)" != "latest" ]; then \
+		if [ "$(TAG)" = "0.4.0" ] ||[ "$(TAG)" = "0.4.5" ] ||  [ "$(TAG)" = "0.5.0" ] || [ "$(TAG)" = "0.6.0" ] || [ "$(TAG)" = "0.7.0" ] || [ "$(TAG)" = "0.8.0" ] || [ "$(TAG)" = "0.8.1" ] || [ "$(TAG)" = "0.8.2" ] || [ "$(TAG)" = "0.9.0" ] || [ "$(TAG)" = "0.9.1" ]; then \
 			echo "--with-aggregate-type-defaults"; \
 		fi; \
 	))
