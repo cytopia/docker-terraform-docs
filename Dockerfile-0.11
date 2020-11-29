@@ -16,8 +16,8 @@ ARG VERSION=latest
 RUN set -x \
 	&& export GOPATH=/go \
 	&& mkdir -p /go/src/github.com/terraform-docs \
-	&& git clone https://github.com/terraform-docs/terraform-docs /go/src/github.com/terraform-docs/terraform-docs \
-	&& cd /go/src/github.com/terraform-docs/terraform-docs \
+	&& git clone https://github.com/terraform-docs/terraform-docs /go/src/github.com/segmentio/terraform-docs \
+	&& cd /go/src/github.com/segmentio/terraform-docs \
 	&& if [ "${VERSION}" != "latest" ]; then \
 		git checkout v${VERSION}; \
 	fi \
