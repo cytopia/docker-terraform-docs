@@ -139,4 +139,3 @@ No provider.
 | this\_security\_group\_name | The name of the security group |
 | this\_security\_group\_owner\_id | The owner ID |
 | this\_security\_group\_vpc\_id | The VPC ID |
-
