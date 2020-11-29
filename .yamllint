@@ -1,0 +1,14 @@
+---
+extends: default
+
+ignore: |
+  /ansible/files/es-index-templates/logstash/
+  .terragrunt-cache/
+
+
+rules:
+  truthy:
+    allowed-values: ['True', 'False']
+    check-keys: False
+    level: error
+  line-length: disable
