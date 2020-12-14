@@ -7,9 +7,10 @@
 [![](https://img.shields.io/badge/github-cytopia%2Fdocker--terraform--docs-red.svg)](https://github.com/cytopia/docker-terraform-docs "github.com/cytopia/docker-terraform-docs")
 [![License](https://img.shields.io/badge/license-MIT-%233DA639.svg)](https://opensource.org/licenses/MIT)
 
-[![Lint](https://github.com/cytopia/docker-terraform-docs/workflows/Lint/badge.svg)](https://github.com/cytopia/docker-terraform-docs/actions?query=workflow%3ALint)
-[![Build](https://github.com/cytopia/docker-terraform-docs/workflows/Build/badge.svg)](https://github.com/cytopia/docker-terraform-docs/actions?query=workflow%3ABuild)
-[![Build Status](https://travis-ci.com/cytopia/docker-terraform-docs.svg?branch=master)](https://travis-ci.com/cytopia/docker-terraform-docs)
+[![lint](https://github.com/cytopia/docker-terraform-docs/workflows/lint/badge.svg)](https://github.com/cytopia/docker-terraform-docs/actions?query=workflow%3Alint)
+[![build](https://github.com/cytopia/docker-terraform-docs/workflows/build/badge.svg)](https://github.com/cytopia/docker-terraform-docs/actions?query=workflow%3Abuild)
+[![nightly](https://github.com/cytopia/docker-terraform-docs/workflows/nightly/badge.svg)](https://github.com/cytopia/docker-terraform-docs/actions?query=workflow%3Anightly)
+
 
 > #### All [#awesome-ci](https://github.com/topics/awesome-ci) Docker images
 >
