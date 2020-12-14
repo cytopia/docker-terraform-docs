@@ -1,12 +1,16 @@
 # Docker image for `terraform-docs`
 
-[![Build Status](https://travis-ci.com/cytopia/docker-terraform-docs.svg?branch=master)](https://travis-ci.com/cytopia/docker-terraform-docs)
 [![Tag](https://img.shields.io/github/tag/cytopia/docker-terraform-docs.svg)](https://github.com/cytopia/docker-terraform-docs/releases)
 [![](https://images.microbadger.com/badges/version/cytopia/terraform-docs:latest.svg?kill_cache=1)](https://microbadger.com/images/cytopia/terraform-docs:latest "terraform-docs")
 [![](https://images.microbadger.com/badges/image/cytopia/terraform-docs:latest.svg?kill_cache=1)](https://microbadger.com/images/cytopia/terraform-docs:latest "terraform-docs")
 [![](https://img.shields.io/docker/pulls/cytopia/terraform-docs.svg)](https://hub.docker.com/r/cytopia/terraform-docs)
 [![](https://img.shields.io/badge/github-cytopia%2Fdocker--terraform--docs-red.svg)](https://github.com/cytopia/docker-terraform-docs "github.com/cytopia/docker-terraform-docs")
 [![License](https://img.shields.io/badge/license-MIT-%233DA639.svg)](https://opensource.org/licenses/MIT)
+
+[![lint](https://github.com/cytopia/docker-terraform-docs/workflows/lint/badge.svg)](https://github.com/cytopia/docker-terraform-docs/actions?query=workflow%3Alint)
+[![build](https://github.com/cytopia/docker-terraform-docs/workflows/build/badge.svg)](https://github.com/cytopia/docker-terraform-docs/actions?query=workflow%3Abuild)
+[![nightly](https://github.com/cytopia/docker-terraform-docs/workflows/nightly/badge.svg)](https://github.com/cytopia/docker-terraform-docs/actions?query=workflow%3Anightly)
+
 
 > #### All [#awesome-ci](https://github.com/topics/awesome-ci) Docker images
 >
@@ -44,13 +48,13 @@ View **[Dockerfile](https://github.com/cytopia/docker-terraform-docs/blob/master
 
 [![Docker hub](http://dockeri.co/image/cytopia/terraform-docs?kill_cache=1)](https://hub.docker.com/r/cytopia/terraform-docs)
 
-Tiny Alpine-based multistage-build dockerized version of [terraform-docs](https://github.com/segmentio/terraform-docs)<sup>[1]</sup>,
+Tiny Alpine-based multistage-build dockerized version of [terraform-docs](https://github.com/terraform-docs/terraform-docs)<sup>[1]</sup>,
 which additionally implements `terraform-docs-replace` allowing you to automatically and safely
 replace the `terraform-docs` generated output infile.
 Furthermore this implementation is also **Terraform >= 0.12 ready**<sup>[2]</sup>. See [Generic Usage](#generic) for more details.
 The image is built nightly against multiple stable versions and pushed to Dockerhub.
 
-* <sub>[1] Official project: https://github.com/segmentio/terraform-docs</sub>
+* <sub>[1] Official project: https://github.com/terraform-docs/terraform-docs</sub>
 * <sub>[2] Based on an awk script by [cloudposse/build-harness](https://github.com/cloudposse/build-harness/blob/master/bin/terraform-docs.awk)</sub>
 
 
@@ -65,24 +69,26 @@ changes will be introduced).
 
 | Docker tag | Build from docker-terraform-docs | Build from terraform-docs |
 |------------|----------------------------------|---------------------------|
-| `latest`   | [Branch: master](https://github.com/cytopia/docker-terraform-docs) | [Branch: master](https://github.com/segmentio/terraform-docs) |
-| `0.9.1`    | [Branch: master](https://github.com/cytopia/docker-terraform-docs) | [Tag: v0.9.1](https://github.com/segmentio/terraform-docs/tree/v0.9.1) |
-| `0.9.0`    | [Branch: master](https://github.com/cytopia/docker-terraform-docs) | [Tag: v0.9.0](https://github.com/segmentio/terraform-docs/tree/v0.9.0) |
-| `0.8.2`    | [Branch: master](https://github.com/cytopia/docker-terraform-docs) | [Tag: v0.8.2](https://github.com/segmentio/terraform-docs/tree/v0.8.2) |
-| `0.8.1`    | [Branch: master](https://github.com/cytopia/docker-terraform-docs) | [Tag: v0.8.1](https://github.com/segmentio/terraform-docs/tree/v0.8.1) |
-| `0.8.0`    | [Branch: master](https://github.com/cytopia/docker-terraform-docs) | [Tag: v0.8.0](https://github.com/segmentio/terraform-docs/tree/v0.8.0) |
-| `0.8.0-rc.3` | [Branch: master](https://github.com/cytopia/docker-terraform-docs) | [Tag: v0.8.0-rc.3](https://github.com/segmentio/terraform-docs/tree/v0.8.0-rc.3) |
-| `0.8.0-rc.2` | [Branch: master](https://github.com/cytopia/docker-terraform-docs) | [Tag: v0.8.0-rc.2](https://github.com/segmentio/terraform-docs/tree/v0.8.0-rc.2) |
-| `0.8.0-rc.1` | [Branch: master](https://github.com/cytopia/docker-terraform-docs) | [Tag: v0.8.0-rc.1](https://github.com/segmentio/terraform-docs/tree/v0.8.0-rc.1) |
-| `0.7.0`    | [Branch: master](https://github.com/cytopia/docker-terraform-docs) | [Tag: v0.7.0](https://github.com/segmentio/terraform-docs/tree/v0.7.0) |
-| `0.6.0`    | [Branch: master](https://github.com/cytopia/docker-terraform-docs) | [Tag: v0.6.0](https://github.com/segmentio/terraform-docs/tree/v0.6.0) |
-| `0.5.0`    | [Branch: master](https://github.com/cytopia/docker-terraform-docs) | [Tag: v0.5.0](https://github.com/segmentio/terraform-docs/tree/v0.5.0) |
-| `0.4.5`    | [Branch: master](https://github.com/cytopia/docker-terraform-docs) | [Tag: v0.4.5](https://github.com/segmentio/terraform-docs/tree/v0.4.5) |
-| `0.4.0`    | [Branch: master](https://github.com/cytopia/docker-terraform-docs) | [Tag: v0.4.0](https://github.com/segmentio/terraform-docs/tree/v0.4.0) |
-| `0.3.0`    | [Branch: master](https://github.com/cytopia/docker-terraform-docs) | [Tag: v0.3.0](https://github.com/segmentio/terraform-docs/tree/v0.3.0) |
-| `0.2.0`    | [Branch: master](https://github.com/cytopia/docker-terraform-docs) | [Tag: v0.2.0](https://github.com/segmentio/terraform-docs/tree/v0.2.0) |
-| `0.1.1`    | [Branch: master](https://github.com/cytopia/docker-terraform-docs) | [Tag: v0.1.1](https://github.com/segmentio/terraform-docs/tree/v0.1.1) |
-| `0.1.0`    | [Branch: master](https://github.com/cytopia/docker-terraform-docs) | [Tag: v0.1.0](https://github.com/segmentio/terraform-docs/tree/v0.1.0) |
+| `latest`   | [Branch: master](https://github.com/cytopia/docker-terraform-docs) | [Branch: master](https://github.com/terraform-docs/terraform-docs) |
+| `0.10.1`   | [Branch: master](https://github.com/cytopia/docker-terraform-docs) | [Tag: v0.10.1](https://github.com/terraform-docs/terraform-docs/tree/v0.10.1) |
+| `0.10.0`   | [Branch: master](https://github.com/cytopia/docker-terraform-docs) | [Tag: v0.10.0](https://github.com/terraform-docs/terraform-docs/tree/v0.10.0) |
+| `0.9.1`    | [Branch: master](https://github.com/cytopia/docker-terraform-docs) | [Tag: v0.9.1](https://github.com/terraform-docs/terraform-docs/tree/v0.9.1) |
+| `0.9.0`    | [Branch: master](https://github.com/cytopia/docker-terraform-docs) | [Tag: v0.9.0](https://github.com/terraform-docs/terraform-docs/tree/v0.9.0) |
+| `0.8.2`    | [Branch: master](https://github.com/cytopia/docker-terraform-docs) | [Tag: v0.8.2](https://github.com/terraform-docs/terraform-docs/tree/v0.8.2) |
+| `0.8.1`    | [Branch: master](https://github.com/cytopia/docker-terraform-docs) | [Tag: v0.8.1](https://github.com/terraform-docs/terraform-docs/tree/v0.8.1) |
+| `0.8.0`    | [Branch: master](https://github.com/cytopia/docker-terraform-docs) | [Tag: v0.8.0](https://github.com/terraform-docs/terraform-docs/tree/v0.8.0) |
+| `0.8.0-rc.3` | [Branch: master](https://github.com/cytopia/docker-terraform-docs) | [Tag: v0.8.0-rc.3](https://github.com/terraform-docs/terraform-docs/tree/v0.8.0-rc.3) |
+| `0.8.0-rc.2` | [Branch: master](https://github.com/cytopia/docker-terraform-docs) | [Tag: v0.8.0-rc.2](https://github.com/terraform-docs/terraform-docs/tree/v0.8.0-rc.2) |
+| `0.8.0-rc.1` | [Branch: master](https://github.com/cytopia/docker-terraform-docs) | [Tag: v0.8.0-rc.1](https://github.com/terraform-docs/terraform-docs/tree/v0.8.0-rc.1) |
+| `0.7.0`    | [Branch: master](https://github.com/cytopia/docker-terraform-docs) | [Tag: v0.7.0](https://github.com/terraform-docs/terraform-docs/tree/v0.7.0) |
+| `0.6.0`    | [Branch: master](https://github.com/cytopia/docker-terraform-docs) | [Tag: v0.6.0](https://github.com/terraform-docs/terraform-docs/tree/v0.6.0) |
+| `0.5.0`    | [Branch: master](https://github.com/cytopia/docker-terraform-docs) | [Tag: v0.5.0](https://github.com/terraform-docs/terraform-docs/tree/v0.5.0) |
+| `0.4.5`    | [Branch: master](https://github.com/cytopia/docker-terraform-docs) | [Tag: v0.4.5](https://github.com/terraform-docs/terraform-docs/tree/v0.4.5) |
+| `0.4.0`    | [Branch: master](https://github.com/cytopia/docker-terraform-docs) | [Tag: v0.4.0](https://github.com/terraform-docs/terraform-docs/tree/v0.4.0) |
+| `0.3.0`    | [Branch: master](https://github.com/cytopia/docker-terraform-docs) | [Tag: v0.3.0](https://github.com/terraform-docs/terraform-docs/tree/v0.3.0) |
+| `0.2.0`    | [Branch: master](https://github.com/cytopia/docker-terraform-docs) | [Tag: v0.2.0](https://github.com/terraform-docs/terraform-docs/tree/v0.2.0) |
+| `0.1.1`    | [Branch: master](https://github.com/cytopia/docker-terraform-docs) | [Tag: v0.1.1](https://github.com/terraform-docs/terraform-docs/tree/v0.1.1) |
+| `0.1.0`    | [Branch: master](https://github.com/cytopia/docker-terraform-docs) | [Tag: v0.1.0](https://github.com/terraform-docs/terraform-docs/tree/v0.1.0) |
 
 ### Point in time releases
 If you want to ensure to have reproducible Terraform doc generation you should use a git tag from
@@ -91,24 +97,26 @@ you will have to take care yourself and update your CI tools every time a new ta
 
 | Docker tag     | Build from docker-terraform-docs | Build from terraform-docs |
 |----------------|----------------------------------|---------------------------|
-| `latest-<tag>` | Tag: `<tag>`                     | [Branch: master](https://github.com/segmentio/terraform-docs) |
-| `0.9.1-<tag>`  | Tag: `<tag>`                     | [Tag: v0.9.1](https://github.com/segmentio/terraform-docs/tree/v0.9.1) |
-| `0.9.0-<tag>`  | Tag: `<tag>`                     | [Tag: v0.9.0](https://github.com/segmentio/terraform-docs/tree/v0.9.0) |
-| `0.8.2-<tag>`  | Tag: `<tag>`                     | [Tag: v0.8.2](https://github.com/segmentio/terraform-docs/tree/v0.8.2) |
-| `0.8.1-<tag>`  | Tag: `<tag>`                     | [Tag: v0.8.1](https://github.com/segmentio/terraform-docs/tree/v0.8.1) |
-| `0.8.0-<tag>`  | Tag: `<tag>`                     | [Tag: v0.8.0](https://github.com/segmentio/terraform-docs/tree/v0.8.0) |
-| `0.8.0-rc.3-<tag>` | Tag: `<tag>`                 | [Tag: v0.8.0-rc.3](https://github.com/segmentio/terraform-docs/tree/v0.8.0-rc.3) |
-| `0.8.0-rc.2-<tag>` | Tag: `<tag>`                 | [Tag: v0.8.0-rc.2](https://github.com/segmentio/terraform-docs/tree/v0.8.0-rc.2) |
-| `0.8.0-rc.1-<tag>` | Tag: `<tag>`                 | [Tag: v0.8.0-rc.1](https://github.com/segmentio/terraform-docs/tree/v0.8.0-rc.1) |
-| `0.7.0-<tag>`  | Tag: `<tag>`                     | [Tag: v0.7.0](https://github.com/segmentio/terraform-docs/tree/v0.7.0) |
-| `0.6.0-<tag>`  | Tag: `<tag>`                     | [Tag: v0.6.0](https://github.com/segmentio/terraform-docs/tree/v0.6.0) |
-| `0.5.0-<tag>`  | Tag: `<tag>`                     | [Tag: v0.5.0](https://github.com/segmentio/terraform-docs/tree/v0.5.0) |
-| `0.4.5-<tag>`  | Tag: `<tag>`                     | [Tag: v0.4.5](https://github.com/segmentio/terraform-docs/tree/v0.4.5) |
-| `0.4.0-<tag>`  | Tag: `<tag>`                     | [Tag: v0.4.0](https://github.com/segmentio/terraform-docs/tree/v0.4.0) |
-| `0.3.0-<tag>`  | Tag: `<tag>`                     | [Tag: v0.3.0](https://github.com/segmentio/terraform-docs/tree/v0.3.0) |
-| `0.2.0-<tag>`  | Tag: `<tag>`                     | [Tag: v0.2.0](https://github.com/segmentio/terraform-docs/tree/v0.2.0) |
-| `0.1.1-<tag>`  | Tag: `<tag>`                     | [Tag: v0.1.1](https://github.com/segmentio/terraform-docs/tree/v0.1.1) |
-| `0.1.0-<tag>`  | Tag: `<tag>`                     | [Tag: v0.1.0](https://github.com/segmentio/terraform-docs/tree/v0.1.0) |
+| `latest-<tag>` | Tag: `<tag>`                     | [Branch: master](https://github.com/terraform-docs/terraform-docs) |
+| `0.10.1-<tag>` | Tag: `<tag>`                     | [Tag: v0.10.1](https://github.com/terraform-docs/terraform-docs/tree/v0.10.1) |
+| `0.10.0-<tag>` | Tag: `<tag>`                     | [Tag: v0.10.0](https://github.com/terraform-docs/terraform-docs/tree/v0.10.0) |
+| `0.9.1-<tag>`  | Tag: `<tag>`                     | [Tag: v0.9.1](https://github.com/terraform-docs/terraform-docs/tree/v0.9.1) |
+| `0.9.0-<tag>`  | Tag: `<tag>`                     | [Tag: v0.9.0](https://github.com/terraform-docs/terraform-docs/tree/v0.9.0) |
+| `0.8.2-<tag>`  | Tag: `<tag>`                     | [Tag: v0.8.2](https://github.com/terraform-docs/terraform-docs/tree/v0.8.2) |
+| `0.8.1-<tag>`  | Tag: `<tag>`                     | [Tag: v0.8.1](https://github.com/terraform-docs/terraform-docs/tree/v0.8.1) |
+| `0.8.0-<tag>`  | Tag: `<tag>`                     | [Tag: v0.8.0](https://github.com/terraform-docs/terraform-docs/tree/v0.8.0) |
+| `0.8.0-rc.3-<tag>` | Tag: `<tag>`                 | [Tag: v0.8.0-rc.3](https://github.com/terraform-docs/terraform-docs/tree/v0.8.0-rc.3) |
+| `0.8.0-rc.2-<tag>` | Tag: `<tag>`                 | [Tag: v0.8.0-rc.2](https://github.com/terraform-docs/terraform-docs/tree/v0.8.0-rc.2) |
+| `0.8.0-rc.1-<tag>` | Tag: `<tag>`                 | [Tag: v0.8.0-rc.1](https://github.com/terraform-docs/terraform-docs/tree/v0.8.0-rc.1) |
+| `0.7.0-<tag>`  | Tag: `<tag>`                     | [Tag: v0.7.0](https://github.com/terraform-docs/terraform-docs/tree/v0.7.0) |
+| `0.6.0-<tag>`  | Tag: `<tag>`                     | [Tag: v0.6.0](https://github.com/terraform-docs/terraform-docs/tree/v0.6.0) |
+| `0.5.0-<tag>`  | Tag: `<tag>`                     | [Tag: v0.5.0](https://github.com/terraform-docs/terraform-docs/tree/v0.5.0) |
+| `0.4.5-<tag>`  | Tag: `<tag>`                     | [Tag: v0.4.5](https://github.com/terraform-docs/terraform-docs/tree/v0.4.5) |
+| `0.4.0-<tag>`  | Tag: `<tag>`                     | [Tag: v0.4.0](https://github.com/terraform-docs/terraform-docs/tree/v0.4.0) |
+| `0.3.0-<tag>`  | Tag: `<tag>`                     | [Tag: v0.3.0](https://github.com/terraform-docs/terraform-docs/tree/v0.3.0) |
+| `0.2.0-<tag>`  | Tag: `<tag>`                     | [Tag: v0.2.0](https://github.com/terraform-docs/terraform-docs/tree/v0.2.0) |
+| `0.1.1-<tag>`  | Tag: `<tag>`                     | [Tag: v0.1.1](https://github.com/terraform-docs/terraform-docs/tree/v0.1.1) |
+| `0.1.0-<tag>`  | Tag: `<tag>`                     | [Tag: v0.1.0](https://github.com/terraform-docs/terraform-docs/tree/v0.1.0) |
 
 Where `<tag>` refers to the chosen git tag from this repository.
 
