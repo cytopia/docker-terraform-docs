@@ -166,13 +166,13 @@ Create markdown output and sent to stdout:
 docker run --rm \
   -v $(pwd):/data \
   cytopia/terraform-docs \
-  terraform-docs --sort-inputs-by-required --with-aggregate-type-defaults md .
+  terraform-docs --sort-by-required md .
 
 # [Terraform >= 0.12]
 docker run --rm \
   -v $(pwd):/data \
   cytopia/terraform-docs \
-  terraform-docs-012 --sort-inputs-by-required --with-aggregate-type-defaults md .
+  terraform-docs-012 --sort-by-required md .
 ```
 
 ### Store in file
@@ -182,13 +182,13 @@ Create README.md with `terraform-docs` output:
 docker run --rm \
   -v $(pwd):/data \
   cytopia/terraform-docs \
-  terraform-docs --sort-inputs-by-required --with-aggregate-type-defaults md . > README.md
+  terraform-docs --sort-by-required md . > README.md
 
 # [Terraform >= 0.12]
 docker run --rm \
   -v $(pwd):/data \
   cytopia/terraform-docs \
-  terraform-docs-012 --sort-inputs-by-required --with-aggregate-type-defaults md . > README.md
+  terraform-docs-012 --sort-by-required md . > README.md
 ```
 
 ### Replace in README.md
@@ -211,7 +211,7 @@ following delimiter by default:
 docker run --rm \
   -v $(pwd):/data \
   cytopia/terraform-docs \
-  terraform-docs-replace --sort-inputs-by-required --with-aggregate-type-defaults md README.md
+  terraform-docs-replace --sort-by-required md README.md
 
 # [Terraform >= 0.12]
 # Path to README.md must be specified as last command.
@@ -219,7 +219,7 @@ docker run --rm \
 docker run --rm \
   -v $(pwd):/data \
   cytopia/terraform-docs \
-  terraform-docs-replace-012 --sort-inputs-by-required --with-aggregate-type-defaults md README.md
+  terraform-docs-replace-012 --sort-by-required md README.md
 ```
 
 ### Replace in INFO.md with different delimiter
@@ -242,7 +242,7 @@ docker run --rm \
   -e DELIM_START='<!-- TFDOC_START -->' \
   -e DELIM_CLOSE='<!-- TFDOC_END -->' \
   cytopia/terraform-docs \
-  terraform-docs-replace --sort-inputs-by-required --with-aggregate-type-defaults md INFO.md
+  terraform-docs-replace --sort-by-required md INFO.md
 
 # [Terraform >= 0.12]
 # Path to INFO.md must be specified as last command.
@@ -252,7 +252,7 @@ docker run --rm \
   -e DELIM_START='<!-- TFDOC_START -->' \
   -e DELIM_CLOSE='<!-- TFDOC_END -->' \
   cytopia/terraform-docs \
-  terraform-docs-replace-012 --sort-inputs-by-required --with-aggregate-type-defaults md INFO.md
+  terraform-docs-replace-012 --sort-by-required md INFO.md
 ```
 
 ### Example Makefile
@@ -292,7 +292,7 @@ _gen-main:
 		-e DELIM_START='$(DELIM_START)' \
 		-e DELIM_CLOSE='$(DELIM_CLOSE)' \
 		cytopia/terraform-docs:$(TF_DOCS_VERSION) \
-		terraform-docs-replace --sort-inputs-by-required --with-aggregate-type-defaults md README.md; then \
+		terraform-docs-replace --sort-by-required md README.md; then \
 		echo "OK"; \
 	else \
 		echo "Failed"; \
@@ -311,7 +311,7 @@ _gen-examples:
 			-e DELIM_START='$(DELIM_START)' \
 			-e DELIM_CLOSE='$(DELIM_CLOSE)' \
 			cytopia/terraform-docs:$(TF_DOCS_VERSION) \
-			terraform-docs-replace --sort-inputs-by-required --with-aggregate-type-defaults md $${DOCKER_PATH}/README.md; then \
+			terraform-docs-replace --sort-by-required md $${DOCKER_PATH}/README.md; then \
 			echo "OK"; \
 		else \
 			echo "Failed"; \
@@ -331,7 +331,7 @@ _gen-modules:
 			-e DELIM_START='$(DELIM_START)' \
 			-e DELIM_CLOSE='$(DELIM_CLOSE)' \
 			cytopia/terraform-docs:$(TF_DOCS_VERSION) \
-			terraform-docs-replace --sort-inputs-by-required --with-aggregate-type-defaults md $${DOCKER_PATH}/README.md; then \
+			terraform-docs-replace --sort-by-required md $${DOCKER_PATH}/README.md; then \
 			echo "OK"; \
 		else \
 			echo "Failed"; \
