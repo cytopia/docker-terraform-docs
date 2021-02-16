@@ -21,11 +21,10 @@ RUN set -x \
 	&& if [ "${VERSION}" != "latest" ]; then \
 		git checkout v${VERSION}; \
 	fi \
-	# Build terraform-docs latest
-	&& if [ "${VERSION}" = "latest" ]; then \
-		make gox \
-		&& make build-all GOOS=linux GOARCH=amd64 \
-		&& mv bin/terraform-docs-${VERSION}-linux-amd64 /usr/local/bin/terraform-docs; \
+	# Build terraform-docs 0.11.0 and above
+  && if [ "${VERSION}" = "latest" ] || [ "${VERSION}" = "0.11.0" ]; then \
+    make build GOOS=linux GOARCH=amd64 \
+    && mv bin/linux-amd64/terraform-docs /usr/local/bin/terraform-docs; \
 	# Build terraform-docs 0.8.0-rc.1 and above
 	else \
 		make gox \
@@ -39,9 +38,8 @@ RUN set -x \
 	&& if [ "${VERSION}" != "latest" ]; then \
 		terraform-docs --version | grep "${VERSION}"; \
 	else \
-		terraform-docs --version | grep -E "(terraform-docs[[:space:]])?(version[[:space:]])?(dev|latest)"; \
+		terraform-docs --version | grep -E "(terraform-docs[[:space:]])?(version[[:space:]])?(dev|latest|v[0-9]+.[0-9].+[0-9]+-[0-9]+-[0-9a-z]{8}[[:space:]])"; \
 	fi
-
 
 # Use a clean tiny image to store artifacts in
 FROM alpine:3.11

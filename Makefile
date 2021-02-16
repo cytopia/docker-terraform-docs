@@ -116,7 +116,7 @@ _test-version:
 				| sed 's/.*v//g' \
 		)"; \
 		echo "Testing for latest: (dev|latest)"; \
-		if ! docker run --rm $(IMAGE) | grep -E "^(terraform-docs[[:space:]])?(version[[:space:]])?(dev|latest)"; then \
+		if ! docker run --rm $(IMAGE) | grep -E "^(terraform-docs[[:space:]])?(version[[:space:]])?(dev|latest|v$$LATEST-[0-9]+-[0-9a-z]{8}[[:space:]])"; then \
 			echo "Failed"; \
 			exit 1; \
 		fi; \
