@@ -22,7 +22,7 @@ RUN set -x \
 		git checkout v${VERSION}; \
 	fi \
 	# Build terraform-docs 0.11.0 and above
-  && if [ "${VERSION}" = "latest" ] || [ "${VERSION}" = "0.11.0" ]; then \
+  && if [ "${VERSION}" = "latest" ] || [ "${VERSION}" = "0.11.0" ] || [ "${VERSION}" = "0.11.1" ] || [ "${VERSION}" = "0.11.2" ]; then \
     make build GOOS=linux GOARCH=amd64 \
     && mv bin/linux-amd64/terraform-docs /usr/local/bin/terraform-docs; \
 	# Build terraform-docs 0.8.0-rc.1 and above
