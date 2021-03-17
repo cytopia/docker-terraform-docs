@@ -4,11 +4,11 @@ No requirements.
 
 ## Providers
 
-No providers.
+No provider.
 
 ## Modules
 
-No modules.
+No Modules.
 
 ## Resources
 
@@ -18,8 +18,8 @@ No resources.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_test"></a> [test](#input\_test) | test description | `any` | n/a | yes |
+| test | test description | `any` | n/a | yes |
 
 ## Outputs
 
-No outputs.
+No output.

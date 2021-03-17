@@ -115,8 +115,8 @@ _test-version:
 				| head -1 \
 				| sed 's/.*v//g' \
 		)"; \
-		echo "Testing for latest: (dev|latest)"; \
-		if ! docker run --rm $(IMAGE) | grep -E "^(terraform-docs[[:space:]])?(version[[:space:]])?(dev|latest)"; then \
+		echo "Testing for latest: (dev|latest|beta)"; \
+		if ! docker run --rm $(IMAGE) | grep -E "^(terraform-docs[[:space:]])?(version[[:space:]])?(v?[.0-9]+)?-?(dev|latest|beta)?"; then \
 			echo "Failed"; \
 			exit 1; \
 		fi; \
@@ -134,11 +134,11 @@ _test-run-generate-one:
 	@echo "------------------------------------------------------------"
 	@echo "- Testing terraform-docs (1/2)"
 	@echo "------------------------------------------------------------"
-	@if ! docker run --rm -v $(PWD)/tests:/data $(IMAGE) terraform-docs md /data/output/generate/basic/ > tests/output/generate/basic/TEST-$(VERSION).md; then \
+	if ! docker run --rm -v $(PWD)/tests:/data $(IMAGE) terraform-docs md /data/output/generate/basic/ > tests/output/generate/basic/TEST-$(VERSION).md; then \
 		echo "Failed"; \
 		exit 1; \
-	fi; \
-	if ! grep '## Inputs' tests/output/generate/basic/TEST-$(VERSION).md; then \
+	fi;
+	@if ! grep '## Inputs' tests/output/generate/basic/TEST-$(VERSION).md; then \
 		echo "Failed"; \
 		exit 1; \
 	fi; \
@@ -163,24 +163,53 @@ _test-run-generate-two:
 			echo "--with-aggregate-type-defaults"; \
 		fi; \
 	))
+	@#
 	@# ---- Test Terraform < 0.12 ----
-	@if ! docker run --rm -v $(PWD)/tests:/data $(IMAGE) terraform-docs $(TFDOC_ARG_SORT) $(TFDOC_ARG_AGGREGATE) md /data/output/generate/default/ > tests/output/generate/default/TEST-$(VERSION).md; then \
-		echo "Failed"; \
+	if ! docker run --rm -v $(PWD)/tests:/data $(IMAGE) terraform-docs $(TFDOC_ARG_SORT) $(TFDOC_ARG_AGGREGATE) md /data/output/generate/default/ > tests/output/generate/default/TEST-$(VERSION).md; then \
+		echo "Failed 1"; \
 		exit 1; \
-	fi; \
-	if ! grep -E '^variable.*$$' tests/output/generate/default/main.tf | awk -F'"' '{print $$2}' | xargs -n1 sh -c 'if ! cat tests/output/generate/default/TEST-$(VERSION).md | sed "s/\\\//g" | grep -E "[[:space:]]$$1[[:space:]]" >/dev/null; then echo "[ERROR] $$1"; false; else echo "[SUCC]  $$1"; true; fi' -- ; then \
-		echo "Failed"; \
+	fi;
+	@if ! grep -E '^variable.*$$' tests/output/generate/default/main.tf \
+		| awk -F'"' '{print $$2}' \
+		| xargs -n1 sh -c '\
+			if ! cat tests/output/generate/default/TEST-$(VERSION).md \
+				| sed "s/\\\//g" \
+				| grep -E "([[:space:]]|\[)$$1([[:space:]]|\])" >/dev/null; \
+			then \
+				echo "[ERROR] $$1"; \
+				false; \
+			else \
+				echo "[SUCC]  $$1"; \
+				true; \
+			fi' -- ; \
+	then \
+		echo "Failed 2"; \
 		exit 1; \
-	fi
+	fi;
+	@#
 	@# ---- Test Terraform >= 0.12 ----
-	@if ! docker run --rm -v $(PWD)/tests:/data $(IMAGE) terraform-docs-012 $(TFDOC_ARG_SORT) $(TFDOC_ARG_AGGREGATE) md /data/output/generate/0.12/ > tests/output/generate/0.12/TEST-$(VERSION).md; then \
-		echo "Failed"; \
+	if ! docker run --rm -v $(PWD)/tests:/data $(IMAGE) terraform-docs-012 $(TFDOC_ARG_SORT) $(TFDOC_ARG_AGGREGATE) md /data/output/generate/0.12/ > tests/output/generate/0.12/TEST-$(VERSION).md; then \
+		echo "Failed 3"; \
 		exit 1; \
-	fi; \
-	if ! grep -E '^variable.*$$' tests/output/generate/0.12/main.tf | awk -F'"' '{print $$2}' | xargs -n1 sh -c 'if ! cat tests/output/generate/0.12/TEST-$(VERSION).md | sed "s/\\\//g" | grep -E "[[:space:]]$$1[[:space:]]" >/dev/null; then echo "[ERROR] $$1"; false; else echo "[SUCC]  $$1"; true; fi' -- ; then \
-		echo "Failed"; \
+	fi;
+	@if ! grep -E '^variable.*$$' tests/output/generate/0.12/main.tf \
+		| awk -F'"' '{print $$2}' \
+		| xargs -n1 sh -c '\
+			if ! cat tests/output/generate/0.12/TEST-$(VERSION).md \
+				| sed "s/\\\//g" \
+				| grep -E "([[:space:]]|\[)$$1([[:space:]]|\])" >/dev/null; \
+			then \
+				echo "[ERROR] $$1"; \
+				false; \
+			else \
+				echo "[SUCC]  $$1"; \
+				true; \
+			fi' -- ;\
+	then \
+		echo "Failed 4"; \
 		exit 1; \
-	fi
+	fi;
+	@#
 	@echo "Success";
 
 .PHONY: _test-run-replace-one
@@ -191,20 +220,33 @@ _test-run-replace-one:
 	@echo '<!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->' > tests/output/replace/basic/TEST-$(VERSION).md
 	@echo >> tests/output/replace/basic/TEST-$(VERSION).md
 	@echo '<!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->' >> tests/output/replace/basic/TEST-$(VERSION).md
-	@if ! docker run --rm -v $(PWD)/tests:/data $(IMAGE) terraform-docs-replace md /data/output/replace/basic/TEST-$(VERSION).md; then \
-		echo "Failed"; \
+	if ! docker run --rm -v $(PWD)/tests:/data $(IMAGE) terraform-docs-replace md /data/output/replace/basic/TEST-$(VERSION).md; then \
+		echo "Failed 1"; \
 		exit 1; \
-	fi; \
-	if ! grep '## Inputs' tests/output/replace/basic/TEST-$(VERSION).md; then \
-		echo "Failed"; \
+	fi;
+	@if ! grep '## Inputs' tests/output/replace/basic/TEST-$(VERSION).md; then \
+		echo "Failed 2"; \
 		exit 1; \
 	fi; \
 	if ! grep 'test description' tests/output/replace/basic/TEST-$(VERSION).md; then \
-		echo "Failed"; \
+		echo "Failed 3"; \
 		exit 1; \
 	fi; \
-	if ! grep -E '^variable.*$$' tests/output/replace/basic/main.tf | awk -F'"' '{print $$2}' | xargs -n1 sh -c 'if ! cat tests/output/replace/basic/TEST-$(VERSION).md | sed "s/\\\//g" | grep -E "[[:space:]]$$1[[:space:]]" >/dev/null; then echo "[ERROR] $$1"; false; else echo "[SUCC]  $$1"; true; fi' -- ; then \
-		echo "Failed"; \
+	if ! grep -E '^variable.*$$' tests/output/replace/basic/main.tf \
+		| awk -F'"' '{print $$2}' \
+		| xargs -n1 sh -c '\
+			if ! cat tests/output/replace/basic/TEST-$(VERSION).md \
+				| sed "s/\\\//g" \
+				| grep -E "([[:space:]]|\[)$$1([[:space:]]|\])" >/dev/null; \
+			then \
+				echo "[ERROR] $$1"; \
+				false; \
+			else \
+				echo "[SUCC]  $$1"; \
+				true; \
+			fi' -- ; \
+	then \
+		echo "Failed 4"; \
 		exit 1; \
 	fi; \
 	echo "Success";
@@ -224,22 +266,50 @@ _test-run-replace-two:
 			echo "--with-aggregate-type-defaults"; \
 		fi; \
 	))
+	@#
 	@# ---- Test Terraform < 0.12 ----
-	@if ! docker run --rm -v $(PWD)/tests:/data $(IMAGE) terraform-docs-replace $(TFDOC_ARG_SORT) $(TFDOC_ARG_AGGREGATE) md /data/output/replace/default/TEST-$(VERSION).md; then \
-		echo "Failed"; \
+	if ! docker run --rm -v $(PWD)/tests:/data $(IMAGE) terraform-docs-replace $(TFDOC_ARG_SORT) $(TFDOC_ARG_AGGREGATE) md /data/output/replace/default/TEST-$(VERSION).md; then \
+		echo "Failed 1"; \
 		exit 1; \
-	fi; \
-	if ! grep -E '^variable.*$$' tests/output/replace/default/main.tf | awk -F'"' '{print $$2}' | xargs -n1 sh -c 'if ! cat tests/output/replace/default/TEST-$(VERSION).md | sed "s/\\\//g" | grep -E "[[:space:]]$$1[[:space:]]" >/dev/null; then echo "[ERROR] $$1"; false; else echo "[SUCC]  $$1"; true; fi' -- ; then \
-		echo "Failed"; \
+	fi;
+	@if ! grep -E '^variable.*$$' tests/output/replace/default/main.tf \
+		| awk -F'"' '{print $$2}' \
+		| xargs -n1 sh -c '\
+			if ! cat tests/output/replace/default/TEST-$(VERSION).md \
+				| sed "s/\\\//g" \
+				| grep -E "([[:space:]]|\[)$$1([[:space:]]|\])" >/dev/null; \
+			then \
+				echo "[ERROR] $$1"; \
+				false; \
+			else \
+				echo "[SUCC]  $$1"; \
+				true; \
+			fi' -- ; \
+	then \
+		echo "Failed 2"; \
 		exit 1; \
-	fi
+	fi;
+	@#
 	@# ---- Test Terraform >= 0.12 ----
-	@if ! docker run --rm -v $(PWD)/tests:/data $(IMAGE) terraform-docs-replace-012 $(TFDOC_ARG_SORT) $(TFDOC_ARG_AGGREGATE) md /data/output/replace/0.12/TEST-$(VERSION).md; then \
+	if ! docker run --rm -v $(PWD)/tests:/data $(IMAGE) terraform-docs-replace-012 $(TFDOC_ARG_SORT) $(TFDOC_ARG_AGGREGATE) md /data/output/replace/0.12/TEST-$(VERSION).md; then \
 		echo "Failed"; \
 		exit 1; \
-	fi; \
-	if ! grep -E '^variable.*$$' tests/output/replace/0.12/main.tf | awk -F'"' '{print $$2}' | xargs -n1 sh -c 'if ! cat tests/output/replace/0.12/TEST-$(VERSION).md | sed "s/\\\//g" | grep -E "[[:space:]]$$1[[:space:]]" >/dev/null; then echo "[ERROR] $$1"; false; else echo "[SUCC]  $$1"; true; fi' -- ; then \
-		echo "Failed"; \
+	fi;
+	@if ! grep -E '^variable.*$$' tests/output/replace/0.12/main.tf \
+		| awk -F'"' '{print $$2}' \
+		| xargs -n1 sh -c '\
+			if ! cat tests/output/replace/0.12/TEST-$(VERSION).md \
+				| sed "s/\\\//g" \
+				| grep -E "([[:space:]]|\[)$$1([[:space:]]|\])" >/dev/null; \
+			then \
+				echo "[ERROR] $$1"; \
+				false; \
+			else \
+				echo "[SUCC]  $$1"; \
+				true; \
+			fi' -- ; \
+	then \
+		echo "Failed 3"; \
 		exit 1; \
 	fi; \
 	echo "Success";
