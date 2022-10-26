@@ -6,6 +6,7 @@ RUN set -x \
     bash \
     ca-certificates \
     curl \
+    dpkg \
     gcc \
     git \
     make \
@@ -27,8 +28,23 @@ RUN set -x \
   \
   # Build
   && go mod download \
-  && make build \
-  && mv /go/src/github.com/terraform-docs/bin//linux-amd64/terraform-docs /usr/local/bin/terraform-docs
+  && make build
+
+RUN set -x \
+  && dpkg --print-architecture \
+  \
+  # Copy correct architecture
+  && if [ "$(dpkg --print-architecture | awk -F'-' '{print $NF}' )" = "i386" ]; then\
+    mv /go/src/github.com/terraform-docs/bin/linux-386/terraform-docs /usr/local/bin/terraform-docs; \
+  elif [ "$(uname -m)" = "x86_64" ]; then \
+    mv /go/src/github.com/terraform-docs/bin/linux-amd64/terraform-docs /usr/local/bin/terraform-docs; \
+  elif [ "$(uname -m)" = "aarch64" ]; then \
+    mv /go/src/github.com/terraform-docs/bin/linux-arm64/terraform-docs /usr/local/bin/terraform-docs; \
+  elif [ "$(uname -m)" = "armv7l" ]; then \
+    mv /go/src/github.com/terraform-docs/bin/linux-arm/terraform-docs /usr/local/bin/terraform-docs; \
+  else \
+    mv /go/src/github.com/terraform-docs/bin/linux-$(uname -m)/terraform-docs /usr/local/bin/terraform-docs; \
+  fi
 
 # Version pre-check
 RUN set -x \
