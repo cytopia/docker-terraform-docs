@@ -1,0 +1,94 @@
+---
+
+# -------------------------------------------------------------------------------------------------
+# Job Name
+# -------------------------------------------------------------------------------------------------
+name: params
+
+
+# -------------------------------------------------------------------------------------------------
+# Custom Variables
+# -------------------------------------------------------------------------------------------------
+env:
+  MATRIX: >-
+    [
+      {
+        "NAME":    "tfdocs",
+        "VERSION": [
+          "latest",
+          "0.16.0",
+          "0.15.0",
+          "0.14.1",
+          "0.14.0",
+          "0.13.0",
+          "0.12.1",
+          "0.12.0",
+          "0.11.2",
+          "0.11.1",
+          "0.11.0",
+          "0.10.1",
+          "0.10.0",
+          "0.9.1",
+          "0.9.0",
+          "0.8.2",
+          "0.8.1",
+          "0.8.0",
+          "0.7.0",
+          "0.6.0",
+          "0.5.0",
+          "0.4.5",
+          "0.4.0"
+        ],
+        "FLAVOUR": ["latest"],
+        "ARCH":    ["linux/amd64", "linux/386", "linux/arm64", "linux/arm/v7", "linux/arm/v6"]
+      }
+    ]
+
+
+# -------------------------------------------------------------------------------------------------
+# When to run
+# -------------------------------------------------------------------------------------------------
+on:
+  workflow_call:
+    outputs:
+      matrix:
+        description: "The determined version matrix"
+        value: ${{ jobs.params.outputs.matrix }}
+      refs:
+        description: "The determined git ref matrix (only during scheduled run)"
+        value: ${{ jobs.params.outputs.refs }}
+
+jobs:
+  params:
+    runs-on: ubuntu-latest
+
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+      refs: ${{ steps.set-refs.outputs.matrix }}
+
+    steps:
+      - name: "[Set-Output] Matrix"
+        id: set-matrix
+        run: |
+          echo "matrix=$( echo '${{ env.MATRIX }}' | jq -M -c )" >> $GITHUB_OUTPUT
+
+      - name: "[Set-Output] Matrix 'Refs' (master branch and latest tag)"
+        id: set-refs
+        uses: cytopia/git-ref-matrix-action@v0.1.11
+        with:
+          repository_default_branch: master
+          branches: master
+          num_latest_tags: 0
+        if: github.event_name == 'schedule'
+
+      - name: "[DEBUG] Show settings'"
+        run: |
+          echo 'Matrix'
+          echo '--------------------'
+          echo '${{ steps.set-matrix.outputs.matrix }}'
+          echo
+
+          echo 'Matrix: Refs'
+          echo '--------------------'
+          echo '${{ steps.set-matrix-refs.outputs.matrix }}'
+          echo
