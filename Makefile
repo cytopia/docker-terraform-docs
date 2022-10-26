@@ -2,104 +2,149 @@ ifneq (,)
 .error This Makefile requires GNU Make.
 endif
 
-.PHONY: lint build rebuild lint test tag pull-base-image login push enter
+# Ensure additional Makefiles are present
+MAKEFILES = Makefile.docker Makefile.lint
+$(MAKEFILES): URL=https://raw.githubusercontent.com/devilbox/makefiles/master/$(@)
+$(MAKEFILES):
+	@if ! (curl --fail -sS -o $(@) $(URL) || wget -O $(@) $(URL)); then \
+		echo "Error, curl or wget required."; \
+		echo "Exiting."; \
+		false; \
+	fi
+include $(MAKEFILES)
 
-# --------------------------------------------------------------------------------------------------
-# Variables
-# --------------------------------------------------------------------------------------------------
-DIR = .
-FILE_012 = Dockerfile-0.12
-FILE_011 = Dockerfile-0.11
-IMAGE = cytopia/terraform-docs
-TAG = latest
-VERSION = latest
-NO_CACHE =
+# Set default Target
+.DEFAULT_GOAL := help
 
 
-# --------------------------------------------------------------------------------------------------
-# Default Target
-# --------------------------------------------------------------------------------------------------
+# -------------------------------------------------------------------------------------------------
+# Default configuration
+# -------------------------------------------------------------------------------------------------
+# Own vars
+TAG        = latest
+
+# Makefile.docker overwrites
+NAME       = tfdocs
+VERSION    = latest
+IMAGE      = cytopia/terraform-docs
+FLAVOUR    = latest
+
+FILE       = Dockerfile
+ifeq ($(strip $(VERSION)),0.1.0)
+	FILE = Dockerfile-0.11
+else
+	ifeq ($(strip $(VERSION)),0.1.1)
+		FILE = Dockerfile-0.11
+	else
+		ifeq ($(strip $(VERSION)),0.2.0)
+			FILE = Dockerfile-0.11
+		else
+			ifeq ($(strip $(VERSION)),0.3.0)
+				FILE = Dockerfile-0.11
+			else
+				ifeq ($(strip $(VERSION)),0.4.0)
+					FILE = Dockerfile-0.11
+				else
+					ifeq ($(strip $(VERSION)),0.4.5)
+						FILE = Dockerfile-0.11
+					else
+						ifeq ($(strip $(VERSION)),0.5.0)
+							FILE = Dockerfile-0.11
+						else
+							ifeq ($(strip $(VERSION)),0.6.0)
+								FILE = Dockerfile-0.11
+							else
+								ifeq ($(strip $(VERSION)),0.7.0)
+									FILE = Dockerfile-0.11
+								endif
+							endif
+						endif
+					endif
+				endif
+			endif
+		endif
+	endif
+endif
+DIR        = Dockerfiles
+
+# Building from master branch: Tag == 'latest'
+ifeq ($(strip $(TAG)),latest)
+	ifeq ($(strip $(VERSION)),latest)
+		DOCKER_TAG = $(FLAVOUR)
+	else
+		ifeq ($(strip $(FLAVOUR)),latest)
+			DOCKER_TAG = $(VERSION)
+		else
+			DOCKER_TAG = $(FLAVOUR)-$(VERSION)
+		endif
+	endif
+# Building from any other branch or tag: Tag == '<REF>'
+else
+	ifeq ($(strip $(FLAVOUR)),latest)
+		DOCKER_TAG = $(VERSION)-$(TAG)
+	else
+		DOCKER_TAG = $(FLAVOUR)-$(VERSION)-$(TAG)
+	endif
+endif
+
+# Makefile.lint overwrites
+FL_IGNORES  = .git/,.github/,tests/,Dockerfiles/data/
+SC_IGNORES  = .git/,.github/,tests/
+JL_IGNORES  = .git/,.github/
+
+
+# -------------------------------------------------------------------------------------------------
+#  Default Target
+# -------------------------------------------------------------------------------------------------
+.PHONY: help
 help:
-	@echo "lint                      Lint project files and repository"
-	@echo "build   [VERSION=...]     Build terraform-docs docker image"
-	@echo "rebuild [VERSION=...]     Build terraform-docs docker image without cache"
-	@echo "test    [VERSION=...]     Test built terraform-docs docker image"
-	@echo "tag TAG=...               Retag Docker image"
-	@echo "login USER=... PASS=...   Login to Docker hub"
-	@echo "push [TAG=...]            Push Docker image to Docker hub"
-
-
-# --------------------------------------------------------------------------------------------------
-# Lint Targets
-# --------------------------------------------------------------------------------------------------
-lint: lint-workflow
-lint: lint-files
-
-.PHONY: lint-workflow
-lint-workflow:
-	@echo "################################################################################"
-	@echo "# Lint Workflow"
-	@echo "################################################################################"
-	@\
-	GIT_CURR_MAJOR="$$( git tag | sort -V | tail -1 | sed 's|\.[0-9]*$$||g' )"; \
-	GIT_CURR_MINOR="$$( git tag | sort -V | tail -1 | sed 's|^[0-9]*\.||g' )"; \
-	GIT_NEXT_TAG="$${GIT_CURR_MAJOR}.$$(( GIT_CURR_MINOR + 1 ))"; \
-		if ! grep 'refs:' -A 100 .github/workflows/nightly.yml \
-		| grep  "          - '$${GIT_NEXT_TAG}'" >/dev/null; then \
-		echo "[ERR] New Tag required in .github/workflows/nightly.yml: $${GIT_NEXT_TAG}"; \
-			exit 1; \
-		else \
-		echo "[OK] Git Tag present in .github/workflows/nightly.yml: $${GIT_NEXT_TAG}"; \
-	fi
+	@echo "lint                                     Lint project files and repository"
 	@echo
-
-.PHONY: lint-files
-lint-files:
-	@echo "################################################################################"
-	@echo "# Lint Files"
-	@echo "################################################################################"
-	@docker run --rm -v $(PWD):/data cytopia/file-lint file-cr --text --ignore '.git/,.github/,tests/' --path .
-	@docker run --rm -v $(PWD):/data cytopia/file-lint file-crlf --text --ignore '.git/,.github/,tests/' --path .
-	@docker run --rm -v $(PWD):/data cytopia/file-lint file-trailing-single-newline --text --ignore '.git/,.github/,tests/' --path .
-	@docker run --rm -v $(PWD):/data cytopia/file-lint file-trailing-space --text --ignore '.git/,.github/,tests/' --path .
-	@docker run --rm -v $(PWD):/data cytopia/file-lint file-utf8 --text --ignore '.git/,.github/,tests/' --path .
-	@docker run --rm -v $(PWD):/data cytopia/file-lint file-utf8-bom --text --ignore '.git/,.github/,tests/' --path .
+	@echo "build [ARCH=...] [TAG=...]               Build Docker image"
+	@echo "rebuild [ARCH=...] [TAG=...]             Build Docker image without cache"
+	@echo "push [ARCH=...] [TAG=...]                Push Docker image to Docker hub"
+	@echo
+	@echo "manifest-create [ARCHES=...] [TAG=...]   Create multi-arch manifest"
+	@echo "manifest-push [TAG=...]                  Push multi-arch manifest"
+	@echo
+	@echo "test [ARCH=...]                          Test built Docker image"
 	@echo
 
 
-# --------------------------------------------------------------------------------------------------
-# Build Targets
-# --------------------------------------------------------------------------------------------------
-build:
-	if [ "$(VERSION)" = "0.1.0" ] \
-	|| [ "$(VERSION)" = "0.1.1" ] \
-	|| [ "$(VERSION)" = "0.2.0" ] \
-	|| [ "$(VERSION)" = "0.3.0" ] \
-	|| [ "$(VERSION)" = "0.4.0" ] \
-	|| [ "$(VERSION)" = "0.4.5" ] \
-	|| [ "$(VERSION)" = "0.5.0" ] \
-	|| [ "$(VERSION)" = "0.6.0" ] \
-	|| [ "$(VERSION)" = "0.7.0" ]; then \
-		docker build $(NO_CACHE) --build-arg VERSION=$(VERSION) -t $(IMAGE) -f $(DIR)/$(FILE_011) $(DIR); \
-	else \
-		docker build $(NO_CACHE) --build-arg VERSION=$(VERSION) -t $(IMAGE) -f $(DIR)/$(FILE_012) $(DIR); \
-	fi
+# -------------------------------------------------------------------------------------------------
+#  Docker Targets
+# -------------------------------------------------------------------------------------------------
+.PHONY: build
+build: ARGS=--build-arg VERSION=$(VERSION)
+build: docker-arch-build
 
-rebuild: NO_CACHE=--no-cache
-rebuild: pull-base-image
-rebuild: build
+.PHONY: rebuild
+rebuild: ARGS=--build-arg VERSION=$(VERSION)
+rebuild: docker-arch-rebuild
 
+.PHONY: push
+push: docker-arch-push
+
+
+# -------------------------------------------------------------------------------------------------
+#  Manifest Targets
+# -------------------------------------------------------------------------------------------------
+.PHONY: manifest-create
+manifest-create: docker-manifest-create
+
+.PHONY: manifest-push
+manifest-push: docker-manifest-push
 
 
 # --------------------------------------------------------------------------------------------------
 # Test Targets
 # --------------------------------------------------------------------------------------------------
-test:
-	@$(MAKE) --no-print-directory _test-version
-	@$(MAKE) --no-print-directory _test-run-generate-one
-	@$(MAKE) --no-print-directory _test-run-generate-two
-	@$(MAKE) --no-print-directory _test-run-replace-one
-	@$(MAKE) --no-print-directory _test-run-replace-two
+.PHONY: test
+test: _test-version
+test: _test-run-generate-one
+test: _test-run-generate-two
+test: _test-run-replace-one
+test: _test-run-replace-two
 
 .PHONY: _test-version
 _test-version:
@@ -116,13 +161,13 @@ _test-version:
 				| sed 's/.*v//g' \
 		)"; \
 		echo "Testing for latest: (dev|latest|beta)"; \
-		if ! docker run --rm $(IMAGE) | grep -E "^(terraform-docs[[:space:]])?(version[[:space:]])?(v?[.0-9]+)?-?(dev|latest|beta)?"; then \
+		if ! docker run --rm --platform $(ARCH) $(IMAGE):$(DOCKER_TAG) | grep -E "^(terraform-docs[[:space:]])?(version[[:space:]])?(v?[.0-9]+)?-?(dev|latest|beta)?"; then \
 			echo "Failed"; \
 			exit 1; \
 		fi; \
 	else \
 		echo "Testing for version: $(VERSION)"; \
-		if ! docker run --rm $(IMAGE) | grep -E "^(terraform-docs version)?\s?v?$(VERSION)(\s.*)?$$"; then \
+		if ! docker run --rm --platform $(ARCH) $(IMAGE):$(DOCKER_TAG) | grep -E "^(terraform-docs version)?\s?v?$(VERSION)(\s.*)?$$"; then \
 			echo "Failed"; \
 			exit 1; \
 		fi; \
@@ -134,7 +179,7 @@ _test-run-generate-one:
 	@echo "------------------------------------------------------------"
 	@echo "- Testing terraform-docs (1/2)"
 	@echo "------------------------------------------------------------"
-	if ! docker run --rm -v $(PWD)/tests:/data $(IMAGE) terraform-docs md /data/output/generate/basic/ > tests/output/generate/basic/TEST-$(VERSION).md; then \
+	if ! docker run --rm --platform $(ARCH) -v $(PWD)/tests:/data $(IMAGE):$(DOCKER_TAG) terraform-docs md /data/output/generate/basic/ > tests/output/generate/basic/TEST-$(VERSION).md; then \
 		echo "Failed"; \
 		exit 1; \
 	fi;
@@ -165,7 +210,7 @@ _test-run-generate-two:
 	))
 	@#
 	@# ---- Test Terraform < 0.12 ----
-	if ! docker run --rm -v $(PWD)/tests:/data $(IMAGE) terraform-docs $(TFDOC_ARG_SORT) $(TFDOC_ARG_AGGREGATE) md /data/output/generate/default/ > tests/output/generate/default/TEST-$(VERSION).md; then \
+	if ! docker run --rm --platform $(ARCH) -v $(PWD)/tests:/data $(IMAGE):$(DOCKER_TAG) terraform-docs $(TFDOC_ARG_SORT) $(TFDOC_ARG_AGGREGATE) md /data/output/generate/default/ > tests/output/generate/default/TEST-$(VERSION).md; then \
 		echo "Failed 1"; \
 		exit 1; \
 	fi;
@@ -188,7 +233,7 @@ _test-run-generate-two:
 	fi;
 	@#
 	@# ---- Test Terraform >= 0.12 ----
-	if ! docker run --rm -v $(PWD)/tests:/data $(IMAGE) terraform-docs-012 $(TFDOC_ARG_SORT) $(TFDOC_ARG_AGGREGATE) md /data/output/generate/0.12/ > tests/output/generate/0.12/TEST-$(VERSION).md; then \
+	if ! docker run --platform $(ARCH) --rm -v $(PWD)/tests:/data $(IMAGE):$(DOCKER_TAG) terraform-docs-012 $(TFDOC_ARG_SORT) $(TFDOC_ARG_AGGREGATE) md /data/output/generate/0.12/ > tests/output/generate/0.12/TEST-$(VERSION).md; then \
 		echo "Failed 3"; \
 		exit 1; \
 	fi;
@@ -220,7 +265,7 @@ _test-run-replace-one:
 	@echo '<!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->' > tests/output/replace/basic/TEST-$(VERSION).md
 	@echo >> tests/output/replace/basic/TEST-$(VERSION).md
 	@echo '<!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->' >> tests/output/replace/basic/TEST-$(VERSION).md
-	if ! docker run --rm -v $(PWD)/tests:/data $(IMAGE) terraform-docs-replace md /data/output/replace/basic/TEST-$(VERSION).md; then \
+	if ! docker run --rm --platform $(ARCH) -v $(PWD)/tests:/data $(IMAGE):$(DOCKER_TAG) terraform-docs-replace md /data/output/replace/basic/TEST-$(VERSION).md; then \
 		echo "Failed 1"; \
 		exit 1; \
 	fi;
@@ -268,7 +313,7 @@ _test-run-replace-two:
 	))
 	@#
 	@# ---- Test Terraform < 0.12 ----
-	if ! docker run --rm -v $(PWD)/tests:/data $(IMAGE) terraform-docs-replace $(TFDOC_ARG_SORT) $(TFDOC_ARG_AGGREGATE) md /data/output/replace/default/TEST-$(VERSION).md; then \
+	if ! docker run --rm --platform $(ARCH) -v $(PWD)/tests:/data $(IMAGE):$(DOCKER_TAG) terraform-docs-replace $(TFDOC_ARG_SORT) $(TFDOC_ARG_AGGREGATE) md /data/output/replace/default/TEST-$(VERSION).md; then \
 		echo "Failed 1"; \
 		exit 1; \
 	fi;
@@ -291,7 +336,7 @@ _test-run-replace-two:
 	fi;
 	@#
 	@# ---- Test Terraform >= 0.12 ----
-	if ! docker run --rm -v $(PWD)/tests:/data $(IMAGE) terraform-docs-replace-012 $(TFDOC_ARG_SORT) $(TFDOC_ARG_AGGREGATE) md /data/output/replace/0.12/TEST-$(VERSION).md; then \
+	if ! docker run --rm --platform $(ARCH) -v $(PWD)/tests:/data $(IMAGE):$(DOCKER_TAG) terraform-docs-replace-012 $(TFDOC_ARG_SORT) $(TFDOC_ARG_AGGREGATE) md /data/output/replace/0.12/TEST-$(VERSION).md; then \
 		echo "Failed"; \
 		exit 1; \
 	fi;
@@ -313,31 +358,3 @@ _test-run-replace-two:
 		exit 1; \
 	fi; \
 	echo "Success";
-
-
-# -------------------------------------------------------------------------------------------------
-#  Deploy Targets
-# -------------------------------------------------------------------------------------------------
-tag:
-	docker tag $(IMAGE) $(IMAGE):$(TAG)
-
-login:
-	yes | docker login --username $(USER) --password $(PASS)
-
-push:
-	docker push $(IMAGE):$(TAG)
-
-
-# --------------------------------------------------------------------------------------------------
-# Helper Targets
-# --------------------------------------------------------------------------------------------------
-pull-base-image:
-	@grep -E '^\s*FROM' Dockerfile-0.11 \
-		| sed -e 's/^FROM//g' -e 's/[[:space:]]*as[[:space:]]*.*$$//g' \
-		| xargs -n1 docker pull;
-	@grep -E '^\s*FROM' Dockerfile-0.12 \
-		| sed -e 's/^FROM//g' -e 's/[[:space:]]*as[[:space:]]*.*$$//g' \
-		| xargs -n1 docker pull;
-
-enter:
-	docker run --rm --name $(subst /,-,$(IMAGE)) -it --entrypoint=/bin/sh $(ARG) $(IMAGE):$(VERSION)
