@@ -4,11 +4,12 @@ extends: default
 ignore: |
   /ansible/files/es-index-templates/logstash/
   .terragrunt-cache/
+  .yamllint
 
 
 rules:
   truthy:
-    allowed-values: ['True', 'False']
+    allowed-values: ['true', 'false']
     check-keys: False
     level: error
   line-length: disable
