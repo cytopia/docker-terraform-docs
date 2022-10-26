@@ -1,9 +1,6 @@
 # Docker image for `terraform-docs`
 
 [![Tag](https://img.shields.io/github/tag/cytopia/docker-terraform-docs.svg)](https://github.com/cytopia/docker-terraform-docs/releases)
-[![](https://images.microbadger.com/badges/version/cytopia/terraform-docs:latest.svg?kill_cache=1)](https://microbadger.com/images/cytopia/terraform-docs:latest "terraform-docs")
-[![](https://images.microbadger.com/badges/image/cytopia/terraform-docs:latest.svg?kill_cache=1)](https://microbadger.com/images/cytopia/terraform-docs:latest "terraform-docs")
-[![](https://img.shields.io/docker/pulls/cytopia/terraform-docs.svg)](https://hub.docker.com/r/cytopia/terraform-docs)
 [![](https://img.shields.io/badge/github-cytopia%2Fdocker--terraform--docs-red.svg)](https://github.com/cytopia/docker-terraform-docs "github.com/cytopia/docker-terraform-docs")
 [![License](https://img.shields.io/badge/license-MIT-%233DA639.svg)](https://opensource.org/licenses/MIT)
 
@@ -42,13 +39,10 @@
 > [yamlfmt][yfmt-git-lnk] **•**
 > [yamllint][ylint-git-lnk]
 
-> #### All [#awesome-ci](https://github.com/topics/awesome-ci) Makefiles
->
-> Visit **[cytopia/makefiles](https://github.com/cytopia/makefiles)** for seamless project integration, minimum required best-practice code linting and CI.
+View **[Dockerfiles](https://github.com/cytopia/docker-terraform-docs/blob/master/Dockerfiles/)** on GitHub.
 
-View **[Dockerfile](https://github.com/cytopia/docker-terraform-docs/blob/master/Dockerfile)** on GitHub.
 
-[![Docker hub](http://dockeri.co/image/cytopia/terraform-docs?kill_cache=1)](https://hub.docker.com/r/cytopia/terraform-docs)
+**Available Architectures:**  `amd64`, `i386`, `arm64`, `arm/v7`, `arm/v6`
 
 Tiny Alpine-based multistage-build dockerized version of [terraform-docs](https://github.com/terraform-docs/terraform-docs)<sup>[1]</sup>,
 which additionally implements `terraform-docs-replace` allowing you to automatically and safely
@@ -59,85 +53,88 @@ The image is built nightly against multiple stable versions and pushed to Docker
 * <sub>[1] Official project: https://github.com/terraform-docs/terraform-docs</sub>
 * <sub>[2] Based on an awk script by [cloudposse/build-harness](https://github.com/cloudposse/build-harness/blob/master/bin/terraform-docs.awk)</sub>
 
+## :whale: Available Docker image versions
 
-## Available Docker image versions
+[![](https://img.shields.io/docker/pulls/cytopia/terraform-docs.svg)](https://hub.docker.com/r/cytopia/terraform-docs)
+[![Docker](https://badgen.net/badge/icon/:latest?icon=docker&label=cytopia/terraform-docs)](https://hub.docker.com/r/cytopia/terraform-docs)
 
-### Rolling releases
-The following Docker image tags are rolling releases and built and updated nightly. This means any
-scripts from this repository which enhance the original `terraform-docs` are always available at
-their latest state (from this repository's master branch) and *might* cause backwards
-incompatibilities with how you use it (although it's very unlikely that backwards incompatible
-changes will be introduced).
+#### Rolling releaess
 
-| Docker tag      | Build from [docker-terraform-docs](https://github.com/cytopia/docker-terraform-docs) | Build from [terraform-docs](https://github.com/terraform-docs/terraform-docs) |
-|-----------------|----------------------------------|---------------------------|
-| `latest`        | [Branch: master](https://github.com/cytopia/docker-terraform-docs) | [Branch: master](https://github.com/terraform-docs/terraform-docs) |
-| `0.16.0`        | [Branch: master](https://github.com/cytopia/docker-terraform-docs) | [Tag: v0.16.0](https://github.com/terraform-docs/terraform-docs/tree/v0.16.0) |
-| `0.15.0`        | [Branch: master](https://github.com/cytopia/docker-terraform-docs) | [Tag: v0.15.0](https://github.com/terraform-docs/terraform-docs/tree/v0.15.0) |
-| `0.14.1`        | [Branch: master](https://github.com/cytopia/docker-terraform-docs) | [Tag: v0.14.1](https://github.com/terraform-docs/terraform-docs/tree/v0.14.1) |
-| `0.14.0`        | [Branch: master](https://github.com/cytopia/docker-terraform-docs) | [Tag: v0.14.0](https://github.com/terraform-docs/terraform-docs/tree/v0.14.0) |
-| `0.13.0`        | [Branch: master](https://github.com/cytopia/docker-terraform-docs) | [Tag: v0.13.0](https://github.com/terraform-docs/terraform-docs/tree/v0.13.0) |
-| `0.12.1`        | [Branch: master](https://github.com/cytopia/docker-terraform-docs) | [Tag: v0.12.1](https://github.com/terraform-docs/terraform-docs/tree/v0.12.1) |
-| `0.12.0`        | [Branch: master](https://github.com/cytopia/docker-terraform-docs) | [Tag: v0.12.0](https://github.com/terraform-docs/terraform-docs/tree/v0.12.0) |
-| `0.11.2`        | [Branch: master](https://github.com/cytopia/docker-terraform-docs) | [Tag: v0.11.2](https://github.com/terraform-docs/terraform-docs/tree/v0.11.2) |
-| `0.11.1`        | [Branch: master](https://github.com/cytopia/docker-terraform-docs) | [Tag: v0.11.1](https://github.com/terraform-docs/terraform-docs/tree/v0.11.1) |
-| `0.11.0`        | [Branch: master](https://github.com/cytopia/docker-terraform-docs) | [Tag: v0.11.0](https://github.com/terraform-docs/terraform-docs/tree/v0.11.0) |
-| `0.10.1`        | [Branch: master](https://github.com/cytopia/docker-terraform-docs) | [Tag: v0.10.1](https://github.com/terraform-docs/terraform-docs/tree/v0.10.1) |
-| `0.10.0`        | [Branch: master](https://github.com/cytopia/docker-terraform-docs) | [Tag: v0.10.0](https://github.com/terraform-docs/terraform-docs/tree/v0.10.0) |
-| `0.9.1`         | [Branch: master](https://github.com/cytopia/docker-terraform-docs) | [Tag: v0.9.1](https://github.com/terraform-docs/terraform-docs/tree/v0.9.1) |
-| `0.9.0`         | [Branch: master](https://github.com/cytopia/docker-terraform-docs) | [Tag: v0.9.0](https://github.com/terraform-docs/terraform-docs/tree/v0.9.0) |
-| `0.8.2`         | [Branch: master](https://github.com/cytopia/docker-terraform-docs) | [Tag: v0.8.2](https://github.com/terraform-docs/terraform-docs/tree/v0.8.2) |
-| `0.8.1`         | [Branch: master](https://github.com/cytopia/docker-terraform-docs) | [Tag: v0.8.1](https://github.com/terraform-docs/terraform-docs/tree/v0.8.1) |
-| `0.8.0`         | [Branch: master](https://github.com/cytopia/docker-terraform-docs) | [Tag: v0.8.0](https://github.com/terraform-docs/terraform-docs/tree/v0.8.0) |
-| `0.7.0`         | [Branch: master](https://github.com/cytopia/docker-terraform-docs) | [Tag: v0.7.0](https://github.com/terraform-docs/terraform-docs/tree/v0.7.0) |
-| `0.6.0`         | [Branch: master](https://github.com/cytopia/docker-terraform-docs) | [Tag: v0.6.0](https://github.com/terraform-docs/terraform-docs/tree/v0.6.0) |
-| `0.5.0`         | [Branch: master](https://github.com/cytopia/docker-terraform-docs) | [Tag: v0.5.0](https://github.com/terraform-docs/terraform-docs/tree/v0.5.0) |
-| `0.4.5`         | [Branch: master](https://github.com/cytopia/docker-terraform-docs) | [Tag: v0.4.5](https://github.com/terraform-docs/terraform-docs/tree/v0.4.5) |
-| `0.4.0`         | [Branch: master](https://github.com/cytopia/docker-terraform-docs) | [Tag: v0.4.0](https://github.com/terraform-docs/terraform-docs/tree/v0.4.0) |
-| `0.3.0`         | [Branch: master](https://github.com/cytopia/docker-terraform-docs) | [Tag: v0.3.0](https://github.com/terraform-docs/terraform-docs/tree/v0.3.0) |
-| `0.2.0`         | [Branch: master](https://github.com/cytopia/docker-terraform-docs) | [Tag: v0.2.0](https://github.com/terraform-docs/terraform-docs/tree/v0.2.0) |
-| `0.1.1`         | [Branch: master](https://github.com/cytopia/docker-terraform-docs) | [Tag: v0.1.1](https://github.com/terraform-docs/terraform-docs/tree/v0.1.1) |
-| `0.1.0`         | [Branch: master](https://github.com/cytopia/docker-terraform-docs) | [Tag: v0.1.0](https://github.com/terraform-docs/terraform-docs/tree/v0.1.0) |
+The following Docker image tags are rolling releases and are built and updated every night.
 
-### Point in time releases
-If you want to ensure to have reproducible Terraform doc generation you should use a git tag from
-this repository. Tags are incremented for each new version, but never updated itself. This means
-you will have to take care yourself and update your CI tools every time a new tag is being released.
+[![nightly](https://github.com/cytopia/docker-terraform-docs/workflows/nightly/badge.svg)](https://github.com/cytopia/docker-terraform-docs/actions?query=workflow%3Anightly)
 
-| Docker tag            | Build from [docker-terraform-docs](https://github.com/cytopia/docker-terraform-docs) | Build from [terraform-docs](https://github.com/terraform-docs/terraform-docs) |
-|-----------------------|----------------------------------|---------------------------|
-| `latest-<tag>`        | Tag: `<tag>` | [Branch: master](https://github.com/terraform-docs/terraform-docs) |
-| `0.16.0-<tag>`        | Tag: `<tag>` | [Tag: v0.16.0](https://github.com/terraform-docs/terraform-docs/tree/v0.16.0) |
-| `0.15.0-<tag>`        | Tag: `<tag>` | [Tag: v0.15.0](https://github.com/terraform-docs/terraform-docs/tree/v0.15.0) |
-| `0.14.1-<tag>`        | Tag: `<tag>` | [Tag: v0.14.1](https://github.com/terraform-docs/terraform-docs/tree/v0.14.1) |
-| `0.14.0-<tag>`        | Tag: `<tag>` | [Tag: v0.14.0](https://github.com/terraform-docs/terraform-docs/tree/v0.14.0) |
-| `0.13.0-<tag>`        | Tag: `<tag>` | [Tag: v0.13.0](https://github.com/terraform-docs/terraform-docs/tree/v0.13.0) |
-| `0.12.1-<tag>`        | Tag: `<tag>` | [Tag: v0.12.1](https://github.com/terraform-docs/terraform-docs/tree/v0.12.1) |
-| `0.12.0-<tag>`        | Tag: `<tag>` | [Tag: v0.12.0](https://github.com/terraform-docs/terraform-docs/tree/v0.12.0) |
-| `0.11.2-<tag>`        | Tag: `<tag>` | [Tag: v0.11.2](https://github.com/terraform-docs/terraform-docs/tree/v0.11.2) |
-| `0.11.1-<tag>`        | Tag: `<tag>` | [Tag: v0.11.1](https://github.com/terraform-docs/terraform-docs/tree/v0.11.1) |
-| `0.11.0-<tag>`        | Tag: `<tag>` | [Tag: v0.11.0](https://github.com/terraform-docs/terraform-docs/tree/v0.11.0) |
-| `0.10.1-<tag>`        | Tag: `<tag>` | [Tag: v0.10.1](https://github.com/terraform-docs/terraform-docs/tree/v0.10.1) |
-| `0.10.0-<tag>`        | Tag: `<tag>` | [Tag: v0.10.0](https://github.com/terraform-docs/terraform-docs/tree/v0.10.0) |
-| `0.9.1-<tag>`         | Tag: `<tag>` | [Tag: v0.9.1](https://github.com/terraform-docs/terraform-docs/tree/v0.9.1) |
-| `0.9.0-<tag>`         | Tag: `<tag>` | [Tag: v0.9.0](https://github.com/terraform-docs/terraform-docs/tree/v0.9.0) |
-| `0.8.2-<tag>`         | Tag: `<tag>` | [Tag: v0.8.2](https://github.com/terraform-docs/terraform-docs/tree/v0.8.2) |
-| `0.8.1-<tag>`         | Tag: `<tag>` | [Tag: v0.8.1](https://github.com/terraform-docs/terraform-docs/tree/v0.8.1) |
-| `0.8.0-<tag>`         | Tag: `<tag>` | [Tag: v0.8.0](https://github.com/terraform-docs/terraform-docs/tree/v0.8.0) |
-| `0.7.0-<tag>`         | Tag: `<tag>` | [Tag: v0.7.0](https://github.com/terraform-docs/terraform-docs/tree/v0.7.0) |
-| `0.6.0-<tag>`         | Tag: `<tag>` | [Tag: v0.6.0](https://github.com/terraform-docs/terraform-docs/tree/v0.6.0) |
-| `0.5.0-<tag>`         | Tag: `<tag>` | [Tag: v0.5.0](https://github.com/terraform-docs/terraform-docs/tree/v0.5.0) |
-| `0.4.5-<tag>`         | Tag: `<tag>` | [Tag: v0.4.5](https://github.com/terraform-docs/terraform-docs/tree/v0.4.5) |
-| `0.4.0-<tag>`         | Tag: `<tag>` | [Tag: v0.4.0](https://github.com/terraform-docs/terraform-docs/tree/v0.4.0) |
-| `0.3.0-<tag>`         | Tag: `<tag>` | [Tag: v0.3.0](https://github.com/terraform-docs/terraform-docs/tree/v0.3.0) |
-| `0.2.0-<tag>`         | Tag: `<tag>` | [Tag: v0.2.0](https://github.com/terraform-docs/terraform-docs/tree/v0.2.0) |
-| `0.1.1-<tag>`         | Tag: `<tag>` | [Tag: v0.1.1](https://github.com/terraform-docs/terraform-docs/tree/v0.1.1) |
-| `0.1.0-<tag>`         | Tag: `<tag>` | [Tag: v0.1.0](https://github.com/terraform-docs/terraform-docs/tree/v0.1.0) |
-
-Where `<tag>` refers to the chosen git tag from this repository.
+| Docker Tag           | Git Ref   | Terraform Docs | Available Architectures                      |
+|----------------------|-----------|--------------|----------------------------------------------|
+| `latest`             | master    | latest       | `amd64`, `i386`, `arm64`, `arm/v7`, `arm/v6` |
+| `0.16.0`             | master    | **`0.16.0`** | `amd64`, `i386`, `arm64`, `arm/v7`, `arm/v6` |
+| `0.15.0`             | master    | **`0.15.0`** | `amd64`, `i386`, `arm64`, `arm/v7`, `arm/v6` |
+| `0.14.1`             | master    | **`0.14.1`** | `amd64`, `i386`, `arm64`, `arm/v7`, `arm/v6` |
+| `0.14.0`             | master    | **`0.14.0`** | `amd64`, `i386`, `arm64`, `arm/v7`, `arm/v6` |
+| `0.13.0`             | master    | **`0.13.0`** | `amd64`, `i386`, `arm64`, `arm/v7`, `arm/v6` |
+| `0.12.1`             | master    | **`0.12.1`** | `amd64`, `i386`, `arm64`, `arm/v7`, `arm/v6` |
+| `0.12.0`             | master    | **`0.12.0`** | `amd64`, `i386`, `arm64`, `arm/v7`, `arm/v6` |
+| `0.11.2`             | master    | **`0.11.2`** | `amd64`                                      |
+| `0.11.1`             | master    | **`0.11.1`** | `amd64`                                      |
+| `0.11.0`             | master    | **`0.11.0`** | `amd64`                                      |
+| `0.10.1`             | master    | **`0.10.1`** | `amd64`                                      |
+| `0.10.0`             | master    | **`0.10.0`** | `amd64`                                      |
+| `0.9.1`              | master    | **`0.9.1`**  | `amd64`                                      |
+| `0.9.0`              | master    | **`0.9.0`**  | `amd64`                                      |
+| `0.8.2`              | master    | **`0.8.2`**  | `amd64`                                      |
+| `0.8.1`              | master    | **`0.8.1`**  | `amd64`                                      |
+| `0.8.0`              | master    | **`0.8.0`**  | `amd64`                                      |
+| `0.7.0`              | master    | **`0.7.0`**  | `amd64`                                      |
+| `0.6.0`              | master    | **`0.6.0`**  | `amd64`                                      |
+| `0.5.0`              | master    | **`0.5.0`**  | `amd64`                                      |
+| `0.4.5`              | master    | **`0.4.5`**  | `amd64`                                      |
+| `0.4.0`              | master    | **`0.4.0`**  | `amd64`                                      |
+| `0.3.0`              | master    | **`0.3.0`**  | `amd64`                                      |
+| `0.2.0`              | master    | **`0.2.0`**  | `amd64`                                      |
+| `0.1.1`              | master    | **`0.1.1`**  | `amd64`                                      |
+| `0.1.0`              | master    | **`0.1.0`**  | `amd64`                                      |
 
 
-## Environment variables
+#### Point in time releases
+
+The following Docker image tags are built once and can be used for reproducible builds. Its version never changes so you will have to update tags in your pipelines from time to time in order to stay up-to-date.
+
+[![build](https://github.com/cytopia/docker-terraform-docs/workflows/build/badge.svg)](https://github.com/cytopia/docker-terraform-docs/actions?query=workflow%3Abuild)
+
+
+| Docker Tag           | Git Ref   | Terraform Docs | Available Architectures                      |
+|----------------------|-----------|--------------|----------------------------------------------|
+| `latest-0.32`        | tag: 0.32 | latest       | `amd64`, `i386`, `arm64`, `arm/v7`, `arm/v6` |
+| `0.16.0-0.32`        | tag: 0.32 | **`0.16.0`** | `amd64`, `i386`, `arm64`, `arm/v7`, `arm/v6` |
+| `0.15.0-0.32`        | tag: 0.32 | **`0.15.0`** | `amd64`, `i386`, `arm64`, `arm/v7`, `arm/v6` |
+| `0.14.1-0.32`        | tag: 0.32 | **`0.14.1`** | `amd64`, `i386`, `arm64`, `arm/v7`, `arm/v6` |
+| `0.14.0-0.32`        | tag: 0.32 | **`0.14.0`** | `amd64`, `i386`, `arm64`, `arm/v7`, `arm/v6` |
+| `0.13.0-0.32`        | tag: 0.32 | **`0.13.0`** | `amd64`, `i386`, `arm64`, `arm/v7`, `arm/v6` |
+| `0.12.1-0.32`        | tag: 0.32 | **`0.12.1`** | `amd64`, `i386`, `arm64`, `arm/v7`, `arm/v6` |
+| `0.12.0-0.32`        | tag: 0.32 | **`0.12.0`** | `amd64`, `i386`, `arm64`, `arm/v7`, `arm/v6` |
+| `0.11.2-0.32`        | tag: 0.32 | **`0.11.2`** | `amd64`                                      |
+| `0.11.1-0.32`        | tag: 0.32 | **`0.11.1`** | `amd64`                                      |
+| `0.11.0-0.32`        | tag: 0.32 | **`0.11.0`** | `amd64`                                      |
+| `0.10.1-0.32`        | tag: 0.32 | **`0.10.1`** | `amd64`                                      |
+| `0.10.0-0.32`        | tag: 0.32 | **`0.10.0`** | `amd64`                                      |
+| `0.9.1-0.32`         | tag: 0.32 | **`0.9.1`**  | `amd64`                                      |
+| `0.9.0-0.32`         | tag: 0.32 | **`0.9.0`**  | `amd64`                                      |
+| `0.8.2-0.32`         | tag: 0.32 | **`0.8.2`**  | `amd64`                                      |
+| `0.8.1-0.32`         | tag: 0.32 | **`0.8.1`**  | `amd64`                                      |
+| `0.8.0-0.32`         | tag: 0.32 | **`0.8.0`**  | `amd64`                                      |
+| `0.7.0-0.32`         | tag: 0.32 | **`0.7.0`**  | `amd64`                                      |
+| `0.6.0-0.32`         | tag: 0.32 | **`0.6.0`**  | `amd64`                                      |
+| `0.5.0-0.32`         | tag: 0.32 | **`0.5.0`**  | `amd64`                                      |
+| `0.4.5-0.32`         | tag: 0.32 | **`0.4.5`**  | `amd64`                                      |
+| `0.4.0-0.32`         | tag: 0.32 | **`0.4.0`**  | `amd64`                                      |
+| `0.3.0-0.32`         | tag: 0.32 | **`0.3.0`**  | `amd64`                                      |
+| `0.2.0-0.32`         | tag: 0.32 | **`0.2.0`**  | `amd64`                                      |
+| `0.1.1-0.32`         | tag: 0.32 | **`0.1.1`**  | `amd64`                                      |
+| `0.1.0-0.32`         | tag: 0.32 | **`0.1.0`**  | `amd64`                                      |
+
+
+
+## :capital_abcd: Environment variables
 
 The following Docker environment variables are available. These will only need to be used when
 using `terraform-docs-replace` or `terraform-docs-replace-012`.
@@ -148,13 +145,13 @@ using `terraform-docs-replace` or `terraform-docs-replace-012`.
 | DELIM_CLOSE | `<!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->` | No | The ending delimiter in the file in where you want to replace the `terraform-docs` output. |
 
 
-## Docker mounts
+## :open_file_folder: Docker mounts
 
 The working directory inside the Docker container is **`/data/`** and should be mounted locally to
 where your Terraform module is located.
 
 
-## Usage
+## :computer: Usage
 
 ### Generic
 ```bash
@@ -374,7 +371,7 @@ script:
 ```
 
 
-## Example projects
+## :information_source: Example projects
 
 Find below some example projects how this Docker image is used in CI to verify if the README.md has
 been updated with the latest changes generated from `terraform-docs`:
@@ -537,7 +534,8 @@ Visit **[cytopia/makefiles](https://github.com/cytopia/makefiles)** for dependen
 The provided Makefiles will only require GNU Make and Docker itself removing the need to install anything else.
 
 
-## License
+## :page_facing_up: License
+
 
 **[MIT License](LICENSE)**
 
