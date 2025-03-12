@@ -64,35 +64,38 @@ The following Docker image tags are rolling releases and are built and updated e
 
 [![nightly](https://github.com/cytopia/docker-terraform-docs/workflows/nightly/badge.svg)](https://github.com/cytopia/docker-terraform-docs/actions?query=workflow%3Anightly)
 
-| Docker Tag           | Git Ref   | Terraform Docs | Available Architectures                      |
-|----------------------|-----------|--------------|----------------------------------------------|
-| `latest`             | master    | latest       | `amd64`, `i386`, `arm64`, `arm/v7`, `arm/v6` |
-| `0.16.0`             | master    | **`0.16.0`** | `amd64`, `i386`, `arm64`, `arm/v7`, `arm/v6` |
-| `0.15.0`             | master    | **`0.15.0`** | `amd64`, `i386`, `arm64`, `arm/v7`, `arm/v6` |
-| `0.14.1`             | master    | **`0.14.1`** | `amd64`, `i386`, `arm64`, `arm/v7`, `arm/v6` |
-| `0.14.0`             | master    | **`0.14.0`** | `amd64`, `i386`, `arm64`, `arm/v7`, `arm/v6` |
-| `0.13.0`             | master    | **`0.13.0`** | `amd64`, `i386`, `arm64`, `arm/v7`, `arm/v6` |
-| `0.12.1`             | master    | **`0.12.1`** | `amd64`, `i386`, `arm64`, `arm/v7`, `arm/v6` |
-| `0.12.0`             | master    | **`0.12.0`** | `amd64`, `i386`, `arm64`, `arm/v7`, `arm/v6` |
-| `0.11.2`             | master    | **`0.11.2`** | `amd64`                                      |
-| `0.11.1`             | master    | **`0.11.1`** | `amd64`                                      |
-| `0.11.0`             | master    | **`0.11.0`** | `amd64`                                      |
-| `0.10.1`             | master    | **`0.10.1`** | `amd64`                                      |
-| `0.10.0`             | master    | **`0.10.0`** | `amd64`                                      |
-| `0.9.1`              | master    | **`0.9.1`**  | `amd64`                                      |
-| `0.9.0`              | master    | **`0.9.0`**  | `amd64`                                      |
-| `0.8.2`              | master    | **`0.8.2`**  | `amd64`                                      |
-| `0.8.1`              | master    | **`0.8.1`**  | `amd64`                                      |
-| `0.8.0`              | master    | **`0.8.0`**  | `amd64`                                      |
-| `0.7.0`              | master    | **`0.7.0`**  | `amd64`                                      |
-| `0.6.0`              | master    | **`0.6.0`**  | `amd64`                                      |
-| `0.5.0`              | master    | **`0.5.0`**  | `amd64`                                      |
-| `0.4.5`              | master    | **`0.4.5`**  | `amd64`                                      |
-| `0.4.0`              | master    | **`0.4.0`**  | `amd64`                                      |
-| `0.3.0`              | master    | **`0.3.0`**  | `amd64`                                      |
-| `0.2.0`              | master    | **`0.2.0`**  | `amd64`                                      |
-| `0.1.1`              | master    | **`0.1.1`**  | `amd64`                                      |
-| `0.1.0`              | master    | **`0.1.0`**  | `amd64`                                      |
+| Docker Tag | Git Ref   | Terraform Docs | Available Architectures                      |
+|------------|-----------|----------------|----------------------------------------------|
+| `latest`   | master    | latest         | `amd64`, `i386`, `arm64`, `arm/v7`, `arm/v6` |
+| `0.19.0`   | master    | **`0.19.0`**   | `amd64`, `i386`, `arm64`, `arm/v7`, `arm/v6` |
+| `0.18.0`   | master    | **`0.18.0`**   | `amd64`, `i386`, `arm64`, `arm/v7`, `arm/v6` |
+| `0.17.0`   | master    | **`0.17.0`**   | `amd64`, `i386`, `arm64`, `arm/v7`, `arm/v6` |
+| `0.16.0`   | master    | **`0.16.0`**   | `amd64`, `i386`, `arm64`, `arm/v7`, `arm/v6` |
+| `0.15.0`   | master    | **`0.15.0`**   | `amd64`, `i386`, `arm64`, `arm/v7`, `arm/v6` |
+| `0.14.1`   | master    | **`0.14.1`**   | `amd64`, `i386`, `arm64`, `arm/v7`, `arm/v6` |
+| `0.14.0`   | master    | **`0.14.0`**   | `amd64`, `i386`, `arm64`, `arm/v7`, `arm/v6` |
+| `0.13.0`   | master    | **`0.13.0`**   | `amd64`, `i386`, `arm64`, `arm/v7`, `arm/v6` |
+| `0.12.1`   | master    | **`0.12.1`**   | `amd64`, `i386`, `arm64`, `arm/v7`, `arm/v6` |
+| `0.12.0`   | master    | **`0.12.0`**   | `amd64`, `i386`, `arm64`, `arm/v7`, `arm/v6` |
+| `0.11.2`   | master    | **`0.11.2`**   | `amd64`                                      |
+| `0.11.1`   | master    | **`0.11.1`**   | `amd64`                                      |
+| `0.11.0`   | master    | **`0.11.0`**   | `amd64`                                      |
+| `0.10.1`   | master    | **`0.10.1`**   | `amd64`                                      |
+| `0.10.0`   | master    | **`0.10.0`**   | `amd64`                                      |
+| `0.9.1`    | master    | **`0.9.1`**    | `amd64`                                      |
+| `0.9.0`    | master    | **`0.9.0`**    | `amd64`                                      |
+| `0.8.2`    | master    | **`0.8.2`**    | `amd64`                                      |
+| `0.8.1`    | master    | **`0.8.1`**    | `amd64`                                      |
+| `0.8.0`    | master    | **`0.8.0`**    | `amd64`                                      |
+| `0.7.0`    | master    | **`0.7.0`**    | `amd64`                                      |
+| `0.6.0`    | master    | **`0.6.0`**    | `amd64`                                      |
+| `0.5.0`    | master    | **`0.5.0`**    | `amd64`                                      |
+| `0.4.5`    | master    | **`0.4.5`**    | `amd64`                                      |
+| `0.4.0`    | master    | **`0.4.0`**    | `amd64`                                      |
+| `0.3.0`    | master    | **`0.3.0`**    | `amd64`                                      |
+| `0.2.0`    | master    | **`0.2.0`**    | `amd64`                                      |
+| `0.1.1`    | master    | **`0.1.1`**    | `amd64`                                      |
+| `0.1.0`    | master    | **`0.1.0`**    | `amd64`                                      |
 
 
 #### Point in time releases
