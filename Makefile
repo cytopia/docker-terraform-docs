@@ -30,41 +30,11 @@ IMAGE      = cytopia/terraform-docs
 FLAVOUR    = latest
 
 FILE       = Dockerfile
-ifeq ($(strip $(VERSION)),0.1.0)
-	FILE = Dockerfile-0.11
-else
-	ifeq ($(strip $(VERSION)),0.1.1)
-		FILE = Dockerfile-0.11
-	else
-		ifeq ($(strip $(VERSION)),0.2.0)
-			FILE = Dockerfile-0.11
-		else
-			ifeq ($(strip $(VERSION)),0.3.0)
-				FILE = Dockerfile-0.11
-			else
-				ifeq ($(strip $(VERSION)),0.4.0)
-					FILE = Dockerfile-0.11
-				else
-					ifeq ($(strip $(VERSION)),0.4.5)
-						FILE = Dockerfile-0.11
-					else
-						ifeq ($(strip $(VERSION)),0.5.0)
-							FILE = Dockerfile-0.11
-						else
-							ifeq ($(strip $(VERSION)),0.6.0)
-								FILE = Dockerfile-0.11
-							else
-								ifeq ($(strip $(VERSION)),0.7.0)
-									FILE = Dockerfile-0.11
-								endif
-							endif
-						endif
-					endif
-				endif
-			endif
-		endif
-	endif
+OVERRIDE_VERSIONS := 0.1.0 0.1.1 0.2.0 0.3.0 0.4.0 0.4.5 0.5.0 0.6.0 0.7.0
+ifeq ($(filter $(VERSION),$(OVERRIDE_VERSIONS)), $(VERSION))
+  FILE = Dockerfile-0.11
 endif
+
 DIR        = Dockerfiles
 
 # Building from master branch: Tag == 'latest'
