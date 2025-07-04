@@ -67,6 +67,7 @@ The following Docker image tags are rolling releases and are built and updated e
 | Docker Tag | Git Ref   | Terraform Docs | Available Architectures                      |
 |------------|-----------|----------------|----------------------------------------------|
 | `latest`   | master    | latest         | `amd64`, `i386`, `arm64`, `arm/v7`, `arm/v6` |
+| `0.20.0`   | master    | **`0.20.0`**   | `amd64`, `i386`, `arm64`, `arm/v7`, `arm/v6` |
 | `0.19.0`   | master    | **`0.19.0`**   | `amd64`, `i386`, `arm64`, `arm/v7`, `arm/v6` |
 | `0.18.0`   | master    | **`0.18.0`**   | `amd64`, `i386`, `arm64`, `arm/v7`, `arm/v6` |
 | `0.17.0`   | master    | **`0.17.0`**   | `amd64`, `i386`, `arm64`, `arm/v7`, `arm/v6` |
